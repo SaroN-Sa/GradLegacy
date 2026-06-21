@@ -1,17 +1,16 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/store/theme-context";
 
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { theme, toggleTheme } =
+    useTheme();
 
   return (
     <button
-      onClick={() =>
-        setTheme(theme === "dark" ? "light" : "dark")
-      }
-      className="border rounded-lg p-2"
+      onClick={toggleTheme}
+      className="rounded-lg border p-2"
     >
       {theme === "dark" ? (
         <Sun size={18} />
