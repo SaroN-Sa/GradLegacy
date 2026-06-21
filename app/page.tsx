@@ -3,46 +3,23 @@
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 
-import { useLanguage } from "@/store/language-context";
-
-const content = {
-  en: {
-    title: "Preserve Your Graduation Legacy",
-    description:
-      "Collect wishes, photos, videos and memories from family and friends.",
-  },
-
-  am: {
-    title: "የምረቃ ትውስታዎችዎን ያስቀምጡ",
-    description:
-      "ከቤተሰብ እና ከጓደኞች መልዕክቶችን ይሰብስቡ።",
-  },
-
-  it: {
-    title: "Conserva il tuo ricordo di laurea",
-    description:
-      "Raccogli auguri, foto e video da amici e familiari.",
-  },
-};
+import HeroSection from "@/components/home/hero-section";
+import FeaturesSection from "@/components/home/features-section";
+import HowItWorks from "@/components/home/how-it-works";
+import CTASection from "@/components/home/cta-section";
 
 export default function Home() {
-  const { language } = useLanguage();
-
-  const t = content[language];
-
   return (
     <>
       <Navbar />
 
-      <main className="min-h-screen flex flex-col items-center justify-center text-center px-6">
-        <h1 className="text-6xl font-bold mb-6">
-          {t.title}
-        </h1>
+      <HeroSection />
 
-        <p className="max-w-2xl text-lg">
-          {t.description}
-        </p>
-      </main>
+      <FeaturesSection />
+
+      <HowItWorks />
+
+      <CTASection />
 
       <Footer />
     </>

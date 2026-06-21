@@ -3,15 +3,27 @@ import LanguageSwitcher from "@/components/shared/language-switcher";
 
 export default function Navbar() {
   return (
-    <header className="border-b">
-      <div className="container mx-auto flex items-center justify-between p-4">
-        <h1 className="font-bold text-xl">
-          🎓 GradLegacy
-        </h1>
+    <header className="sticky top-0 border-b bg-background/80 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+          <h1 className="text-2xl font-bold">
+            🎓 GradLegacy
+          </h1>
+        </div>
+
+        <nav className="hidden md:flex items-center gap-8">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#cta">Get Started</a>
+        </nav>
 
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
           <ThemeToggle />
+
+          <button className="rounded-lg border px-4 py-2">
+            Login
+          </button>
         </div>
       </div>
     </header>
