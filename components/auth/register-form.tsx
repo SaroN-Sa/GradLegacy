@@ -15,62 +15,132 @@ import {
   Shield,
   Cloud,
   Globe,
+  Loader2,
 } from "lucide-react";
+
+import { toast } from "sonner";
 
 import { authService } from "@/services/auth";
 import { registerSchema } from "@/lib/auth-schema";
 import PasswordRequirements from "./password-requirements";
 
 export default function RegisterForm() {
-  const router = useRouter();
+ const router = useRouter();
 
-  const [loading, setLoading]               = useState(false);
-  const [error, setError]                   = useState("");
-  const [password, setPassword]             = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword]     = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [acceptedTerms, setAcceptedTerms]   = useState(false);
-  const [language, setLanguage]             = useState("en");
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState("");
 
-  const passwordsMatch    = confirmPassword.length > 0 && password === confirmPassword;
-  const passwordsMismatch = confirmPassword.length > 0 && password !== confirmPassword;
+const [password, setPassword] = useState("");
+const [confirmPassword, setConfirmPassword] = useState("");
 
-  const clearError = () => { if (error) setError(""); };
+const [showPassword, setShowPassword] = useState(false);
+const [showConfirmPassword, setShowConfirmPassword] =
+  useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+const [acceptedTerms, setAcceptedTerms] =
+  useState(false);
 
-    const formData      = new FormData(e.currentTarget);
-    const name          = formData.get("name") as string;
-    const email         = formData.get("email") as string;
-    const confirmPwd    = formData.get("confirmPassword") as string;
+const [language, setLanguage] =
+  useState("en");
 
-    const validation = registerSchema.safeParse({ name, email, password, confirmPassword: confirmPwd });
+const passwordsMatch =
+  confirmPassword.length > 0 &&
+  password === confirmPassword;
 
-    if (!validation.success) {
-      setError(validation.error.issues[0].message);
-      setLoading(false);
-      return;
-    }
+const passwordsMismatch =
+  confirmPassword.length > 0 &&
+  password !== confirmPassword;
 
-    if (!acceptedTerms) {
-      setError("Please accept the Terms of Service and Privacy Policy.");
-      setLoading(false);
-      return;
-    }
+const clearError = () => {
+  if (error) setError("");
+};
 
-    try {
-      await authService.register(name, email, password, language);
-      router.push("/login?registered=true");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+ const handleSubmit = async (
+  e: React.FormEvent<HTMLFormElement>
+) => {
+  e.preventDefault();
+
+  setError("");
+  setLoading(true);
+
+  const loadingToast = toast.loading(
+    "Creating your GradLegacy account..."
+  );
+
+  const formData = new FormData(e.currentTarget);
+
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+
+  const confirmPwd =
+    formData.get("confirmPassword") as string;
+
+  const validation = registerSchema.safeParse({
+    name,
+    email,
+    password,
+    confirmPassword: confirmPwd,
+  });
+
+  if (!validation.success) {
+    toast.dismiss(loadingToast);
+
+    const message =
+      validation.error.issues[0]?.message ||
+      "Please check your information.";
+
+    setError(message);
+
+    toast.error(message);
+
+    setLoading(false);
+    return;
+  }
+
+  if (!acceptedTerms) {
+    toast.dismiss(loadingToast);
+
+    const message =
+      "Please accept the Terms of Service and Privacy Policy.";
+
+    setError(message);
+
+    toast.error(message);
+
+    setLoading(false);
+    return;
+  }
+
+  try {
+    await authService.register(
+      name,
+      email,
+      password,
+      language
+    );
+
+    toast.dismiss(loadingToast);
+
+    toast.success(
+      "🎓 Welcome to GradLegacy! Your account has been created successfully."
+    );
+
+    router.push("/register/success");
+  } catch (err) {
+    toast.dismiss(loadingToast);
+
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Registration failed. Please try again.";
+
+    setError(message);
+
+    toast.error(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   /* ─────────────────────────────────────────────────────────────────────────
      ROOT: w-screen h-screen, no padding, no max-width — fills the viewport.
