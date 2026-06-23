@@ -2,38 +2,67 @@ import { ID } from "appwrite";
 import { account } from "@/lib/appwrite";
 
 export const authService = {
-  async register(
-    name: string,
-    email: string,
-    password: string
-  ) {
-    return account.create(
-      ID.unique(),
+async register(
+name: string,
+email: string,
+password: string,
+language?: string
+) {
+const user = await account.create(
+ID.unique(),
+email,
+password,
+name
+);
+
+```
+return {
+  user,
+  language,
+};
+```
+
+},
+
+async login(
+email: string,
+password: string
+) {
+return await account.createEmailPasswordSession(
+email,
+password
+);
+},
+
+async logout() {
+return await account.deleteSession("current");
+},
+
+async getCurrentUser() {
+try {
+return await account.get();
+} catch {
+return null;
+}
+},
+async forgotPassword(email: string) {
+    return account.createRecovery(
       email,
-      password,
-      name
+      `${process.env.NEXT_PUBLIC_APP_URL}/reset-password`
     );
   },
 
-  async login(
-    email: string,
+  async resetPassword(
+    userId: string,
+    secret: string,
     password: string
   ) {
-    return account.createEmailPasswordSession(
-      email,
+    return account.updateRecovery(
+      userId,
+      secret,
       password
     );
   },
-
-  async logout() {
-    return account.deleteSession("current");
-  },
-
-  async getCurrentUser() {
-    try {
-      return await account.get();
-    } catch {
-      return null;
-    }
-  },
 };
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL!;
+
