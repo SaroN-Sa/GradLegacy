@@ -53,7 +53,7 @@ try {
     "Welcome back to GradLegacy!"
   );
 
-  router.push("/test");
+  router.push("/dashboard");
 } catch (error) {
   toast.dismiss(loadingToast);
 
