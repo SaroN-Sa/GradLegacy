@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { authService } from "@/services/auth";
@@ -14,121 +13,233 @@ export default function DashboardPage() {
   const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
-    checkUser();
+    loadUser();
   }, []);
 
-  const checkUser = async () => {
+  // 🔥 LOAD USER + PROFILE
+  const loadUser = async () => {
     try {
-      const user =
-        await authService.getCurrentUser();
+      const user = await authService.getCurrentUser();
 
       if (!user) {
         router.push("/login");
         return;
       }
 
-      const existingProfile =
-        await profileService.getProfileByUserId(
-          user.$id
-        );
+      const res = await profileService.getProfileByUserId(user.$id);
 
-      if (!existingProfile) {
-        router.push(
-          "/dashboard/profile/setup"
-        );
+      if (!res) {
+        router.push("/dashboard/profile/setup");
         return;
       }
 
-      setProfile(existingProfile);
-    } catch (error) {
-      console.error(error);
+      setProfile(res);
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleLogout = async () => {
-    await authService.logout();
+  // 🔥 APPLY BUTTON
+  const applyForApproval = async () => {
+    try {
+      await profileService.updateProfile(profile.$id, {
+        status: "pending",
+      });
 
-    router.push("/login");
+      router.push("/dashboard/profile/setup");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // 📊 PROFILE PROGRESS CALC
+  const calculateProgress = (p: any) => {
+    const fields = [
+      "fullName",
+      "username",
+      "bio",
+      "university",
+      "department",
+      "profileImage",
+      "coverImage",
+    ];
+
+    let filled = 0;
+
+    fields.forEach((f) => {
+      if (p?.[f]) filled++;
+    });
+
+    return Math.round((filled / fields.length) * 100);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
+      <div className="min-h-screen flex items-center justify-center text-gray-900 dark:text-white">
+        Loading dashboard...
       </div>
     );
   }
 
+  if (!profile) return null;
+
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-white p-6">
 
-        <h1 className="text-3xl font-bold mb-2">
-          Welcome, {profile.fullName}
-        </h1>
+      <div className="max-w-4xl mx-auto space-y-6">
 
-        <p className="text-gray-500 mb-8">
-          Manage your graduation page.
-        </p>
+        {/* HEADER */}
+        <div className="p-6 rounded-2xl shadow bg-white dark:bg-zinc-900 border">
+          <h1 className="text-2xl font-bold">
+            Welcome, {profile.fullName}
+          </h1>
 
-        <div className="border rounded-xl p-6 mb-6">
-          <h2 className="font-semibold text-xl mb-4">
-            Profile
-          </h2>
-
-          <p>
-            Username:
-            {" "}
-            {profile.username}
-          </p>
-
-          <p>
-            University:
-            {" "}
-            {profile.university}
-          </p>
-
-          <p>
-            Graduation Year:
-            {" "}
-            {profile.graduationYear}
+          <p className="text-gray-700 dark:text-gray-300">
+            Status: {profile.status || "draft"}
           </p>
         </div>
 
-        <div className="border rounded-xl p-6 mb-6">
-          <h2 className="font-semibold text-xl mb-4">
-            Public Page
+        {/* 📊 PROGRESS BAR */}
+        <div className="p-6 rounded-2xl shadow bg-white dark:bg-zinc-900 border">
+          <h2 className="font-semibold mb-3">
+            Profile Completion
           </h2>
 
-          <p className="mb-4">
-            /graduate/{profile.username}
+          <div className="w-full bg-gray-200 dark:bg-zinc-700 h-3 rounded-full">
+            <div
+              className="bg-blue-600 h-3 rounded-full transition-all"
+              style={{
+                width: `${calculateProgress(profile)}%`,
+              }}
+            />
+          </div>
+
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+            {calculateProgress(profile)}% complete
           </p>
-
-          <button className="border px-4 py-2 rounded">
-            View Page
-          </button>
         </div>
 
-        <div className="border rounded-xl p-6 mb-6">
-          <h2 className="font-semibold text-xl mb-4">
-            Statistics
-          </h2>
+        {/* 🟡 DRAFT */}
+        {(!profile.status || profile.status === "draft") && (
+          <div className="p-6 rounded-2xl shadow bg-white dark:bg-zinc-900 border">
+            <h2 className="font-semibold mb-3">
+              Complete Your Profile
+            </h2>
 
-          <p>Wishes: 0</p>
-          <p>Photos: 0</p>
-          <p>Visitors: 0</p>
-        </div>
+            <button
+              onClick={applyForApproval}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+            >
+              Apply for Public Page
+            </button>
+          </div>
+        )}
 
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 text-white px-4 py-2 rounded"
-        >
-          Logout
-        </button>
+        {/* 🟠 PENDING */}
+        {profile.status === "pending" && (
+          <div className="p-6 rounded-2xl shadow bg-yellow-100 dark:bg-yellow-900/30 border">
+            <h2 className="font-semibold mb-2">
+              Waiting for Approval
+            </h2>
+
+            <p className="text-gray-700 dark:text-gray-300">
+              Your profile is under review by admin.
+            </p>
+          </div>
+        )}
+
+        {/* 🔴 REJECTED */}
+        {profile.status === "rejected" && (
+          <div className="p-6 rounded-2xl shadow bg-red-100 dark:bg-red-900/30 border">
+            <h2 className="font-semibold mb-2 text-red-600">
+              Rejected
+            </h2>
+
+            <p className="mb-3 text-gray-700 dark:text-gray-300">
+              Please update your profile and reapply.
+            </p>
+
+            <button
+              onClick={applyForApproval}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+            >
+              Re-Apply
+            </button>
+          </div>
+        )}
+
+        {/* 🟢 APPROVED DASHBOARD */}
+        {profile.status === "approved" && (
+          <div className="space-y-6">
+
+            {/* PROFILE CARD */}
+            <div className="p-6 rounded-2xl shadow bg-white dark:bg-zinc-900 border">
+              <h2 className="text-xl font-bold">
+                {profile.fullName}
+              </h2>
+
+              <p className="text-gray-700 dark:text-gray-300">
+                @{profile.username}
+              </p>
+
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                {profile.bio}
+              </p>
+            </div>
+
+            {/* PUBLIC PAGE */}
+            <div className="p-6 rounded-2xl shadow bg-white dark:bg-zinc-900 border">
+              <h3 className="font-semibold mb-2">
+                Public Page
+              </h3>
+
+              <p className="text-gray-700 dark:text-gray-300">
+                /graduate/{profile.username}
+              </p>
+
+              <button
+                onClick={() =>
+                  router.push(`/graduate/${profile.username}`)
+                }
+                className="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+              >
+                View Page
+              </button>
+            </div>
+
+            {/* STATS */}
+            <div className="grid grid-cols-3 gap-4">
+
+              <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border text-center">
+                <p className="text-2xl font-bold">0</p>
+                <p className="text-sm text-gray-500">
+                  Wishes
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border text-center">
+                <p className="text-2xl font-bold">0</p>
+                <p className="text-sm text-gray-500">
+                  Photos
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border text-center">
+                <p className="text-2xl font-bold">0</p>
+                <p className="text-sm text-gray-500">
+                  Visitors
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+        )}
 
       </div>
+
     </div>
   );
 }

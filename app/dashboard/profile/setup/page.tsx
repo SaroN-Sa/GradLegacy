@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { authService } from "@/services/auth";
@@ -14,6 +14,8 @@ export default function ProfileSetupPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  const [existingProfileId, setExistingProfileId] = useState<string | null>(null);
+
   const [form, setForm] = useState({
     fullName: "",
     username: "",
@@ -25,210 +27,124 @@ export default function ProfileSetupPage() {
     coverImage: "",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement
-    >
-  ) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+  useEffect(() => {
+    loadExisting();
+  }, []);
+
+  const loadExisting = async () => {
+    const user = await authService.getCurrentUser();
+
+    if (!user) return;
+
+    const profile = await profileService.getProfileByUserId(user.$id);
+
+    if (profile) {
+      setExistingProfileId(profile.$id);
+
+      setForm({
+        fullName: profile.fullName || "",
+        username: profile.username || "",
+        bio: profile.bio || "",
+        university: profile.university || "",
+        department: profile.department || "",
+        graduationYear: profile.graduationYear || "",
+        profileImage: profile.profileImage || "",
+        coverImage: profile.coverImage || "",
+      });
+    }
   };
 
-  const handleSubmit = async (
-    e: React.FormEvent
-  ) => {
+  const handleChange = (e: any) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     try {
       setLoading(true);
-      setMessage("");
 
-      const user =
-        await authService.getCurrentUser();
+      const user = await authService.getCurrentUser();
 
-      if (!user) {
-        setMessage(
-          "Please login first."
-        );
-        return;
+      if (!user) return;
+
+      // 🔥 UPDATE or CREATE
+      if (existingProfileId) {
+        await profileService.updateProfile(existingProfileId, {
+          ...form,
+          graduationYear: Number(form.graduationYear),
+        });
+      } else {
+        await profileService.createProfile({
+          userId: user.$id,
+          ...form,
+          graduationYear: Number(form.graduationYear),
+          status: "draft",
+        });
       }
 
-      const existingUsername =
-        await profileService.getProfileByUsername(
-          form.username
-        );
+      setMessage("Saved successfully!");
 
-      if (existingUsername) {
-        setMessage(
-          "Username already exists."
-        );
-        return;
-      }
-
-      await profileService.createProfile({
-        userId: user.$id,
-
-        fullName: form.fullName,
-        username: form.username,
-        bio: form.bio,
-
-        university: form.university,
-        department: form.department,
-
-        graduationYear:
-          Number(form.graduationYear),
-
-        profileImage:
-          form.profileImage,
-
-        coverImage:
-          form.coverImage,
-
-        language: "en",
-        theme: "default",
-      });
-
-      setMessage(
-        "Profile created successfully!"
-      );
-
+      // 🔥 REDIRECT BACK TO DASHBOARD
       setTimeout(() => {
         router.push("/dashboard");
-      }, 1500);
-    } catch (error: any) {
-      console.error(error);
+      }, 1000);
 
-      setMessage(
-        error?.message ||
-          "Failed to create profile."
-      );
+    } catch (err: any) {
+      console.error(err);
+      setMessage(err.message || "Error saving profile");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen px-4 py-10">
-      <div className="mx-auto max-w-2xl rounded-xl border p-6 shadow">
-        <h1 className="mb-2 text-3xl font-bold">
-          Create Your Graduate Profile
+    <div className="min-h-screen p-6">
+
+      <div className="max-w-2xl mx-auto">
+
+        <h1 className="text-2xl font-bold mb-4">
+          Profile Setup
         </h1>
 
-        <p className="mb-8 text-gray-500">
-          Set up your graduation page.
-        </p>
+        <form onSubmit={handleSubmit} className="space-y-3">
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-        >
-          <input
-            name="fullName"
-            placeholder="Full Name"
-            value={form.fullName}
-            onChange={handleChange}
-            className="w-full rounded-lg border p-3"
-            required
-          />
+          <input name="fullName" value={form.fullName} onChange={handleChange} placeholder="Full Name" className="border p-2 w-full" />
+          <input name="username" value={form.username} onChange={handleChange} placeholder="Username" className="border p-2 w-full" />
+          <textarea name="bio" value={form.bio} onChange={handleChange} placeholder="Bio" className="border p-2 w-full" />
 
-          <input
-            name="username"
-            placeholder="Username"
-            value={form.username}
-            onChange={handleChange}
-            className="w-full rounded-lg border p-3"
-            required
-          />
+          <input name="university" value={form.university} onChange={handleChange} placeholder="University" className="border p-2 w-full" />
+          <input name="department" value={form.department} onChange={handleChange} placeholder="Department" className="border p-2 w-full" />
 
-          <textarea
-            name="bio"
-            placeholder="Tell people about yourself..."
-            value={form.bio}
-            onChange={handleChange}
-            className="w-full rounded-lg border p-3"
-            rows={4}
-          />
-
-          <input
-            name="university"
-            placeholder="University"
-            value={form.university}
-            onChange={handleChange}
-            className="w-full rounded-lg border p-3"
-          />
-
-          <input
-            name="department"
-            placeholder="Department"
-            value={form.department}
-            onChange={handleChange}
-            className="w-full rounded-lg border p-3"
-          />
-
-          <input
-            name="graduationYear"
-            type="number"
-            placeholder="Graduation Year"
-            value={form.graduationYear}
-            onChange={handleChange}
-            className="w-full rounded-lg border p-3"
-          />
+          <input name="graduationYear" value={form.graduationYear} onChange={handleChange} placeholder="Year" className="border p-2 w-full" />
 
           <ImageUpload
-            label="Profile Photo"
+            label="Profile Image"
             onUpload={(url) =>
-              setForm((prev) => ({
-                ...prev,
-                profileImage: url,
-              }))
+              setForm((p) => ({ ...p, profileImage: url }))
             }
           />
 
-          {form.profileImage && (
-            <img
-              src={form.profileImage}
-              alt="Profile"
-              className="h-32 w-32 rounded-full object-cover"
-            />
-          )}
-
           <ImageUpload
-            label="Cover Photo"
+            label="Cover Image"
             onUpload={(url) =>
-              setForm((prev) => ({
-                ...prev,
-                coverImage: url,
-              }))
+              setForm((p) => ({ ...p, coverImage: url }))
             }
           />
-
-          {form.coverImage && (
-            <img
-              src={form.coverImage}
-              alt="Cover"
-              className="h-40 w-full rounded-lg object-cover"
-            />
-          )}
 
           <button
-            type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 py-3 text-white disabled:opacity-50"
+            className="bg-blue-600 text-white px-4 py-2 rounded w-full"
           >
-            {loading
-              ? "Saving..."
-              : "Save Profile"}
+            {loading ? "Saving..." : "Save Profile"}
           </button>
+
         </form>
 
-        {message && (
-          <p className="mt-4 text-center">
-            {message}
-          </p>
-        )}
+        {message && <p className="mt-3">{message}</p>}
+
       </div>
+
     </div>
   );
 }
