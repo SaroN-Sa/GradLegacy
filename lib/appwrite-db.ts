@@ -1,44 +1,12 @@
-import { databases } from "@/lib/appwrite";
-import { Query, ID } from "appwrite";
+import { Client, Databases, ID, Query } from "appwrite";
 
-const DATABASE_ID = "6a3d0b9100231432c178";
-const COLLECTION_ID = "graduateprofiles";
+const client = new Client()
+  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
 
-export const db = {
-  createProfile: async (data: any) => {
-    return await databases.createDocument(
-      DATABASE_ID,
-      COLLECTION_ID,
-      ID.unique(),
-      data
-    );
-  },
+export const databases = new Databases(client);
 
-  getProfileByUserId: async (userId: string) => {
-    return await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTION_ID,
-      [Query.equal("userId", userId)]
-    );
-  },
+export const DATABASE_ID = "6a3d0b9100231432c178";
+export const COLLECTION_ID = "graduateprofiles";
 
-  getProfileByUsername: async (username: string) => {
-    return await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTION_ID,
-      [Query.equal("username", username)]
-    );
-  },
-
-  updateProfile: async (
-    documentId: string,
-    data: any
-  ) => {
-    return await databases.updateDocument(
-      DATABASE_ID,
-      COLLECTION_ID,
-      documentId,
-      data
-    );
-  },
-};
+export { ID, Query };
