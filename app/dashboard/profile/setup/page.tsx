@@ -15,7 +15,7 @@ import {
 
 import { authService } from "@/services/auth";
 import { profileService } from "@/services/profile";
-import ImageUpload from "@/components/profile/ImageUpload";
+import ImageUpload from "@/components/ImageUpload";
 
 export default function ProfileSetupPage() {
   const router = useRouter();
