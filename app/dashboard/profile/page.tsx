@@ -12,8 +12,10 @@ import QuickActions from "@/components/profile/QuickActions";
 import ProfileStats from "@/components/profile/ProfileStats";
 import QRCodeModal from "@/components/profile/QRCodeModal";
 import ProfilePreviewModal from "@/components/profile/ProfilePreviewModal";  // ← new
+import socialLinksCard from "@/components/profile/SocialLinksCard";
 
 import type { GraduateProfile } from "@/types/profile";
+import SocialLinksCard from "@/components/profile/SocialLinksCard";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -195,6 +197,8 @@ export default function ProfilePage() {
         onClose={() => setShowPreview(false)}
         profile={profile}
       />
+      <SocialLinksCard profile={profile} />
+      
     </>
   );
 }

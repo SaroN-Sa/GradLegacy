@@ -23,13 +23,10 @@ export interface GraduateProfile {
 
   language?: string;
 
-  quote?: string;
-
-  facebook?: string;
-
+  website?: string;
   linkedin?: string;
-
-  telegram?: string;
-
+  github?: string;
+  facebook?: string;
   instagram?: string;
+  twitter?: string;
 }
