@@ -2,15 +2,7 @@
 
 import { useCallback, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import {
-  Upload,
-  X,
-  Image as ImageIcon,
-  Video,
-  Music,
-  Loader2,
-  AlertCircle,
-} from "lucide-react";
+import { Upload, X, Music, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 
 import { mediaService } from "@/services/media";
 import { CreateMedia, Media } from "@/types/media";
@@ -51,43 +43,23 @@ export default function MediaUploader({
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  const acceptedTypes = useMemo(
-    () => accept.split(",").map((item) => item.trim()),
-    [accept]
-  );
+  const acceptedTypes = useMemo(() => accept.split(",").map((item) => item.trim()), [accept]);
 
-  const generateId = () =>
-    `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-
-  const getFileIcon = (file: File) => {
-    if (file.type.startsWith("image/")) {
-      return <ImageIcon className="h-6 w-6" />;
-    }
-    if (file.type.startsWith("video/")) {
-      return <Video className="h-6 w-6" />;
-    }
-    return <Music className="h-6 w-6" />;
-  };
+  const generateId = () => `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
   const validateFile = (file: File): string | null => {
     if (file.size > maxFileSize) {
       return `File "${file.name}" exceeds the maximum size.`;
     }
     const valid = acceptedTypes.some((type) => {
-      if (type.endsWith("/*")) {
-        return file.type.startsWith(type.replace("/*", "/"));
-      }
+      if (type.endsWith("/*")) return file.type.startsWith(type.replace("/*", "/"));
       return file.type === type;
     });
-    if (!valid) {
-      return `"${file.name}" is not a supported file type.`;
-    }
+    if (!valid) return `"${file.name}" is not a supported file type.`;
     return null;
   };
 
-  const createPreview = (file: File) => {
-    return URL.createObjectURL(file);
-  };
+  const createPreview = (file: File) => URL.createObjectURL(file);
 
   const addFiles = useCallback(
     (selectedFiles: File[]) => {
@@ -121,23 +93,17 @@ export default function MediaUploader({
   const removeFile = (id: string) => {
     setFiles((prev) => {
       const file = prev.find((item) => item.id === id);
-      if (file) {
-        URL.revokeObjectURL(file.preview);
-      }
+      if (file) URL.revokeObjectURL(file.preview);
       return prev.filter((item) => item.id !== id);
     });
   };
 
   const clearFiles = () => {
-    files.forEach((item) => {
-      URL.revokeObjectURL(item.preview);
-    });
+    files.forEach((item) => URL.revokeObjectURL(item.preview));
     setFiles([]);
   };
 
-  const openPicker = () => {
-    inputRef.current?.click();
-  };
+  const openPicker = () => inputRef.current?.click();
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(event.target.files ?? []);
@@ -146,109 +112,67 @@ export default function MediaUploader({
     event.target.value = "";
   };
 
-  const updateProgress = (
-    id: string,
-    progress: number,
-    uploading: boolean,
-    uploaded: boolean,
-    error?: string
-  ) => {
+  const updateProgress = (id: string, progress: number, uploading: boolean, uploaded: boolean, error?: string) => {
     setFiles((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, progress, uploading, uploaded, error }
-          : item
-      )
+      prev.map((item) => (item.id === id ? { ...item, progress, uploading, uploaded, error } : item))
     );
   };
 
   const uploadSingleFile = async (selectedFile: SelectedFile): Promise<Media | null> => {
-  try {
-    updateProgress(selectedFile.id, 10, true, false);
+    try {
+      updateProgress(selectedFile.id, 10, true, false);
 
-    const formData = new FormData();
-    formData.append("file", selectedFile.file);
-    formData.append("userId", userId);
+      const formData = new FormData();
+      formData.append("file", selectedFile.file);
+      formData.append("userId", userId);
 
-    const response = await fetch("/api/media/upload", {
-      method: "POST",
-      body: formData,
-    });
+      const response = await fetch("/api/media/upload", { method: "POST", body: formData });
+      if (!response.ok) throw new Error("Upload failed.");
 
-    if (!response.ok) {
-      throw new Error("Upload failed.");
+      updateProgress(selectedFile.id, 60, true, false);
+
+      const result = await response.json();
+      if (!result.success) throw new Error(result.error || "Upload failed.");
+      if (!result.media || !result.media.publicId) {
+        throw new Error("Upload response missing publicId");
+      }
+
+      const mediaData: CreateMedia = {
+        userId,
+        uploadedBy: userId,
+        title: selectedFile.file.name,
+        description: "",
+        type: result.media.type,
+        url: result.media.url,
+        publicId: result.media.publicId,
+        visibility: "private",
+        album: "",
+        featured: false,
+        status: "active",
+      };
+
+      const media = await mediaService.createMedia(mediaData);
+      updateProgress(selectedFile.id, 100, false, true);
+      return media;
+    } catch (error) {
+      console.error("Upload error:", error);
+      updateProgress(selectedFile.id, 0, false, false, error instanceof Error ? error.message : "Upload failed.");
+      return null;
     }
-
-    updateProgress(selectedFile.id, 60, true, false);
-
-    const result = await response.json();
-    
-    // Log the response to see what's coming back
-    console.log("Upload API response:", result);
-
-    if (!result.success) {
-      throw new Error(result.error || "Upload failed.");
-    }
-
-    // Ensure we have the publicId
-    if (!result.media || !result.media.publicId) {
-      console.error("Missing publicId in response:", result);
-      throw new Error("Upload response missing publicId");
-    }
-
-    // Create media data
-    const mediaData: CreateMedia = {
-      userId,
-      uploadedBy: userId,
-      title: selectedFile.file.name,
-      description: "",
-      type: result.media.type,
-      url: result.media.url,
-      publicId: result.media.publicId, // This must be present
-      visibility: "private",
-      album: "",
-      featured: false,
-      status: "active",
-    };
-
-    console.log("Creating media with data:", mediaData);
-
-    const media = await mediaService.createMedia(mediaData);
-
-    updateProgress(selectedFile.id, 100, false, true);
-    return media;
-  } catch (error) {
-    console.error("Upload error:", error);
-    updateProgress(
-      selectedFile.id,
-      0,
-      false,
-      false,
-      error instanceof Error ? error.message : "Upload failed."
-    );
-    return null;
-  }
-};
+  };
 
   const uploadFiles = async () => {
     const validFiles = files.filter((file) => !file.error && !file.uploaded);
     if (!validFiles.length) return;
 
     setUploading(true);
-
     try {
       const uploadedMedia: Media[] = [];
-
       for (const file of validFiles) {
         const media = await uploadSingleFile(file);
-        if (media) {
-          uploadedMedia.push(media);
-        }
+        if (media) uploadedMedia.push(media);
       }
-
-      if (uploadedMedia.length && onUploadComplete) {
-        onUploadComplete(uploadedMedia);
-      }
+      if (uploadedMedia.length && onUploadComplete) onUploadComplete(uploadedMedia);
     } finally {
       setUploading(false);
     }
@@ -293,60 +217,36 @@ export default function MediaUploader({
         onDragLeave={onDragLeave}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        className={`cursor-pointer rounded-xl border-2 border-dashed p-10 transition-all duration-200 ${
-          dragging
-            ? "border-[#0f172a] bg-[#0f172a]/5"
-            : "border-gray-300 hover:border-[#0f172a]/60 hover:bg-gray-50"
+        className={`cursor-pointer rounded-2xl border-2 border-dashed p-10 transition-all duration-200 ${
+          dragging ? "border-[#0f172a] bg-[#0f172a]/5" : "border-gray-300 hover:border-[#0f172a]/60 hover:bg-gray-50"
         }`}
       >
         <div className="flex flex-col items-center justify-center gap-4 text-center">
           <Upload className="h-12 w-12 text-[#0f172a]" />
           <div>
-            <h3 className="text-lg font-semibold">Upload Media</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Drag & Drop files here or click to browse.
-            </p>
-            <p className="mt-2 text-xs text-gray-400">
+            <h3 className="text-lg font-extrabold tracking-tight text-gray-900">Upload Media</h3>
+            <p className="mt-1 text-sm text-gray-500">Drag & drop files here, or click to browse.</p>
+            <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
               Images • Videos • Audio
             </p>
           </div>
         </div>
-        <input
-          ref={inputRef}
-          hidden
-          multiple={multiple}
-          type="file"
-          accept={accept}
-          onChange={onInputChange}
-        />
+        <input ref={inputRef} hidden multiple={multiple} type="file" accept={accept} onChange={onInputChange} />
       </div>
 
       {hasFiles && (
         <>
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {files.map((item) => (
-              <div
-                key={item.id}
-                className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
-              >
+              <div key={item.id} className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg shadow-black/5">
                 <div className="relative aspect-video bg-gray-100">
                   {item.file.type.startsWith("image/") ? (
-                    <Image
-                      src={item.preview}
-                      alt={item.file.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width:768px) 100vw, 33vw"
-                    />
+                    <Image src={item.preview} alt={item.file.name} fill className="object-cover" sizes="(max-width:768px) 100vw, 33vw" />
                   ) : item.file.type.startsWith("video/") ? (
-                    <video
-                      src={item.preview}
-                      controls
-                      className="h-full w-full object-cover"
-                    />
+                    <video src={item.preview} controls className="h-full w-full object-cover" />
                   ) : (
-                    <div className="flex h-full items-center justify-center">
-                      <Music className="h-14 w-14 text-gray-400" />
+                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-emerald-50 to-emerald-100">
+                      <Music className="h-14 w-14 text-emerald-500" />
                     </div>
                   )}
                   <button
@@ -355,7 +255,7 @@ export default function MediaUploader({
                       e.stopPropagation();
                       removeFile(item.id);
                     }}
-                    className="absolute right-3 top-3 rounded-full bg-white p-2 shadow"
+                    className="absolute right-3 top-3 rounded-full bg-white/90 p-2 shadow transition hover:bg-white"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -363,34 +263,30 @@ export default function MediaUploader({
 
                 <div className="space-y-3 p-4">
                   <div>
-                    <p className="truncate font-medium">{item.file.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {(item.file.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
+                    <p className="truncate text-sm font-bold text-gray-900">{item.file.name}</p>
+                    <p className="text-xs text-gray-400">{(item.file.size / 1024 / 1024).toFixed(2)} MB</p>
                   </div>
 
                   {item.error && (
-                    <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600">
-                      <AlertCircle className="h-4 w-4" />
+                    <div className="flex items-center gap-2 rounded-xl bg-red-50 p-3 text-sm text-red-600">
+                      <AlertCircle className="h-4 w-4 shrink-0" />
                       <span>{item.error}</span>
                     </div>
                   )}
 
                   {item.uploading && (
                     <div className="space-y-2">
-                      <div className="h-2 overflow-hidden rounded-full bg-gray-200">
-                        <div
-                          className="h-full bg-[#0f172a] transition-all"
-                          style={{ width: `${item.progress}%` }}
-                        />
+                      <div className="h-2 overflow-hidden rounded-full bg-gray-100">
+                        <div className="h-full bg-[#0f172a] transition-all" style={{ width: `${item.progress}%` }} />
                       </div>
-                      <p className="text-xs text-gray-500">Uploading...</p>
+                      <p className="text-xs text-gray-400">Uploading…</p>
                     </div>
                   )}
 
                   {item.uploaded && (
-                    <div className="rounded-lg bg-green-50 p-3 text-sm font-medium text-green-700">
-                      Upload completed
+                    <div className="flex items-center gap-2 rounded-xl bg-emerald-50 p-3 text-sm font-semibold text-emerald-700">
+                      <CheckCircle2 className="h-4 w-4" />
+                      Upload complete
                     </div>
                   )}
                 </div>
@@ -398,18 +294,18 @@ export default function MediaUploader({
             ))}
           </div>
 
-          <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-xl border border-gray-200 bg-gray-50 p-5 md:flex-row">
-            <div className="text-sm text-gray-600">
-              <p>
-                Selected: <strong>{files.length}</strong>
-              </p>
-              <p>
-                Ready: <strong>{pendingUploads}</strong>
-              </p>
-              <p>
-                Uploaded: <strong>{completedUploads}</strong>
-              </p>
-              {hasErrors && <p className="text-red-600">Some files contain errors.</p>}
+          <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-5 md:flex-row">
+            <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+              <span>
+                Selected <strong className="text-gray-900">{files.length}</strong>
+              </span>
+              <span>
+                Ready <strong className="text-gray-900">{pendingUploads}</strong>
+              </span>
+              <span>
+                Uploaded <strong className="text-gray-900">{completedUploads}</strong>
+              </span>
+              {hasErrors && <span className="font-semibold text-red-600">Some files contain errors</span>}
             </div>
 
             <div className="flex gap-3">
@@ -417,7 +313,7 @@ export default function MediaUploader({
                 type="button"
                 onClick={clearFiles}
                 disabled={uploading}
-                className="rounded-lg border border-gray-200 px-5 py-2 text-sm font-medium hover:bg-gray-100 disabled:opacity-50"
+                className="rounded-xl border-2 border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 disabled:opacity-50"
               >
                 Clear
               </button>
@@ -425,10 +321,10 @@ export default function MediaUploader({
                 type="button"
                 disabled={uploading || pendingUploads === 0}
                 onClick={uploadFiles}
-                className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#0f172a] to-[#1e3a5f] px-5 py-2 text-sm font-medium text-white hover:shadow-lg disabled:opacity-50"
+                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#0f172a] to-[#1e3a5f] px-5 py-2.5 text-sm font-bold text-white transition hover:shadow-lg disabled:opacity-50"
               >
                 {uploading && <Loader2 className="h-4 w-4 animate-spin" />}
-                {uploading ? "Uploading..." : "Upload Media"}
+                {uploading ? "Uploading…" : "Upload Media"}
               </button>
             </div>
           </div>

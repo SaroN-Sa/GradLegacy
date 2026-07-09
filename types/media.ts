@@ -2,7 +2,11 @@ export type MediaType = "image" | "video" | "audio";
 
 export type MediaVisibility = "private" | "public" | "unlisted";
 
-export type MediaSource = "graduate" | "visitor" | "timeline" | "memorybook";
+export type MediaSource =
+  | "graduate"
+  | "visitor"
+  | "timeline"
+  | "memorybook";
 
 export type MediaStatus = "active" | "deleted";
 

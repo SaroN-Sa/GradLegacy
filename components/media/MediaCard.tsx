@@ -1,68 +1,23 @@
 "use client";
 
 import Image from "next/image";
-import {
-  Eye,
-  Pencil,
-  Trash2,
-  Globe,
-  Lock,
-  Link2,
-  Star,
-  Play,
-  Music,
-  Calendar,
-} from "lucide-react";
+import { Eye, Pencil, Trash2, Star, Play, Music, Calendar } from "lucide-react";
 
 import { Media } from "@/types/media";
+import { TYPE_ACCENT, VISIBILITY_ACCENT } from "@/lib/media/media-accent";
 
 interface MediaCardProps {
   media: Media;
-
   onView: (media: Media) => void;
-
   onEdit: (media: Media) => void;
-
   onDelete: (media: Media) => void;
 }
 
-export default function MediaCard({
-  media,
-  onView,
-  onEdit,
-  onDelete,
-}: MediaCardProps) {
-  const visibilityIcon = () => {
-    switch (media.visibility) {
-      case "public":
-        return <Globe className="h-4 w-4 text-green-600" />;
-
-      case "private":
-        return <Lock className="h-4 w-4 text-red-600" />;
-
-      case "unlisted":
-        return <Link2 className="h-4 w-4 text-yellow-600" />;
-
-      default:
-        return null;
-    }
-  };
-
-  const visibilityText = () => {
-    switch (media.visibility) {
-      case "public":
-        return "Public";
-
-      case "private":
-        return "Private";
-
-      case "unlisted":
-        return "Unlisted";
-
-      default:
-        return "";
-    }
-  };
+export default function MediaCard({ media, onView, onEdit, onDelete }: MediaCardProps) {
+  const visibility = VISIBILITY_ACCENT[media.visibility];
+  const typeAccent = TYPE_ACCENT[media.type];
+  const VisibilityIcon = visibility?.icon;
+  const TypeIcon = typeAccent?.icon;
 
   const mediaPreview = () => {
     if (media.type === "image") {
@@ -80,11 +35,7 @@ export default function MediaCard({
     if (media.type === "video") {
       return (
         <>
-          <video
-            src={media.url}
-            className="h-full w-full object-cover"
-          />
-
+          <video src={media.url} className="h-full w-full object-cover" />
           <div className="absolute inset-0 flex items-center justify-center bg-black/20">
             <div className="rounded-full bg-white/90 p-4">
               <Play className="h-8 w-8 fill-current text-[#0f172a]" />
@@ -95,14 +46,14 @@ export default function MediaCard({
     }
 
     return (
-      <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#0f172a]/5 to-[#0f172a]/10">
-        <Music className="h-16 w-16 text-[#0f172a]" />
+      <div className="flex h-full items-center justify-center bg-gradient-to-br from-emerald-50 to-emerald-100">
+        <Music className="h-14 w-14 text-emerald-500" />
       </div>
     );
   };
 
   return (
-    <div className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <div className="group overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-lg shadow-black/5 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10">
       {/* Preview */}
       <div
         className="relative aspect-[4/3] cursor-pointer overflow-hidden bg-gray-100"
@@ -110,63 +61,61 @@ export default function MediaCard({
       >
         {mediaPreview()}
 
-        {/* Featured Badge */}
         {media.featured && (
-          <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-yellow-400 px-3 py-1 text-xs font-semibold text-[#0f172a] shadow">
+          <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-yellow-400 px-3 py-1 text-xs font-bold text-[#0f172a] shadow">
             <Star className="h-3.5 w-3.5 fill-current" />
             Featured
           </div>
         )}
 
-        {/* Media Type */}
-        <div className="absolute right-3 top-3 rounded-full bg-[#0f172a]/80 px-3 py-1 text-xs font-medium text-white capitalize">
-          {media.type}
-        </div>
+        {typeAccent && (
+          <div className={`absolute right-3 top-3 flex items-center gap-1 rounded-full ${typeAccent.chip} px-3 py-1 text-xs font-bold text-white capitalize shadow`}>
+            <TypeIcon className="h-3 w-3" />
+            {media.type}
+          </div>
+        )}
       </div>
 
       {/* Content */}
       <div className="space-y-4 p-5">
         <div>
-          <h3 className="truncate text-lg font-semibold text-gray-900">
+          <h3 className="truncate text-lg font-extrabold tracking-tight text-gray-900">
             {media.title || "Untitled Media"}
           </h3>
 
           {media.description && (
-            <p className="mt-2 line-clamp-2 text-sm text-gray-600">
-              {media.description}
-            </p>
+            <p className="mt-1.5 line-clamp-2 text-sm text-gray-500">{media.description}</p>
           )}
         </div>
 
         {/* Info */}
-        <div className="space-y-2 text-sm text-gray-500">
-          <div className="flex items-center gap-2">
-            {visibilityIcon()}
-
-            <span>{visibilityText()}</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
-
-            <span>
-              {new Date(media.$createdAt).toLocaleDateString()}
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          {visibility && (
+            <span className={`inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-2.5 py-1 font-semibold ${visibility.text}`}>
+              <span className={`h-1.5 w-1.5 rounded-full ${visibility.dot}`} />
+              <VisibilityIcon className="h-3.5 w-3.5" />
+              {visibility.label}
             </span>
-          </div>
+          )}
+
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-2.5 py-1 font-semibold text-gray-400">
+            <Calendar className="h-3.5 w-3.5" />
+            {new Date(media.$createdAt).toLocaleDateString()}
+          </span>
 
           {media.album && (
-            <div className="rounded-lg bg-gray-100 px-3 py-2 text-xs font-medium text-gray-700">
-              Album: {media.album}
-            </div>
+            <span className="inline-flex items-center rounded-full bg-gray-50 px-2.5 py-1 font-semibold text-gray-500">
+              {media.album}
+            </span>
           )}
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-between border-t pt-4">
+        <div className="flex items-center justify-between border-t border-gray-100 pt-4">
           <button
             type="button"
             onClick={() => onView(media)}
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[#0f172a] transition hover:bg-[#0f172a]/5"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-[#0f172a] transition-colors hover:bg-[#0f172a]/5"
           >
             <Eye className="h-4 w-4" />
             View
@@ -175,7 +124,7 @@ export default function MediaCard({
           <button
             type="button"
             onClick={() => onEdit(media)}
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[#0f172a] transition hover:bg-[#0f172a]/5"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-[#0f172a] transition-colors hover:bg-[#0f172a]/5"
           >
             <Pencil className="h-4 w-4" />
             Edit
@@ -184,7 +133,7 @@ export default function MediaCard({
           <button
             type="button"
             onClick={() => onDelete(media)}
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4" />
             Delete

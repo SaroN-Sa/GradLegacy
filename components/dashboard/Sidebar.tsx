@@ -21,7 +21,7 @@ import { authService } from "@/services/auth";
 const menuItems = [
   { name: "Dashboard",  href: "/dashboard",                icon: LayoutDashboard },
   { name: "My Profile", href: "/dashboard/profile",   icon: User },
-  { name: "Gallery",    href: "/dashboard/gallery",        icon: Images },
+  { name: "Media",    href: "/dashboard/media",        icon: Images },
   { name: "Timeline",   href: "/dashboard/timeline",       icon: Clock3 },
   { name: "Wishes",     href: "/dashboard/wishes",         icon: MessageSquare },
   { name: "Analytics",  href: "/dashboard/analytics",      icon: BarChart3 },
