@@ -27,7 +27,7 @@ export default function MediaHubPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <Link
-            href="/"
+            href="/dashboard"
             className="mb-3 inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 transition-colors hover:text-[#0f172a]"
           >
             <ArrowLeft size={13} />
@@ -63,7 +63,7 @@ export default function MediaHubPage() {
           return (
             <Link
               key={c.slug}
-              href={`/media/${c.slug}`}
+              href={`/dashboard/media/${c.slug}`}
               className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-white p-5 shadow-lg shadow-black/5 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10"
             >
               <div className="flex items-start justify-between">

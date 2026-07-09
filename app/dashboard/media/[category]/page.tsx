@@ -83,7 +83,7 @@ export default function MediaCategoryPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <Link
-            href="/media"
+            href="/dashboard/media"
             className="mb-3 inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 transition-colors hover:text-[#0f172a]"
           >
             <ArrowLeft size={13} />
