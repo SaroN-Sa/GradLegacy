@@ -1,4 +1,8 @@
-// Timeline categories
+// types/timeline.ts
+
+// -------------------------
+// Timeline Category
+// -------------------------
 export type TimelineCategory =
   | "education"
   | "internship"
@@ -6,34 +10,40 @@ export type TimelineCategory =
   | "graduation"
   | "other";
 
-// Timeline visibility status
-export type TimelineStatus = "draft" | "published";
+// -------------------------
+// Timeline Status
+// -------------------------
+export type TimelineStatus =
+  | "draft"
+  | "published";
 
-// Timeline event interface
+// -------------------------
+// Timeline Event
+// -------------------------
 export interface TimelineEvent {
   // Appwrite document ID
   $id: string;
 
-  // Graduate who owns this event
+  // Owner of the event
   userId: string;
 
   // Event information
   title: string;
   description: string;
 
-  // When the event happened
+  // Event date
   date: string;
 
-  // Event type
+  // Event category
   category: TimelineCategory;
 
-  // Optional cover image (Cloudinary URL)
+  // Optional cover image
   image?: string;
 
   // Optional location
   location?: string;
 
-  // Draft or published
+  // Draft or Published
   status: TimelineStatus;
 
   // Timestamps
@@ -41,7 +51,9 @@ export interface TimelineEvent {
   updatedAt: string;
 }
 
-// Data used when creating a new event
+// -------------------------
+// Create Event
+// -------------------------
 export interface CreateTimelineEventData {
   title: string;
   description: string;
@@ -52,6 +64,8 @@ export interface CreateTimelineEventData {
   status: TimelineStatus;
 }
 
-// Data used when updating an existing event
+// -------------------------
+// Update Event
+// -------------------------
 export interface UpdateTimelineEventData
   extends Partial<CreateTimelineEventData> {}
