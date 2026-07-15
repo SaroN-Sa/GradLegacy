@@ -24,8 +24,8 @@ export default function CategoryMotif({
     case "images":
       return (
         <div className={`relative h-9 w-14 ${className}`}>
-          <div className="absolute inset-0 rounded-md bg-violet-200 rotate-[-8deg]" />
-          <div className="absolute inset-0 rounded-md bg-violet-300 rotate-[4deg]" />
+          <div className="absolute inset-0 rounded-md bg-violet-300/40 rotate-[-8deg]" />
+          <div className="absolute inset-0 rounded-md bg-violet-400/70 rotate-[4deg]" />
           <div className="absolute inset-0 rounded-md bg-violet-500" />
         </div>
       );
@@ -53,7 +53,7 @@ export default function CategoryMotif({
           {[6, 14, 22, 32, 20, 12, 26].map((h, i) => (
             <span
               key={i}
-              className="w-[3px] rounded-full bg-emerald-500"
+              className="w-[3px] rounded-full bg-emerald-400"
               style={{ height: h }}
             />
           ))}
@@ -72,7 +72,7 @@ export default function CategoryMotif({
               key={i}
               viewBox="0 0 24 24"
               fill="currentColor"
-              className="absolute text-yellow-400"
+              className="absolute text-[#FFD700]"
               style={{ top: s.top, left: s.left, width: s.size, height: s.size, opacity: s.o }}
             >
               <path d="M12 2l2.9 6.6L22 9.3l-5 4.9 1.2 7.1L12 17.8l-6.2 3.5L7 14.2 2 9.3l7.1-.7L12 2z" />
@@ -84,9 +84,9 @@ export default function CategoryMotif({
     case "public":
       return (
         <div className={`flex h-9 w-14 items-center justify-center ${className}`}>
-          <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-sky-300">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-sky-400/60">
             <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-sky-400">
-              <div className="h-2 w-2 rounded-full bg-sky-500" />
+              <div className="h-2 w-2 rounded-full bg-sky-400" />
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ export default function CategoryMotif({
       return (
         <div className={`grid h-9 w-14 grid-cols-5 gap-[3px] content-center ${className}`}>
           {Array.from({ length: 10 }).map((_, i) => (
-            <span key={i} className="h-1.5 w-1.5 rounded-[2px] bg-slate-400" />
+            <span key={i} className="h-1.5 w-1.5 rounded-[2px] bg-slate-500" />
           ))}
         </div>
       );
@@ -118,8 +118,8 @@ export default function CategoryMotif({
       return (
         <div className={`grid h-9 w-14 grid-cols-4 grid-rows-2 gap-[3px] ${className}`}>
           {[
-            "bg-violet-400", "bg-rose-400", "bg-emerald-400", "bg-yellow-400",
-            "bg-sky-400", "bg-slate-400", "bg-orange-400", "bg-[#0f172a]",
+            "bg-violet-400", "bg-rose-400", "bg-emerald-400", "bg-[#FFD700]",
+            "bg-sky-400", "bg-slate-400", "bg-orange-400", "bg-white",
           ].map((c, i) => (
             <span key={i} className={`rounded-[2px] ${c}`} />
           ))}

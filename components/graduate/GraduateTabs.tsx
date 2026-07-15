@@ -40,7 +40,7 @@ export default function ProfileTabs({
   };
 
   return (
-    <div className="mt-5 flex gap-1 rounded-2xl bg-white p-1.5 shadow-xl shadow-black/20">
+    <div className="mt-5 flex gap-1 rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-1.5 shadow-lg shadow-black/20">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.key;
@@ -51,10 +51,10 @@ export default function ProfileTabs({
             key={tab.key}
             onClick={() => onChange(tab.key)}
             aria-current={isActive ? "true" : undefined}
-            className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl py-3 px-2 transition-all duration-200 sm:gap-2 ${
+            className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl px-2 py-3 transition-all duration-200 sm:gap-2 ${
               isActive
-                ? "bg-[#0f172a] text-yellow-400 shadow-md"
-                : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                ? "bg-[#FFD700]/10 text-[#FFD700] shadow-sm ring-1 ring-[#FFD700]/30"
+                : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"
             }`}
           >
             <Icon size={15} className="shrink-0" />
@@ -66,7 +66,9 @@ export default function ProfileTabs({
             {count > 0 && (
               <span
                 className={`min-w-[1.25rem] rounded-full px-1.5 py-0.5 text-center text-[11px] font-semibold tabular-nums leading-none ${
-                  isActive ? "bg-white/15 text-yellow-300" : "bg-gray-100 text-gray-600"
+                  isActive
+                    ? "bg-[#FFD700]/15 text-[#FFD700]"
+                    : "bg-slate-800 text-slate-400"
                 }`}
               >
                 {count}

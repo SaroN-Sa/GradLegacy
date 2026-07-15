@@ -28,7 +28,7 @@ export default function WishFilters({
   onStatusChange,
 }: WishFiltersProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+    <div className="rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-4 shadow-lg shadow-black/20 sm:p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         {/* Search */}
         <div className="flex-1 lg:max-w-sm">
@@ -36,19 +36,19 @@ export default function WishFilters({
             Search Wishes
           </label>
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
             <input
               type="text"
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search by visitor, relationship or message..."
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-9 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+              className="w-full rounded-xl border border-slate-700 bg-slate-900 py-2.5 pl-10 pr-9 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[#FFD700]/60 focus:bg-slate-900 focus:ring-4 focus:ring-[#FFD700]/10"
             />
             {search && (
               <button
                 type="button"
                 onClick={() => onSearchChange("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-slate-400 hover:bg-slate-200/70 hover:text-slate-600 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-slate-500 transition-colors hover:bg-slate-800 hover:text-slate-300"
                 aria-label="Clear search"
               >
                 <X className="h-3.5 w-3.5" />
@@ -63,7 +63,7 @@ export default function WishFilters({
             <SlidersHorizontal className="h-3 w-3" />
             Status
           </label>
-          <div className="inline-flex flex-wrap gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1">
+          <div className="inline-flex flex-wrap gap-1 rounded-xl border border-slate-700 bg-slate-900 p-1">
             {STATUS_OPTIONS.map((option) => {
               const isActive = status === option.value;
               return (
@@ -73,8 +73,8 @@ export default function WishFilters({
                   onClick={() => onStatusChange(option.value)}
                   className={`rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all ${
                     isActive
-                      ? "bg-white text-blue-600 shadow-sm ring-1 ring-slate-200"
-                      : "text-slate-500 hover:text-slate-700"
+                      ? "bg-[#FFD700]/10 text-[#FFD700] shadow-sm ring-1 ring-[#FFD700]/30"
+                      : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
                   {option.label}
