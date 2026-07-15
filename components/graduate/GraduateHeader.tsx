@@ -62,11 +62,11 @@ export default function ProfileHeader({
         <div className="absolute inset-x-0 top-0 flex items-center justify-between px-4 py-4 sm:px-8">
           <div className="flex items-center gap-2">
             <div className="rounded-xl border border-white/20 bg-white/15 p-2 backdrop-blur-sm">
-              <GraduationCap size={18} className="text-yellow-400" />
+              <GraduationCap size={18} className="text-[#FFD700]" />
             </div>
 
             <span className="text-sm font-bold text-white">
-              Grad<span className="text-yellow-400">Legacy</span>
+              Grad<span className="text-[#FFD700]">Legacy</span>
             </span>
           </div>
 
@@ -82,9 +82,9 @@ export default function ProfileHeader({
 
       {/* Profile Card */}
       <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6">
-        <div className="relative rounded-3xl bg-white p-6 pt-14 shadow-2xl shadow-black/40 sm:p-8 sm:pt-16">
+        <div className="relative rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-6 pt-14 shadow-lg shadow-black/20 sm:p-8 sm:pt-16">
           {/* Avatar — single, predictable overlap above the card */}
-          <div className="absolute -top-12 left-6 h-24 w-24 shrink-0 overflow-hidden rounded-2xl border-4 border-white bg-[#0f172a] shadow-xl sm:-top-14 sm:left-8">
+          <div className="absolute -top-12 left-6 h-24 w-24 shrink-0 overflow-hidden rounded-2xl border-4 border-slate-950 bg-[#0f172a] shadow-xl sm:-top-14 sm:left-8">
             {profile.profileImage ? (
               <img
                 src={profile.profileImage}
@@ -92,7 +92,7 @@ export default function ProfileHeader({
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-lg font-bold text-yellow-400">
+              <div className="flex h-full w-full items-center justify-center text-lg font-bold text-[#FFD700]">
                 {getInitials(profile.fullName) || (
                   <GraduationCap size={36} />
                 )}
@@ -101,22 +101,22 @@ export default function ProfileHeader({
           </div>
 
           <div className="min-w-0">
-            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-[#0f172a] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-yellow-400">
+            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-[#FFD700]/10 border border-[#FFD700]/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#FFD700]">
               <Sparkles size={9} />
               {profile.graduationYear
                 ? `Class of ${profile.graduationYear}`
                 : "Graduate"}
             </div>
 
-            <h1 className="truncate text-2xl font-extrabold text-gray-900 sm:text-3xl">
+            <h1 className="truncate text-2xl font-extrabold text-white sm:text-3xl">
               {profile.fullName}
             </h1>
 
-            <p className="mt-1 text-sm text-gray-400">@{profile.username}</p>
+            <p className="mt-1 text-sm text-slate-400">@{profile.username}</p>
           </div>
 
           {profile.bio && (
-            <p className="mt-5 border-t border-gray-100 pt-5 text-sm leading-relaxed text-gray-600">
+            <p className="mt-5 border-t border-slate-800 pt-5 text-sm leading-relaxed text-slate-300">
               {profile.bio}
             </p>
           )}
@@ -124,22 +124,22 @@ export default function ProfileHeader({
           {(profile.university || profile.department || profile.graduationYear) && (
             <div className="mt-5 flex flex-wrap gap-2">
               {profile.university && (
-                <span className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-semibold text-gray-700">
-                  <Building2 size={12} className="text-[#0f172a]" />
+                <span className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/60 px-3 py-2 text-xs font-semibold text-slate-200">
+                  <Building2 size={12} className="text-[#FFD700]" />
                   {profile.university}
                 </span>
               )}
 
               {profile.department && (
-                <span className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-semibold text-gray-700">
-                  <BookOpen size={12} className="text-[#0f172a]" />
+                <span className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/60 px-3 py-2 text-xs font-semibold text-slate-200">
+                  <BookOpen size={12} className="text-[#FFD700]" />
                   {profile.department}
                 </span>
               )}
 
               {profile.graduationYear && (
-                <span className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-semibold text-gray-700">
-                  <CalendarDays size={12} className="text-[#0f172a]" />
+                <span className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/60 px-3 py-2 text-xs font-semibold text-slate-200">
+                  <CalendarDays size={12} className="text-[#FFD700]" />
                   {profile.graduationYear}
                 </span>
               )}

@@ -35,17 +35,17 @@ export default function MediaGrid({
         {Array.from({ length: 8 }).map((_, index) => (
           <div
             key={index}
-            className="animate-pulse overflow-hidden rounded-3xl border border-gray-100 bg-white"
+            className="animate-pulse overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950"
           >
-            <div className="aspect-[4/3] bg-gray-200" />
+            <div className="aspect-[4/3] bg-slate-800" />
             <div className="space-y-3 p-5">
-              <div className="h-5 w-2/3 rounded bg-gray-200" />
-              <div className="h-4 rounded bg-gray-200" />
-              <div className="h-4 w-3/4 rounded bg-gray-200" />
-              <div className="mt-6 flex justify-between border-t border-gray-100 pt-4">
-                <div className="h-9 w-16 rounded-xl bg-gray-200" />
-                <div className="h-9 w-16 rounded-xl bg-gray-200" />
-                <div className="h-9 w-16 rounded-xl bg-gray-200" />
+              <div className="h-5 w-2/3 rounded bg-slate-800" />
+              <div className="h-4 rounded bg-slate-800" />
+              <div className="h-4 w-3/4 rounded bg-slate-800" />
+              <div className="mt-6 flex justify-between border-t border-slate-800 pt-4">
+                <div className="h-9 w-16 rounded-xl bg-slate-800" />
+                <div className="h-9 w-16 rounded-xl bg-slate-800" />
+                <div className="h-9 w-16 rounded-xl bg-slate-800" />
               </div>
             </div>
           </div>
@@ -56,13 +56,13 @@ export default function MediaGrid({
 
   if (!sortedMedia.length) {
     return (
-      <div className="rounded-3xl border-2 border-dashed border-gray-200 bg-white py-24">
+      <div className="rounded-3xl border-2 border-dashed border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 py-24">
         <div className="flex flex-col items-center px-6 text-center">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0f172a]/8">
-            <ImageIcon size={28} className="text-gray-300" />
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#FFD700]/10">
+            <ImageIcon size={28} className="text-[#FFD700]" />
           </div>
-          <h2 className="text-xl font-extrabold text-gray-900">No Media Found</h2>
-          <p className="mt-2 max-w-xs text-sm text-gray-400">
+          <h2 className="text-xl font-extrabold text-white">No Media Found</h2>
+          <p className="mt-2 max-w-xs text-sm text-slate-400">
             Upload your graduation memories to build your gallery. Images, videos and voice
             messages will appear here.
           </p>
