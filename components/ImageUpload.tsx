@@ -59,7 +59,7 @@ export default function ImageUpload({
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
-        className={`flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-gray-200 transition hover:scale-105 hover:bg-blue-600 hover:text-white ${className}`}
+        className={`flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-slate-800 to-slate-900 border border-[#FFD700]/30 text-[#FFD700] shadow-lg transition-all duration-200 hover:scale-105 hover:border-[#FFD700] hover:bg-[#FFD700]/10 ${className}`}
       >
         {loading ? (
           <Loader2

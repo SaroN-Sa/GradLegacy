@@ -75,10 +75,10 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex h-[90vh] w-full max-w-7xl overflow-hidden rounded-3xl bg-white shadow-2xl"
+        className="flex h-[90vh] w-full max-w-7xl overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 shadow-2xl"
       >
         {/* Media section */}
         <div className="relative flex-1 bg-black">
@@ -87,13 +87,13 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
           <button
             type="button"
             onClick={onClose}
-            className="absolute right-5 top-5 rounded-full bg-white/90 p-3 transition hover:bg-white"
+            className="absolute right-5 top-5 rounded-full bg-slate-950/90 border border-slate-700 p-3 transition hover:border-slate-600"
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5 text-slate-200" />
           </button>
 
           {media.featured && (
-            <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-2 text-sm font-bold text-[#0f172a] shadow">
+            <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full bg-[#FFD700] px-4 py-2 text-sm font-bold text-slate-950 shadow">
               <Star className="h-4 w-4 fill-current" />
               Featured
             </div>
@@ -108,33 +108,33 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
 
           {/* Copy-link toast */}
           {copied && (
-            <div className="absolute bottom-5 right-5 rounded-full bg-[#0f172a] px-4 py-2 text-sm font-semibold text-white shadow-lg">
+            <div className="absolute bottom-5 right-5 rounded-full bg-gradient-to-r from-slate-800 to-slate-900 border border-[#FFD700]/40 px-4 py-2 text-sm font-semibold text-[#FFD700] shadow-lg">
               Link copied
             </div>
           )}
         </div>
 
         {/* Information panel */}
-        <div className="flex w-[420px] flex-col border-l border-gray-100 bg-white">
-          <div className="border-b border-gray-100 p-6">
-            <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
+        <div className="flex w-[420px] flex-col border-l border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
+          <div className="border-b border-slate-800 p-6">
+            <h2 className="text-2xl font-extrabold tracking-tight text-white">
               {media.title || "Untitled Media"}
             </h2>
             {media.description && (
-              <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-gray-500">{media.description}</p>
+              <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-slate-400">{media.description}</p>
             )}
           </div>
 
           <div className="flex-1 space-y-6 overflow-y-auto p-6">
             <div className="flex flex-wrap items-center gap-2">
               {visibility && (
-                <span className={`inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 text-sm font-semibold ${visibility.text}`}>
+                <span className={`inline-flex items-center gap-1.5 rounded-full bg-slate-800/60 px-3 py-1.5 text-sm font-semibold ${visibility.text}`}>
                   <span className={`h-1.5 w-1.5 rounded-full ${visibility.dot}`} />
                   <VisibilityIcon className="h-4 w-4" />
                   {visibility.label}
                 </span>
               )}
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 text-sm font-semibold text-gray-400">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-800/60 px-3 py-1.5 text-sm font-semibold text-slate-400">
                 <Calendar className="h-4 w-4" />
                 {new Date(media.$createdAt).toLocaleString()}
               </span>
@@ -142,26 +142,26 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
 
             {media.album && (
               <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-gray-400">Album</p>
-                <div className="rounded-xl bg-gray-50 px-4 py-3 text-sm text-gray-700">{media.album}</div>
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Album</p>
+                <div className="rounded-2xl bg-slate-800/60 border border-slate-700 px-4 py-3 text-sm text-slate-200">{media.album}</div>
               </div>
             )}
 
             <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-gray-400">Public ID</p>
-              <div className="break-all rounded-xl bg-gray-50 p-3 text-xs text-gray-500">{media.publicId}</div>
+              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Public ID</p>
+              <div className="break-all rounded-2xl bg-slate-800/60 border border-slate-700 p-3 text-xs text-slate-400">{media.publicId}</div>
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-gray-400">Media URL</p>
-              <div className="break-all rounded-xl bg-gray-50 p-3 text-xs text-gray-500">{media.url}</div>
+              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Media URL</p>
+              <div className="break-all rounded-2xl bg-slate-800/60 border border-slate-700 p-3 text-xs text-slate-400">{media.url}</div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-4">
               <button
                 type="button"
                 onClick={handleDownload}
-                className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#0f172a] to-[#1e3a5f] px-4 py-3 text-sm font-semibold text-white transition hover:shadow-lg"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 border border-[#FFD700]/50 px-4 py-3 text-sm font-semibold text-[#FFD700] transition hover:border-[#FFD700]"
               >
                 <Download className="h-4 w-4" />
                 Download
@@ -170,7 +170,7 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
               <button
                 type="button"
                 onClick={handleShare}
-                className="flex items-center justify-center gap-2 rounded-xl border-2 border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                className="flex items-center justify-center gap-2 rounded-2xl border border-slate-700 px-4 py-3 text-sm font-semibold text-slate-300 transition hover:border-slate-600"
               >
                 <Share2 className="h-4 w-4" />
                 Share
@@ -179,7 +179,7 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
               <button
                 type="button"
                 onClick={() => onEdit?.(media)}
-                className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#0f172a]/15 px-4 py-3 text-sm font-semibold text-[#0f172a] transition hover:bg-[#0f172a]/5"
+                className="flex items-center justify-center gap-2 rounded-2xl border border-[#FFD700]/30 px-4 py-3 text-sm font-semibold text-[#FFD700] transition hover:bg-[#FFD700]/10"
               >
                 <Pencil className="h-4 w-4" />
                 Edit
@@ -188,7 +188,7 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
               <button
                 type="button"
                 onClick={() => onDelete?.(media)}
-                className="flex items-center justify-center gap-2 rounded-xl border-2 border-red-200 px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                className="flex items-center justify-center gap-2 rounded-2xl border border-red-500/30 px-4 py-3 text-sm font-semibold text-red-400 transition hover:bg-red-900/20"
               >
                 <Trash2 className="h-4 w-4" />
                 Delete
@@ -196,8 +196,8 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
             </div>
           </div>
 
-          <div className="border-t border-gray-100 bg-gray-50 p-6">
-            <p className="text-center text-xs text-gray-400">
+          <div className="border-t border-slate-800 bg-slate-950/60 p-6">
+            <p className="text-center text-xs text-slate-500">
               Uploaded on {new Date(media.$createdAt).toLocaleDateString()}
             </p>
           </div>

@@ -217,16 +217,18 @@ export default function MediaUploader({
         onDragLeave={onDragLeave}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        className={`cursor-pointer rounded-2xl border-2 border-dashed p-10 transition-all duration-200 ${
-          dragging ? "border-[#0f172a] bg-[#0f172a]/5" : "border-gray-300 hover:border-[#0f172a]/60 hover:bg-gray-50"
+        className={`cursor-pointer rounded-3xl border-2 border-dashed p-10 transition-all duration-200 ${
+          dragging
+            ? "border-[#FFD700] bg-[#FFD700]/5"
+            : "border-slate-700 bg-slate-900/40 hover:border-[#FFD700]/50 hover:bg-slate-900/70"
         }`}
       >
         <div className="flex flex-col items-center justify-center gap-4 text-center">
-          <Upload className="h-12 w-12 text-[#0f172a]" />
+          <Upload className="h-12 w-12 text-[#FFD700]" />
           <div>
-            <h3 className="text-lg font-extrabold tracking-tight text-gray-900">Upload Media</h3>
-            <p className="mt-1 text-sm text-gray-500">Drag & drop files here, or click to browse.</p>
-            <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+            <h3 className="text-lg font-extrabold tracking-tight text-white">Upload Media</h3>
+            <p className="mt-1 text-sm text-slate-400">Drag & drop files here, or click to browse.</p>
+            <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
               Images • Videos • Audio
             </p>
           </div>
@@ -238,15 +240,18 @@ export default function MediaUploader({
         <>
           <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {files.map((item) => (
-              <div key={item.id} className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg shadow-black/5">
-                <div className="relative aspect-video bg-gray-100">
+              <div
+                key={item.id}
+                className="overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-lg shadow-black/20"
+              >
+                <div className="relative aspect-video bg-slate-800">
                   {item.file.type.startsWith("image/") ? (
                     <Image src={item.preview} alt={item.file.name} fill className="object-cover" sizes="(max-width:768px) 100vw, 33vw" />
                   ) : item.file.type.startsWith("video/") ? (
                     <video src={item.preview} controls className="h-full w-full object-cover" />
                   ) : (
-                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-emerald-50 to-emerald-100">
-                      <Music className="h-14 w-14 text-emerald-500" />
+                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-emerald-900/30 to-emerald-950/30">
+                      <Music className="h-14 w-14 text-emerald-400" />
                     </div>
                   )}
                   <button
@@ -255,20 +260,20 @@ export default function MediaUploader({
                       e.stopPropagation();
                       removeFile(item.id);
                     }}
-                    className="absolute right-3 top-3 rounded-full bg-white/90 p-2 shadow transition hover:bg-white"
+                    className="absolute right-3 top-3 rounded-full bg-slate-950/90 p-2 shadow transition hover:bg-slate-900 border border-slate-700"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-4 w-4 text-slate-300" />
                   </button>
                 </div>
 
                 <div className="space-y-3 p-4">
                   <div>
-                    <p className="truncate text-sm font-bold text-gray-900">{item.file.name}</p>
-                    <p className="text-xs text-gray-400">{(item.file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    <p className="truncate text-sm font-bold text-white">{item.file.name}</p>
+                    <p className="text-xs text-slate-500">{(item.file.size / 1024 / 1024).toFixed(2)} MB</p>
                   </div>
 
                   {item.error && (
-                    <div className="flex items-center gap-2 rounded-xl bg-red-50 p-3 text-sm text-red-600">
+                    <div className="flex items-center gap-2 rounded-2xl bg-red-900/20 border border-red-500/30 p-3 text-sm text-red-300">
                       <AlertCircle className="h-4 w-4 shrink-0" />
                       <span>{item.error}</span>
                     </div>
@@ -276,15 +281,15 @@ export default function MediaUploader({
 
                   {item.uploading && (
                     <div className="space-y-2">
-                      <div className="h-2 overflow-hidden rounded-full bg-gray-100">
-                        <div className="h-full bg-[#0f172a] transition-all" style={{ width: `${item.progress}%` }} />
+                      <div className="h-2 overflow-hidden rounded-full bg-slate-800">
+                        <div className="h-full bg-[#FFD700] transition-all" style={{ width: `${item.progress}%` }} />
                       </div>
-                      <p className="text-xs text-gray-400">Uploading…</p>
+                      <p className="text-xs text-slate-500">Uploading…</p>
                     </div>
                   )}
 
                   {item.uploaded && (
-                    <div className="flex items-center gap-2 rounded-xl bg-emerald-50 p-3 text-sm font-semibold text-emerald-700">
+                    <div className="flex items-center gap-2 rounded-2xl bg-emerald-900/20 border border-emerald-500/30 p-3 text-sm font-semibold text-emerald-300">
                       <CheckCircle2 className="h-4 w-4" />
                       Upload complete
                     </div>
@@ -294,18 +299,18 @@ export default function MediaUploader({
             ))}
           </div>
 
-          <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-5 md:flex-row">
-            <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+          <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-5 md:flex-row">
+            <div className="flex flex-wrap gap-4 text-sm text-slate-400">
               <span>
-                Selected <strong className="text-gray-900">{files.length}</strong>
+                Selected <strong className="text-white">{files.length}</strong>
               </span>
               <span>
-                Ready <strong className="text-gray-900">{pendingUploads}</strong>
+                Ready <strong className="text-white">{pendingUploads}</strong>
               </span>
               <span>
-                Uploaded <strong className="text-gray-900">{completedUploads}</strong>
+                Uploaded <strong className="text-white">{completedUploads}</strong>
               </span>
-              {hasErrors && <span className="font-semibold text-red-600">Some files contain errors</span>}
+              {hasErrors && <span className="font-semibold text-red-400">Some files contain errors</span>}
             </div>
 
             <div className="flex gap-3">
@@ -313,7 +318,7 @@ export default function MediaUploader({
                 type="button"
                 onClick={clearFiles}
                 disabled={uploading}
-                className="rounded-xl border-2 border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 disabled:opacity-50"
+                className="rounded-2xl border border-slate-700 px-5 py-2.5 text-sm font-semibold text-slate-300 transition hover:border-slate-600 disabled:opacity-50"
               >
                 Clear
               </button>
@@ -321,7 +326,7 @@ export default function MediaUploader({
                 type="button"
                 disabled={uploading || pendingUploads === 0}
                 onClick={uploadFiles}
-                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#0f172a] to-[#1e3a5f] px-5 py-2.5 text-sm font-bold text-white transition hover:shadow-lg disabled:opacity-50"
+                className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 border border-[#FFD700]/50 px-5 py-2.5 text-sm font-bold text-[#FFD700] transition hover:border-[#FFD700] disabled:opacity-50"
               >
                 {uploading && <Loader2 className="h-4 w-4 animate-spin" />}
                 {uploading ? "Uploading…" : "Upload Media"}
