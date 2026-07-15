@@ -1,6 +1,23 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useRef } from "react";
+import {
+  User,
+  Mail,
+  MessageSquareHeart,
+  ImagePlus,
+  Video,
+  X,
+  CheckCircle2,
+  AlertCircle,
+  Send,
+  Loader2,
+  Users,
+  GraduationCap,
+  Heart,
+  Briefcase,
+  UserRound,
+} from "lucide-react";
 
 import { wishService } from "@/services/wish";
 
@@ -14,124 +31,103 @@ interface WishFormProps {
   onSuccess?: () => void;
 }
 
-const relationships: WishRelationship[] = [
-  "parent",
-  "friend",
-  "teacher",
-  "relative",
-  "mentor",
-  "colleague",
+const RELATIONSHIP_OPTIONS: { value: WishRelationship; label: string; icon: typeof User }[] = [
+  { value: "parent", label: "Parent", icon: Heart },
+  { value: "friend", label: "Friend", icon: Users },
+  { value: "teacher", label: "Teacher", icon: GraduationCap },
+  { value: "relative", label: "Relative", icon: UserRound },
+  { value: "mentor", label: "Mentor", icon: User },
+  { value: "colleague", label: "Colleague", icon: Briefcase },
 ];
+
+const MESSAGE_MAX = 500;
+
+const initialFormData: CreateWishData = {
+  visitorName: "",
+  visitorEmail: "",
+  relationship: "friend",
+  message: "",
+  isAnonymous: false,
+  imageUrl: "",
+  videoUrl: "",
+  status: "pending",
+  isFeatured: false,
+};
+
+type MediaTab = "image" | "video";
 
 export default function WishForm({
   userId,
   onSuccess,
 }: WishFormProps) {
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<CreateWishData>(initialFormData);
 
-  const [formData, setFormData] =
-    useState<CreateWishData>({
-      visitorName: "",
-      visitorEmail: "",
-      relationship: "friend",
-      message: "",
-      isAnonymous: false,
-      imageUrl: "",
-      videoUrl: "",
-      status: "pending",
-      isFeatured: false,
-    });
+  const [mediaTab, setMediaTab] = useState<MediaTab>("image");
 
-  const [imageFile, setImageFile] =
-    useState<File | null>(null);
-
-  const [videoFile, setVideoFile] =
-    useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
 
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const [success, setSuccess] =
-    useState("");
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = (
-    e: ChangeEvent<
-      HTMLInputElement |
-      HTMLTextAreaElement |
-      HTMLSelectElement
-    >
+  const handleTextChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value, type } = e.target;
-
-    if (type === "checkbox") {
-      const checked = (
-        e.target as HTMLInputElement
-      ).checked;
-
-      setFormData((prev) => ({
-        ...prev,
-        [name]: checked,
-      }));
-
-      return;
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
-    if (!e.target.files?.length) return;
-
-    setImageFile(e.target.files[0]);
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
   };
 
-  const handleVideoChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
-    if (!e.target.files?.length) return;
+  const handleVideoChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setVideoFile(file);
+    setVideoPreview(URL.createObjectURL(file));
+  };
 
-    setVideoFile(e.target.files[0]);
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    if (imageInputRef.current) imageInputRef.current.value = "";
+  };
+
+  const removeVideo = () => {
+    setVideoFile(null);
+    setVideoPreview(null);
+    if (videoInputRef.current) videoInputRef.current.value = "";
   };
 
   const validateForm = () => {
-    if (!formData.visitorName.trim()) {
-      return "Visitor name is required.";
-    }
-
-    if (!formData.relationship) {
-      return "Relationship is required.";
-    }
-
-    if (!formData.message.trim()) {
-      return "Message is required.";
-    }
-
+    if (!formData.visitorName.trim()) return "Visitor name is required.";
+    if (!formData.relationship) return "Relationship is required.";
+    if (!formData.message.trim()) return "Message is required.";
     if (
       formData.visitorEmail &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-        formData.visitorEmail
-      )
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.visitorEmail)
     ) {
       return "Invalid email address.";
     }
-
     return "";
   };
 
-  const handleSubmit = async (
-    e: FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setError("");
     setSuccess("");
 
     const validationError = validateForm();
-
     if (validationError) {
       setError(validationError);
       return;
@@ -143,21 +139,11 @@ export default function WishForm({
       let imageUrl = "";
       let videoUrl = "";
 
-      // ---------------------------------
-      // Upload Image
-      // ---------------------------------
+      // Replace with your upload service
       if (imageFile) {
-        // Replace with your upload service
-        // Example:
         // imageUrl = await uploadImage(imageFile);
       }
-
-      // ---------------------------------
-      // Upload Video
-      // ---------------------------------
       if (videoFile) {
-        // Replace with your upload service
-        // Example:
         // videoUrl = await uploadVideo(videoFile);
       }
 
@@ -167,167 +153,299 @@ export default function WishForm({
         videoUrl,
       });
 
-      setSuccess(
-        "Your graduation wish has been submitted successfully."
-      );
-
-      setFormData({
-        visitorName: "",
-        visitorEmail: "",
-        relationship: "friend",
-        message: "",
-        isAnonymous: false,
-        imageUrl: "",
-        videoUrl: "",
-        status: "pending",
-        isFeatured: false,
-      });
-
-      setImageFile(null);
-      setVideoFile(null);
+      setSuccess("Your graduation wish has been submitted successfully.");
+      setFormData(initialFormData);
+      setMediaTab("image");
+      removeImage();
+      removeVideo();
 
       onSuccess?.();
     } catch (err) {
       console.error(err);
-
-      setError(
-        "Unable to submit your wish. Please try again."
-      );
+      setError("Unable to submit your wish. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  const messageLength = formData.message.length;
+  const isMessageNearLimit = messageLength > MESSAGE_MAX * 0.85;
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 rounded-xl border bg-white p-6 shadow-sm"
+      className="space-y-6 rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-6 sm:p-8 shadow-lg shadow-black/20"
     >
-      <h2 className="text-2xl font-bold">
-        Leave a Graduation Wish
-      </h2>
+      <div className="flex items-center gap-3">
+        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FFD700]/10 text-[#FFD700]">
+          <MessageSquareHeart size={22} />
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-white">Leave a Graduation Wish</h2>
+          <p className="text-xs text-slate-400">Share a message of congratulations.</p>
+        </div>
+      </div>
 
       {error && (
-        <div className="rounded-md bg-red-100 p-3 text-red-600">
+        <div className="flex items-center gap-2 rounded-2xl bg-red-900/20 border border-red-500/30 p-3 text-sm text-red-300 animate-fade-in">
+          <AlertCircle className="h-4 w-4 shrink-0" />
           {error}
         </div>
       )}
 
       {success && (
-        <div className="rounded-md bg-green-100 p-3 text-green-700">
+        <div className="flex items-center gap-2 rounded-2xl bg-emerald-900/20 border border-emerald-500/30 p-3 text-sm text-emerald-300 animate-fade-in">
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
           {success}
         </div>
       )}
-            <div>
-        <label className="mb-2 block font-medium">
-          Your Name
-        </label>
 
-        <input
-          type="text"
-          name="visitorName"
-          value={formData.visitorName}
-          onChange={handleChange}
-          className="w-full rounded-lg border p-3"
-          placeholder="John Doe"
-        />
+      {/* Name + Email */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-slate-300">
+            Your Name
+          </label>
+          <div className="relative">
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+            <input
+              type="text"
+              name="visitorName"
+              value={formData.visitorName}
+              onChange={handleTextChange}
+              className="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm placeholder:text-slate-500 outline-none focus:border-[#FFD700]/60 focus:ring-4 focus:ring-[#FFD700]/10 transition-all"
+              placeholder="John Doe"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-slate-300">
+            Email <span className="text-slate-500 font-normal">(optional)</span>
+          </label>
+          <div className="relative">
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+            <input
+              type="email"
+              name="visitorEmail"
+              value={formData.visitorEmail}
+              onChange={handleTextChange}
+              className="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm placeholder:text-slate-500 outline-none focus:border-[#FFD700]/60 focus:ring-4 focus:ring-[#FFD700]/10 transition-all"
+              placeholder="john@example.com"
+            />
+          </div>
+        </div>
       </div>
 
+      {/* Relationship — pill selector */}
       <div>
-        <label className="mb-2 block font-medium">
-          Email (Optional)
-        </label>
-
-        <input
-          type="email"
-          name="visitorEmail"
-          value={formData.visitorEmail}
-          onChange={handleChange}
-          className="w-full rounded-lg border p-3"
-          placeholder="john@example.com"
-        />
-      </div>
-
-      <div>
-        <label className="mb-2 block font-medium">
+        <label className="mb-2 block text-sm font-medium text-slate-300">
           Relationship
         </label>
-
-        <select
-          name="relationship"
-          value={formData.relationship}
-          onChange={handleChange}
-          className="w-full rounded-lg border p-3"
-        >
-          {relationships.map((relationship) => (
-            <option
-              key={relationship}
-              value={relationship}
-            >
-              {relationship}
-            </option>
-          ))}
-        </select>
+        <div className="flex flex-wrap gap-2">
+          {RELATIONSHIP_OPTIONS.map((option) => {
+            const Icon = option.icon;
+            const isActive = formData.relationship === option.value;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() =>
+                  setFormData((prev) => ({ ...prev, relationship: option.value }))
+                }
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium border transition-all duration-200 ${
+                  isActive
+                    ? "bg-gradient-to-r from-slate-800 to-slate-900 border-[#FFD700] text-[#FFD700] scale-105"
+                    : "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
+                }`}
+              >
+                <Icon size={13} />
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
+      {/* Message */}
       <div>
-        <label className="mb-2 block font-medium">
-          Your Wish
-        </label>
-
+        <div className="mb-1.5 flex items-center justify-between">
+          <label className="text-sm font-medium text-slate-300">
+            Your Wish
+          </label>
+          <span
+            className={`text-xs ${
+              isMessageNearLimit ? "text-amber-400" : "text-slate-500"
+            }`}
+          >
+            {messageLength}/{MESSAGE_MAX}
+          </span>
+        </div>
         <textarea
           name="message"
           value={formData.message}
-          onChange={handleChange}
-          rows={6}
-          className="w-full rounded-lg border p-3"
+          onChange={handleTextChange}
+          maxLength={MESSAGE_MAX}
+          rows={5}
+          className="w-full px-4 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm placeholder:text-slate-500 outline-none focus:border-[#FFD700]/60 focus:ring-4 focus:ring-[#FFD700]/10 transition-all resize-none"
           placeholder="Write your graduation wish..."
         />
       </div>
 
+      {/* Media — combined image/video, single compact section */}
       <div>
-        <label className="mb-2 block font-medium">
-          Upload Image
-        </label>
+        <div className="mb-1.5 flex items-center justify-between">
+          <label className="text-sm font-medium text-slate-300">
+            Add Media <span className="text-slate-500 font-normal">(optional)</span>
+          </label>
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-        />
+          {/* Tab switcher */}
+          <div className="flex items-center gap-1 rounded-full bg-slate-900 border border-slate-700 p-0.5">
+            <button
+              type="button"
+              onClick={() => setMediaTab("image")}
+              className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium transition-all ${
+                mediaTab === "image"
+                  ? "bg-[#FFD700]/10 text-[#FFD700]"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              <ImagePlus size={12} />
+              Photo
+              {imagePreview && (
+                <span className="h-1.5 w-1.5 rounded-full bg-[#FFD700]" />
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMediaTab("video")}
+              className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium transition-all ${
+                mediaTab === "video"
+                  ? "bg-[#FFD700]/10 text-[#FFD700]"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              <Video size={12} />
+              Video
+              {videoPreview && (
+                <span className="h-1.5 w-1.5 rounded-full bg-[#FFD700]" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {mediaTab === "image" ? (
+          imagePreview ? (
+            <div className="relative flex items-center gap-3 rounded-2xl border border-slate-700 bg-slate-900/40 p-2">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="h-16 w-16 shrink-0 rounded-xl object-cover"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs font-medium text-slate-200">
+                  {imageFile?.name}
+                </p>
+                <p className="text-[11px] text-slate-500">Image attached</p>
+              </div>
+              <button
+                type="button"
+                onClick={removeImage}
+                className="shrink-0 rounded-full p-1.5 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          ) : (
+            <label className="flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-700 bg-slate-900/40 py-4 text-center cursor-pointer hover:border-[#FFD700]/50 hover:bg-slate-900/70 transition-all">
+              <ImagePlus className="h-4 w-4 text-[#FFD700]" />
+              <span className="text-xs text-slate-400">Click to upload an image</span>
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+              />
+            </label>
+          )
+        ) : videoPreview ? (
+          <div className="relative flex items-center gap-3 rounded-2xl border border-slate-700 bg-slate-900/40 p-2">
+            <video
+              src={videoPreview}
+              className="h-16 w-16 shrink-0 rounded-xl object-cover"
+              muted
+            />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-xs font-medium text-slate-200">
+                {videoFile?.name}
+              </p>
+              <p className="text-[11px] text-slate-500">Video attached</p>
+            </div>
+            <button
+              type="button"
+              onClick={removeVideo}
+              className="shrink-0 rounded-full p-1.5 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        ) : (
+          <label className="flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-700 bg-slate-900/40 py-4 text-center cursor-pointer hover:border-[#FFD700]/50 hover:bg-slate-900/70 transition-all">
+            <Video className="h-4 w-4 text-[#FFD700]" />
+            <span className="text-xs text-slate-400">Click to upload a video</span>
+            <input
+              ref={videoInputRef}
+              type="file"
+              accept="video/*"
+              onChange={handleVideoChange}
+              className="hidden"
+            />
+          </label>
+        )}
       </div>
 
-      <div>
-        <label className="mb-2 block font-medium">
-          Upload Video
-        </label>
-
-        <input
-          type="file"
-          accept="video/*"
-          onChange={handleVideoChange}
-        />
+      {/* Anonymous toggle */}
+      <div className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/40 px-4 py-3">
+        <div>
+          <p className="text-sm font-medium text-white">Send Anonymously</p>
+          <p className="text-xs text-slate-500">Your name won't be shown publicly.</p>
+        </div>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={formData.isAnonymous}
+          onClick={() =>
+            setFormData((prev) => ({ ...prev, isAnonymous: !prev.isAnonymous }))
+          }
+          className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 ${
+            formData.isAnonymous ? "bg-[#FFD700]" : "bg-slate-700"
+          }`}
+        >
+          <span
+            className={`absolute top-0.5 h-5 w-5 rounded-full bg-slate-950 transition-transform duration-200 ${
+              formData.isAnonymous ? "translate-x-5" : "translate-x-0.5"
+            }`}
+          />
+        </button>
       </div>
-
-      <label className="flex items-center gap-3">
-        <input
-          type="checkbox"
-          name="isAnonymous"
-          checked={formData.isAnonymous}
-          onChange={handleChange}
-        />
-
-        Send Anonymously
-      </label>
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-3xl bg-gradient-to-r from-slate-800 to-slate-900 border border-[#FFD700]/50 px-4 py-3 font-semibold text-[#FFD700] transition-all hover:border-[#FFD700] hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
-        {loading
-          ? "Submitting..."
-          : "Submit Wish"}
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Submitting...
+          </>
+        ) : (
+          <>
+            <Send className="h-4 w-4" />
+            Submit Wish
+          </>
+        )}
       </button>
     </form>
   );

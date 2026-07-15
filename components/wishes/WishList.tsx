@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { MessageSquareHeart } from "lucide-react";
 
 import { wishService } from "@/services/wish";
 
@@ -127,12 +128,13 @@ export default function WishList({
 
   if (loading) {
     return (
-      <div className="py-10 text-center">
-        Loading wishes...
+      <div className="flex items-center justify-center py-16">
+        <div className="w-8 h-8 border-2 border-[#FFD700] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
-    return (
+
+  return (
     <div className="space-y-6">
 
       <WishFilters
@@ -143,8 +145,9 @@ export default function WishList({
       />
 
       {filteredWishes.length === 0 && (
-        <div className="rounded-xl border p-10 text-center text-gray-500">
-          No wishes found.
+        <div className="rounded-3xl border border-dashed border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-10 text-center">
+          <MessageSquareHeart className="mx-auto mb-3 text-slate-600" size={28} />
+          <p className="text-sm text-slate-400">No wishes found.</p>
         </div>
       )}
 
