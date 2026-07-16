@@ -12,6 +12,7 @@ Shield,
 Cloud,
 Globe,
 Loader2,
+Home,
 } from "lucide-react";
 
 import { toast } from "sonner";
@@ -91,7 +92,7 @@ return ( <div className="w-screen min-h-screen flex flex-col lg:flex-row overflo
     <div className="absolute top-0 right-0 w-[28rem] h-[28rem] bg-blue-500/10 rounded-full blur-[120px]" />
     <div className="absolute bottom-0 left-0 w-[36rem] h-[36rem] bg-purple-500/10 rounded-full blur-[120px]" />
 
-    <div className="relative z-10">
+    <div className="relative z-10 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <div className="bg-white/10 p-3 rounded-2xl backdrop-blur-sm border border-white/10">
           <GraduationCap
@@ -107,7 +108,15 @@ return ( <div className="w-screen min-h-screen flex flex-col lg:flex-row overflo
           </span>
         </span>
       </div>
-    </div>
+
+      <Link
+            href="/"
+            className="flex items-center gap-1.5 text-sm font-medium text-white/60 hover:text-white transition-colors"
+          >
+            <Home size={15} />
+            Back to Home
+          </Link>
+        </div>
 
     <div className="relative z-10">
       <div
@@ -185,6 +194,7 @@ return ( <div className="w-screen min-h-screen flex flex-col lg:flex-row overflo
       </span>
     </div>
   </div>
+  
 
   {/* RIGHT PANEL */}
   <div
@@ -200,6 +210,7 @@ return ( <div className="w-screen min-h-screen flex flex-col lg:flex-row overflo
     "
   >
     <div className="w-full max-w-[440px]">
+      
 
       <div className="lg:hidden text-center mb-8">
         <div className="flex items-center justify-center gap-2 mb-3">
@@ -215,7 +226,7 @@ return ( <div className="w-screen min-h-screen flex flex-col lg:flex-row overflo
             </span>
           </span>
         </div>
-
+         
         <h2 className="text-2xl font-bold text-[#0f172a]">
           Welcome Back
         </h2>

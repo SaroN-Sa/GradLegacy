@@ -49,16 +49,16 @@ function WishFormPreview({ name }: { name: string }) {
   if (sent) {
     return (
       <div className="flex flex-col items-center gap-3 py-8 text-center">
-        <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center">
-          <CheckCircle2 size={26} className="text-emerald-600" />
+        <div className="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center">
+          <CheckCircle2 size={26} className="text-emerald-600 dark:text-emerald-400" />
         </div>
-        <p className="font-bold text-gray-900">Wish sent! 🎉</p>
-        <p className="text-xs text-gray-500">
+        <p className="font-bold text-gray-900 dark:text-white">Wish sent! 🎉</p>
+        <p className="text-xs text-gray-500 dark:text-slate-400">
           This is a preview — wishes won't be saved.
         </p>
         <button
           onClick={() => setSent(false)}
-          className="mt-1 text-xs font-semibold text-[#0f172a] hover:underline underline-offset-2"
+          className="mt-1 text-xs font-semibold text-[#0f172a] dark:text-yellow-400 hover:underline underline-offset-2"
         >
           Back
         </button>
@@ -69,30 +69,30 @@ function WishFormPreview({ name }: { name: string }) {
   return (
     <div className="space-y-3">
       <div>
-        <label className="mb-1 block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <label className="mb-1 block text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide">
           Your Name (optional)
         </label>
         <input
           type="text"
           placeholder="Anonymous"
           disabled
-          className="w-full rounded-xl border border-gray-200 bg-gray-100 px-3.5 py-2.5 text-sm text-gray-400 placeholder:text-gray-400 outline-none cursor-not-allowed"
+          className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 px-3.5 py-2.5 text-sm text-gray-400 dark:text-slate-500 placeholder:text-gray-400 dark:placeholder:text-slate-500 outline-none cursor-not-allowed"
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <label className="mb-1 block text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide">
           Your Wish <span className="text-red-400">*</span>
         </label>
         <textarea
           rows={3}
           disabled
           placeholder="Write a heartfelt message…"
-          className="w-full rounded-xl border border-gray-200 bg-gray-100 px-3.5 py-2.5 text-sm text-gray-400 placeholder:text-gray-400 outline-none resize-none cursor-not-allowed"
+          className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 px-3.5 py-2.5 text-sm text-gray-400 dark:text-slate-500 placeholder:text-gray-400 dark:placeholder:text-slate-500 outline-none resize-none cursor-not-allowed"
         />
       </div>
 
       {/* Preview-mode notice */}
-      <div className="rounded-xl bg-amber-50 border border-amber-200 px-3.5 py-2.5 text-xs text-amber-700 font-medium">
+      <div className="rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 px-3.5 py-2.5 text-xs text-amber-700 dark:text-amber-300 font-medium">
         👁 Preview mode — wish form is disabled on your own page.
       </div>
 
@@ -165,6 +165,9 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
         Tall card, scrollable internally, never overflows viewport.
         Max width 420px mirrors a phone viewport so the graduate sees
         exactly what visitors on mobile will see.
+
+        NOTE: this outer shell (navy + gold) is fixed brand chrome —
+        matches Sidebar.tsx — and does not follow the site theme toggle.
       */}
       <div className="
         relative w-full max-w-[420px] max-h-[90vh]
@@ -235,12 +238,12 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
             </button>
           </div>
 
-          {/* ── White profile card ── */}
-          <div className="relative z-10 mx-4 bg-white rounded-3xl shadow-2xl shadow-black/40 -mt-8 p-5">
+          {/* ── Profile card (mirrors public profile page — theme-aware) ── */}
+          <div className="relative z-10 mx-4 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl shadow-black/40 -mt-8 p-5">
 
             {/* Avatar + name */}
             <div className="flex items-end gap-4">
-              <div className="w-20 h-20 rounded-2xl border-4 border-white shadow-lg overflow-hidden bg-[#0f172a] flex items-center justify-center shrink-0 -mt-12">
+              <div className="w-20 h-20 rounded-2xl border-4 border-white dark:border-slate-900 shadow-lg overflow-hidden bg-[#0f172a] flex items-center justify-center shrink-0 -mt-12">
                 {profile.profileImage ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -258,16 +261,16 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
                   <Sparkles size={8} />
                   {profile.graduationYear ? `Class of ${profile.graduationYear}` : "Graduate"}
                 </div>
-                <h1 className="text-lg font-extrabold text-gray-900 tracking-tight leading-tight truncate">
+                <h1 className="text-lg font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight truncate">
                   {profile.fullName}
                 </h1>
-                <p className="text-xs text-gray-400 font-medium">@{profile.username}</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 font-medium">@{profile.username}</p>
               </div>
             </div>
 
             {/* Bio */}
             {profile.bio && (
-              <p className="mt-4 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+              <p className="mt-4 text-sm text-gray-600 dark:text-slate-300 leading-relaxed border-t border-gray-100 dark:border-slate-800 pt-4">
                 {profile.bio}
               </p>
             )}
@@ -275,27 +278,27 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
             {/* Info chips */}
             <div className="mt-3 flex flex-wrap gap-1.5">
               {profile.university && (
-                <span className="inline-flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-2.5 py-1 text-[11px] font-semibold text-gray-700">
-                  <Building2 size={10} className="text-[#0f172a]" />
+                <span className="inline-flex items-center gap-1 bg-gray-50 dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700 rounded-xl px-2.5 py-1 text-[11px] font-semibold text-gray-700 dark:text-slate-300">
+                  <Building2 size={10} className="text-[#0f172a] dark:text-yellow-400" />
                   {profile.university}
                 </span>
               )}
               {profile.department && (
-                <span className="inline-flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-2.5 py-1 text-[11px] font-semibold text-gray-700">
-                  <BookOpen size={10} className="text-[#0f172a]" />
+                <span className="inline-flex items-center gap-1 bg-gray-50 dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700 rounded-xl px-2.5 py-1 text-[11px] font-semibold text-gray-700 dark:text-slate-300">
+                  <BookOpen size={10} className="text-[#0f172a] dark:text-yellow-400" />
                   {profile.department}
                 </span>
               )}
               {profile.graduationYear && (
-                <span className="inline-flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-2.5 py-1 text-[11px] font-semibold text-gray-700">
-                  <CalendarDays size={10} className="text-[#0f172a]" />
+                <span className="inline-flex items-center gap-1 bg-gray-50 dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700 rounded-xl px-2.5 py-1 text-[11px] font-semibold text-gray-700 dark:text-slate-300">
+                  <CalendarDays size={10} className="text-[#0f172a] dark:text-yellow-400" />
                   {profile.graduationYear}
                 </span>
               )}
             </div>
           </div>
 
-          {/* ── Tab bar ── */}
+          {/* ── Tab bar (part of fixed brand chrome, unthemed) ── */}
           <div className="mx-4 mt-4 bg-white/10 backdrop-blur-sm rounded-2xl p-1 flex gap-1 border border-white/10">
             {TABS.map(({ key, label, icon: Icon }) => (
               <button
@@ -313,17 +316,17 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
             ))}
           </div>
 
-          {/* ── Tab content ── */}
+          {/* ── Tab content (theme-aware, mirrors public page cards) ── */}
           <div className="mx-4 mt-3 mb-6">
 
             {activeTab === "wishes" && (
-              <div className="bg-white rounded-3xl shadow-xl shadow-black/20 overflow-hidden">
-                <div className="px-5 pt-5 pb-4 border-b border-gray-100">
+              <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-black/20 overflow-hidden">
+                <div className="px-5 pt-5 pb-4 border-b border-gray-100 dark:border-slate-800">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <Heart size={14} className="text-[#0f172a]" />
-                    <h2 className="text-sm font-extrabold text-gray-900">Send a Wish</h2>
+                    <Heart size={14} className="text-[#0f172a] dark:text-yellow-400" />
+                    <h2 className="text-sm font-extrabold text-gray-900 dark:text-white">Send a Wish</h2>
                   </div>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-gray-400 dark:text-slate-500">
                     Celebrate {firstName}'s graduation with a message.
                   </p>
                 </div>
@@ -334,24 +337,24 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
             )}
 
             {activeTab === "gallery" && (
-              <div className="bg-white rounded-3xl shadow-xl shadow-black/20 px-5 py-10 text-center">
-                <div className="w-11 h-11 rounded-2xl bg-[#0f172a]/8 flex items-center justify-center mx-auto mb-3">
-                  <Globe size={20} className="text-[#0f172a]" />
+              <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-black/20 px-5 py-10 text-center">
+                <div className="w-11 h-11 rounded-2xl bg-[#0f172a]/8 dark:bg-yellow-400/10 flex items-center justify-center mx-auto mb-3">
+                  <Globe size={20} className="text-[#0f172a] dark:text-yellow-400" />
                 </div>
-                <p className="text-sm font-bold text-gray-900">No photos yet</p>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-sm font-bold text-gray-900 dark:text-white">No photos yet</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
                   Add photos from your dashboard.
                 </p>
               </div>
             )}
 
             {activeTab === "timeline" && (
-              <div className="bg-white rounded-3xl shadow-xl shadow-black/20 px-5 py-10 text-center">
-                <div className="w-11 h-11 rounded-2xl bg-[#0f172a]/8 flex items-center justify-center mx-auto mb-3">
-                  <CalendarDays size={20} className="text-[#0f172a]" />
+              <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-black/20 px-5 py-10 text-center">
+                <div className="w-11 h-11 rounded-2xl bg-[#0f172a]/8 dark:bg-yellow-400/10 flex items-center justify-center mx-auto mb-3">
+                  <CalendarDays size={20} className="text-[#0f172a] dark:text-yellow-400" />
                 </div>
-                <p className="text-sm font-bold text-gray-900">No timeline yet</p>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-sm font-bold text-gray-900 dark:text-white">No timeline yet</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
                   Add milestones from your dashboard.
                 </p>
               </div>

@@ -37,7 +37,7 @@ export default function ProfileHeader({
 
   return (
 
-    <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-xl">
+    <div className="overflow-hidden rounded-3xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl dark:shadow-black/30">
 
       {/* COVER */}
 
@@ -51,6 +51,7 @@ export default function ProfileHeader({
           alt="Cover Image"
           fill
           priority
+          sizes="100vw"
           className="object-cover"
         />
 
@@ -76,7 +77,7 @@ export default function ProfileHeader({
 
           <button
             onClick={onEdit}
-            className="absolute bottom-6 right-6 flex items-center gap-2 rounded-xl bg-white/90 px-5 py-2 text-sm font-medium text-gray-700 shadow-lg backdrop-blur transition hover:bg-white"
+            className="absolute bottom-6 right-6 flex items-center gap-2 rounded-xl bg-white/90 dark:bg-slate-900/90 px-5 py-2 text-sm font-medium text-gray-700 dark:text-slate-200 shadow-lg backdrop-blur transition hover:bg-white dark:hover:bg-slate-900"
           >
 
             <Pencil size={16} />
@@ -99,7 +100,7 @@ export default function ProfileHeader({
 
           <div className="relative">
 
-            <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white bg-white shadow-2xl">
+            <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white dark:border-slate-900 bg-white dark:bg-slate-800 shadow-2xl">
 
               <Image
                 src={
@@ -108,6 +109,7 @@ export default function ProfileHeader({
                 }
                 alt={profile.fullName}
                 fill
+                sizes="160px"
                 className="object-cover"
               />
 
@@ -137,7 +139,7 @@ export default function ProfileHeader({
 
             <div className="flex items-center justify-center gap-2 lg:justify-start">
 
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
 
                 {profile.fullName}
 
@@ -145,18 +147,18 @@ export default function ProfileHeader({
 
               <BadgeCheck
                 size={22}
-                className="text-green-600"
+                className="text-green-600 dark:text-green-400"
               />
 
             </div>
 
-            <p className="mt-1 text-gray-500">
+            <p className="mt-1 text-gray-500 dark:text-slate-400">
 
               @{profile.username}
 
             </p>
 
-            <span className="mt-4 inline-flex rounded-full bg-blue-100 px-4 py-1 text-sm font-medium text-blue-700">
+            <span className="mt-4 inline-flex rounded-full bg-blue-100 dark:bg-blue-500/10 px-4 py-1 text-sm font-medium text-blue-700 dark:text-blue-300">
 
               🎓 Graduate
 
@@ -173,7 +175,7 @@ export default function ProfileHeader({
           <InfoCard
             icon={
               <School
-                className="text-blue-600"
+                className="text-blue-600 dark:text-blue-400"
               />
             }
             title="University"
@@ -186,7 +188,7 @@ export default function ProfileHeader({
           <InfoCard
             icon={
               <GraduationCap
-                className="text-green-600"
+                className="text-green-600 dark:text-green-400"
               />
             }
             title="Department"
@@ -199,7 +201,7 @@ export default function ProfileHeader({
           <InfoCard
             icon={
               <Calendar
-                className="text-purple-600"
+                className="text-purple-600 dark:text-purple-400"
               />
             }
             title="Graduation Year"
@@ -213,15 +215,15 @@ export default function ProfileHeader({
 
         {/* ABOUT */}
 
-        <div className="mt-10 rounded-3xl border bg-gray-50 p-6">
+        <div className="mt-10 rounded-3xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/60 p-6">
 
-          <h2 className="mb-4 text-xl font-semibold">
+          <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
 
             About Me
 
           </h2>
 
-          <p className="leading-8 text-gray-600 italic">
+          <p className="leading-8 text-gray-600 dark:text-slate-300 italic">
 
             {profile.bio ||
 
@@ -253,13 +255,13 @@ function InfoCard({
 
   return (
 
-    <div className="rounded-2xl border bg-gray-50 p-5 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <div className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/60 p-5 transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-black/30">
 
       <div className="mb-3 flex items-center gap-3">
 
         {icon}
 
-        <span className="font-semibold">
+        <span className="font-semibold text-gray-900 dark:text-white">
 
           {title}
 
@@ -267,7 +269,7 @@ function InfoCard({
 
       </div>
 
-      <p className="text-gray-600">
+      <p className="text-gray-600 dark:text-slate-300">
 
         {value}
 
