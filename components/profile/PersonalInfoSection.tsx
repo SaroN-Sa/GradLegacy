@@ -12,22 +12,25 @@ interface Props {
   ) => void;
 }
 
+const INPUT_CLASS =
+  "w-full rounded-xl border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 py-3 pl-10 pr-4 text-sm text-gray-900 dark:text-white outline-none transition placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-blue-600 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950";
+
 export default function PersonalInfoSection({
   form,
   onChange,
 }: Props) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm dark:shadow-black/20">
 
       {/* Header */}
 
       <div className="mb-6">
 
-        <h2 className="text-xl font-bold text-gray-900">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
           Personal Information
         </h2>
 
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
           Tell visitors who you are.
         </p>
 
@@ -39,7 +42,7 @@ export default function PersonalInfoSection({
 
         <div>
 
-          <label className="mb-2 block text-sm font-semibold text-gray-700">
+          <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-slate-300">
             Full Name
           </label>
 
@@ -47,7 +50,7 @@ export default function PersonalInfoSection({
 
             <User
               size={18}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500"
             />
 
             <input
@@ -56,7 +59,7 @@ export default function PersonalInfoSection({
               value={form.fullName}
               onChange={onChange}
               placeholder="John Doe"
-              className="w-full rounded-xl border border-gray-300 bg-gray-50 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-blue-600 focus:bg-white"
+              className={INPUT_CLASS}
             />
 
           </div>
@@ -67,7 +70,7 @@ export default function PersonalInfoSection({
 
         <div>
 
-          <label className="mb-2 block text-sm font-semibold text-gray-700">
+          <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-slate-300">
             Username
           </label>
 
@@ -75,7 +78,7 @@ export default function PersonalInfoSection({
 
             <AtSign
               size={18}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500"
             />
 
             <input
@@ -84,7 +87,7 @@ export default function PersonalInfoSection({
               value={form.username}
               onChange={onChange}
               placeholder="john_doe"
-              className="w-full rounded-xl border border-gray-300 bg-gray-50 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-blue-600 focus:bg-white"
+              className={INPUT_CLASS}
             />
 
           </div>
@@ -95,7 +98,7 @@ export default function PersonalInfoSection({
 
         <div>
 
-          <label className="mb-2 block text-sm font-semibold text-gray-700">
+          <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-slate-300">
             Bio
           </label>
 
@@ -105,7 +108,7 @@ export default function PersonalInfoSection({
             value={form.bio}
             onChange={onChange}
             placeholder="Write something about yourself..."
-            className="w-full rounded-xl border border-gray-300 bg-gray-50 p-4 text-sm outline-none transition resize-none focus:border-blue-600 focus:bg-white"
+            className="w-full rounded-xl border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 p-4 text-sm text-gray-900 dark:text-white outline-none transition resize-none placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-blue-600 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950"
           />
 
         </div>

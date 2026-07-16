@@ -28,28 +28,28 @@ export default function MediaHubPage() {
         <div>
           <Link
             href="/dashboard"
-            className="mb-3 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 transition-colors hover:text-[#FFD700]"
+            className="mb-3 inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 dark:text-slate-500 transition-colors hover:text-[#B8860B] dark:hover:text-[#FFD700]"
           >
             <ArrowLeft size={13} />
             Back to Home
           </Link>
 
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-slate-800 to-slate-900 border border-[#FFD700]/30 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-[#FFD700]">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-900 border border-[#FFD700]/30 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-[#B8860B] dark:text-[#FFD700]">
             <Images size={10} />
             Media Vault
           </div>
 
-          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
             {loading ? "Loading your media…" : `${media.length} ${media.length === 1 ? "memory" : "memories"} saved`}
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
             Pick a category to browse, search and manage it on its own page.
           </p>
         </div>
 
         <button
           onClick={() => setUploadOpen(true)}
-          className="flex items-center gap-2 self-start rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 border border-[#FFD700]/50 px-5 py-2.5 text-sm font-bold text-[#FFD700] transition-all hover:border-[#FFD700] active:scale-[0.99]"
+          className="flex items-center gap-2 self-start rounded-2xl bg-gradient-to-r from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-900 border border-[#FFD700]/50 px-5 py-2.5 text-sm font-bold text-[#B8860B] dark:text-[#FFD700] transition-all hover:border-[#FFD700] active:scale-[0.99]"
         >
           <Plus size={15} />
           Upload
@@ -64,13 +64,13 @@ export default function MediaHubPage() {
             <Link
               key={c.slug}
               href={`/dashboard/media/${c.slug}`}
-              className="group relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-5 shadow-lg shadow-black/20 transition-all duration-200 hover:-translate-y-1 hover:border-slate-700 hover:shadow-xl hover:shadow-black/30"
+              className="group relative overflow-hidden rounded-3xl border border-gray-200 dark:border-slate-800 bg-gradient-to-br from-white to-gray-50 dark:from-slate-900 dark:to-slate-950 p-5 shadow-lg shadow-black/5 dark:shadow-black/20 transition-all duration-200 hover:-translate-y-1 hover:border-gray-300 dark:hover:border-slate-700 hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/30"
             >
               <div className="flex items-start justify-between">
                 <CategoryMotif slug={c.slug} className="relative" />
                 <ArrowUpRight
                   size={16}
-                  className="text-slate-600 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#FFD700]"
+                  className="text-gray-400 dark:text-slate-600 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#B8860B] dark:group-hover:text-[#FFD700]"
                 />
               </div>
 
@@ -78,9 +78,9 @@ export default function MediaHubPage() {
                 <Icon size={16} className="text-white" />
               </div>
 
-              <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500">{c.eyebrow}</p>
-              <h2 className="text-lg font-extrabold text-white">{c.label}</h2>
-              <p className="mt-1 text-xs leading-relaxed text-slate-400">{c.description}</p>
+              <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.12em] text-gray-400 dark:text-slate-500">{c.eyebrow}</p>
+              <h2 className="text-lg font-extrabold text-gray-900 dark:text-white">{c.label}</h2>
+              <p className="mt-1 text-xs leading-relaxed text-gray-500 dark:text-slate-400">{c.description}</p>
 
               <p className={`mt-4 text-3xl font-extrabold tracking-tight ${c.accent.text}`}>
                 {loading ? "–" : counts[c.slug] ?? 0}

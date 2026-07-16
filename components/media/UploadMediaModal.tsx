@@ -26,7 +26,7 @@ interface UploadMediaModalProps {
 }
 
 const FIELD_CLASS =
-  "w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[#FFD700]/60 focus:ring-4 focus:ring-[#FFD700]/10";
+  "w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm text-slate-900 dark:text-white outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#FFD700]/60 focus:ring-4 focus:ring-[#FFD700]/10";
 
 export default function UploadMediaModal({ open, userId, onClose, onUploaded }: UploadMediaModalProps) {
   const [title, setTitle] = useState("");
@@ -90,20 +90,20 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-      <div className="relative flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 shadow-2xl">
+      <div className="relative flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFD700]/10 text-[#FFD700]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFD700]/10 text-[#B8860B] dark:text-[#FFD700]">
               <ImageIcon size={17} />
             </div>
-            <h2 className="text-base font-semibold text-white">Upload Media</h2>
+            <h2 className="text-base font-semibold text-slate-900 dark:text-white">Upload Media</h2>
           </div>
           <button
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="rounded-full p-1.5 text-slate-400 transition hover:bg-slate-800 hover:text-white disabled:opacity-50"
+            className="rounded-full p-1.5 text-slate-400 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white disabled:opacity-50"
           >
             <X className="h-5 w-5" />
           </button>
@@ -115,13 +115,13 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
 
           {uploadedMedia.length > 0 && (
             <>
-              <div className="flex items-center gap-2 rounded-2xl bg-emerald-900/20 border border-emerald-500/30 px-4 py-2.5 text-xs font-medium text-emerald-300">
+              <div className="flex items-center gap-2 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-300 dark:border-emerald-500/30 px-4 py-2.5 text-xs font-medium text-emerald-700 dark:text-emerald-300">
                 <CheckCircle2 size={14} className="shrink-0" />
                 {uploadedMedia.length} file{uploadedMedia.length > 1 ? "s" : ""} uploaded — add details below.
               </div>
 
               <div>
-                <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
                   <FileText size={12} />
                   Title
                 </label>
@@ -135,7 +135,7 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
               </div>
 
               <div>
-                <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
                   <FolderOpen size={12} />
                   Album
                 </label>
@@ -149,7 +149,7 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
               </div>
 
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-slate-400">
+                <label className="mb-1.5 block text-xs font-medium text-slate-500 dark:text-slate-400">
                   Description
                 </label>
                 <textarea
@@ -163,7 +163,7 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                  <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
                     <Eye size={12} />
                     Visibility
                   </label>
@@ -177,12 +177,12 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
                       <option value="public">Public</option>
                       <option value="unlisted">Unlisted</option>
                     </select>
-                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500" />
+                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
                   </div>
                 </div>
 
                 <div>
-                  <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                  <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
                     <Star size={12} />
                     Featured
                   </label>
@@ -193,18 +193,18 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
                     onClick={() => setFeatured((prev) => !prev)}
                     className={`flex h-[42px] w-full items-center justify-between rounded-2xl border px-4 text-sm font-medium transition-colors ${
                       featured
-                        ? "border-[#FFD700]/50 bg-[#FFD700]/10 text-[#FFD700]"
-                        : "border-slate-700 bg-slate-900 text-slate-400"
+                        ? "border-[#FFD700]/50 bg-[#FFD700]/10 text-[#B8860B] dark:text-[#FFD700]"
+                        : "border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400"
                     }`}
                   >
                     {featured ? "Yes" : "No"}
                     <span
                       className={`relative h-5 w-9 rounded-full transition-colors ${
-                        featured ? "bg-[#FFD700]" : "bg-slate-700"
+                        featured ? "bg-[#FFD700]" : "bg-slate-300 dark:bg-slate-700"
                       }`}
                     >
                       <span
-                        className={`absolute top-0.5 h-4 w-4 rounded-full bg-slate-950 transition-transform ${
+                        className={`absolute top-0.5 h-4 w-4 rounded-full bg-white dark:bg-slate-950 transition-transform ${
                           featured ? "translate-x-4" : "translate-x-0.5"
                         }`}
                       />
@@ -216,7 +216,7 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
           )}
 
           {error && (
-            <div className="flex items-center gap-2 rounded-2xl border border-red-500/30 bg-red-900/20 px-4 py-2.5 text-xs text-red-300">
+            <div className="flex items-center gap-2 rounded-2xl border border-red-300 dark:border-red-500/30 bg-red-50 dark:bg-red-900/20 px-4 py-2.5 text-xs text-red-600 dark:text-red-300">
               <AlertCircle size={14} className="shrink-0" />
               {error}
             </div>
@@ -224,12 +224,12 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-2 border-t border-slate-800 bg-slate-950/60 px-6 py-4">
+        <div className="flex items-center justify-end gap-2 border-t border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/60 px-6 py-4">
           <button
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="rounded-2xl border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 transition hover:border-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-2xl border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 transition hover:border-slate-400 dark:hover:border-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Cancel
           </button>
@@ -238,7 +238,7 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
             type="button"
             onClick={handleSave}
             disabled={saving || uploadedMedia.length === 0}
-            className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 border border-[#FFD700]/50 px-4 py-2 text-sm font-semibold text-[#FFD700] transition hover:border-[#FFD700] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border border-[#FFD700]/50 px-4 py-2 text-sm font-semibold text-[#B8860B] dark:text-[#FFD700] transition hover:border-[#FFD700] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
             {saving ? "Saving…" : "Save Media"}

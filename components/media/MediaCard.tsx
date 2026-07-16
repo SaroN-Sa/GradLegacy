@@ -37,8 +37,8 @@ export default function MediaCard({ media, onView, onEdit, onDelete }: MediaCard
         <>
           <video src={media.url} className="h-full w-full object-cover" />
           <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-            <div className="rounded-full bg-slate-950/90 border border-[#FFD700]/30 p-4">
-              <Play className="h-8 w-8 fill-current text-[#FFD700]" />
+            <div className="rounded-full bg-white/90 dark:bg-slate-950/90 border border-[#FFD700]/30 p-4">
+              <Play className="h-8 w-8 fill-current text-[#B8860B] dark:text-[#FFD700]" />
             </div>
           </div>
         </>
@@ -46,17 +46,17 @@ export default function MediaCard({ media, onView, onEdit, onDelete }: MediaCard
     }
 
     return (
-      <div className="flex h-full items-center justify-center bg-gradient-to-br from-emerald-900/30 to-emerald-950/30">
-        <Music className="h-14 w-14 text-emerald-400" />
+      <div className="flex h-full items-center justify-center bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/30 dark:to-emerald-950/30">
+        <Music className="h-14 w-14 text-emerald-600 dark:text-emerald-400" />
       </div>
     );
   };
 
   return (
-    <div className="group overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 shadow-lg shadow-black/20 transition-all duration-200 hover:-translate-y-1 hover:border-slate-700 hover:shadow-xl hover:shadow-black/30">
+    <div className="group overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 shadow-lg shadow-black/5 dark:shadow-black/20 transition-all duration-200 hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/30">
       {/* Preview */}
       <div
-        className="relative aspect-[4/3] cursor-pointer overflow-hidden bg-slate-800"
+        className="relative aspect-[4/3] cursor-pointer overflow-hidden bg-slate-100 dark:bg-slate-800"
         onClick={() => onView(media)}
       >
         {mediaPreview()}
@@ -79,43 +79,43 @@ export default function MediaCard({ media, onView, onEdit, onDelete }: MediaCard
       {/* Content */}
       <div className="space-y-4 p-5">
         <div>
-          <h3 className="truncate text-lg font-extrabold tracking-tight text-white">
+          <h3 className="truncate text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">
             {media.title || "Untitled Media"}
           </h3>
 
           {media.description && (
-            <p className="mt-1.5 line-clamp-2 text-sm text-slate-400">{media.description}</p>
+            <p className="mt-1.5 line-clamp-2 text-sm text-slate-500 dark:text-slate-400">{media.description}</p>
           )}
         </div>
 
         {/* Info */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {visibility && (
-            <span className={`inline-flex items-center gap-1.5 rounded-full bg-slate-800/60 px-2.5 py-1 font-semibold ${visibility.text}`}>
+            <span className={`inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800/60 px-2.5 py-1 font-semibold ${visibility.text}`}>
               <span className={`h-1.5 w-1.5 rounded-full ${visibility.dot}`} />
               <VisibilityIcon className="h-3.5 w-3.5" />
               {visibility.label}
             </span>
           )}
 
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-800/60 px-2.5 py-1 font-semibold text-slate-400">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800/60 px-2.5 py-1 font-semibold text-slate-500 dark:text-slate-400">
             <Calendar className="h-3.5 w-3.5" />
             {new Date(media.$createdAt).toLocaleDateString()}
           </span>
 
           {media.album && (
-            <span className="inline-flex items-center rounded-full bg-slate-800/60 px-2.5 py-1 font-semibold text-slate-300">
+            <span className="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800/60 px-2.5 py-1 font-semibold text-slate-600 dark:text-slate-300">
               {media.album}
             </span>
           )}
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-between border-t border-slate-800 pt-4">
+        <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-4">
           <button
             type="button"
             onClick={() => onView(media)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-[#FFD700] transition-colors hover:bg-[#FFD700]/10"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-[#B8860B] dark:text-[#FFD700] transition-colors hover:bg-[#FFD700]/10"
           >
             <Eye className="h-4 w-4" />
             View
@@ -124,7 +124,7 @@ export default function MediaCard({ media, onView, onEdit, onDelete }: MediaCard
           <button
             type="button"
             onClick={() => onEdit(media)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-[#FFD700] transition-colors hover:bg-[#FFD700]/10"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-[#B8860B] dark:text-[#FFD700] transition-colors hover:bg-[#FFD700]/10"
           >
             <Pencil className="h-4 w-4" />
             Edit
@@ -133,7 +133,7 @@ export default function MediaCard({ media, onView, onEdit, onDelete }: MediaCard
           <button
             type="button"
             onClick={() => onDelete(media)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-red-400 transition-colors hover:bg-red-900/20"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-red-600 dark:text-red-400 transition-colors hover:bg-red-50 dark:hover:bg-red-900/20"
           >
             <Trash2 className="h-4 w-4" />
             Delete

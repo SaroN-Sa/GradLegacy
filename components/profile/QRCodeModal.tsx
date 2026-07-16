@@ -17,6 +17,8 @@ export default function QRCodeModal({ open, onClose, url }: Props) {
   const [qrError, setQrError] = useState<string | null>(null);
 
   // Generate QR code whenever modal opens or URL changes
+  // NOTE: colors are intentionally fixed (not theme-aware) — QR codes need
+  // strong, reliable contrast to scan correctly regardless of site theme.
   useEffect(() => {
     if (!open || !canvasRef.current) return;
     setQrError(null);
@@ -85,7 +87,7 @@ export default function QRCodeModal({ open, onClose, url }: Props) {
       aria-labelledby="qr-modal-title"
     >
       {/* Card — consistent with dashboard design system */}
-      <div className="relative w-[340px] bg-white rounded-3xl shadow-2xl shadow-black/40 overflow-hidden">
+      <div className="relative w-[340px] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl shadow-black/40 overflow-hidden">
 
         {/* Card top accent bar */}
         <div className="h-1.5 w-full bg-gradient-to-r from-[#0f172a] to-[#1e3a5f]" />
@@ -96,7 +98,7 @@ export default function QRCodeModal({ open, onClose, url }: Props) {
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-800 transition-colors"
+            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700 hover:text-gray-800 dark:hover:text-white transition-colors"
           >
             <X size={16} />
           </button>
@@ -108,16 +110,16 @@ export default function QRCodeModal({ open, onClose, url }: Props) {
             </div>
             <h2
               id="qr-modal-title"
-              className="text-xl font-extrabold text-gray-900 tracking-tight"
+              className="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight"
             >
               Scan to Visit
             </h2>
-            <p className="mt-0.5 text-xs text-gray-500">
+            <p className="mt-0.5 text-xs text-gray-500 dark:text-slate-400">
               Share your graduation page with a scan.
             </p>
           </div>
 
-          {/* QR canvas — centered in a padded navy container */}
+          {/* QR canvas — centered in a padded navy container (fixed, not themed) */}
           <div className="flex items-center justify-center rounded-2xl bg-[#0f172a] p-4 mb-4">
             {qrError ? (
               <div className="w-[220px] h-[220px] flex items-center justify-center text-red-400 text-xs text-center px-4">
@@ -133,8 +135,8 @@ export default function QRCodeModal({ open, onClose, url }: Props) {
           </div>
 
           {/* URL display */}
-          <div className="bg-gray-50 rounded-xl px-3 py-2 mb-5 border border-gray-100">
-            <p className="text-[11px] text-gray-500 font-mono break-all leading-relaxed text-center">
+          <div className="bg-gray-50 dark:bg-slate-800/60 rounded-xl px-3 py-2 mb-5 border border-gray-100 dark:border-slate-700">
+            <p className="text-[11px] text-gray-500 dark:text-slate-400 font-mono break-all leading-relaxed text-center">
               {url}
             </p>
           </div>
@@ -145,13 +147,13 @@ export default function QRCodeModal({ open, onClose, url }: Props) {
               onClick={handleCopy}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all border-2 ${
                 copied
-                  ? "bg-emerald-50 border-emerald-400 text-emerald-700"
-                  : "bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                  ? "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-400 dark:border-emerald-500/40 text-emerald-700 dark:text-emerald-300"
+                  : "bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-800"
               }`}
             >
               {copied ? (
                 <>
-                  <Check size={15} className="text-emerald-600" />
+                  <Check size={15} className="text-emerald-600 dark:text-emerald-400" />
                   Copied!
                 </>
               ) : (

@@ -58,48 +58,48 @@ export default function ProfileStats({
         // Determine completion ring colour
         const ringColor =
           pct === null ? ""
-          : pct >= 80 ? "text-emerald-400"
-          : pct >= 50 ? "text-yellow-400"
-          : "text-red-400";
+          : pct >= 80 ? "text-emerald-500 dark:text-emerald-400"
+          : pct >= 50 ? "text-yellow-600 dark:text-yellow-400"
+          : "text-red-500 dark:text-red-400";
 
         return (
           <div
             key={stat.title}
             className="
               group relative flex flex-col justify-between
-              bg-white rounded-3xl p-6
-              border border-gray-100
-              shadow-lg shadow-black/5
+              bg-white dark:bg-slate-900 rounded-3xl p-6
+              border border-gray-100 dark:border-slate-800
+              shadow-lg shadow-black/5 dark:shadow-black/20
               transition-all duration-200
-              hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10
+              hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/30
               overflow-hidden
             "
           >
             {/* Subtle navy top-left glow — brand accent */}
-            <div className="absolute -top-6 -left-6 w-24 h-24 bg-[#0f172a]/5 rounded-full pointer-events-none" />
+            <div className="absolute -top-6 -left-6 w-24 h-24 bg-[#0f172a]/5 dark:bg-yellow-400/5 rounded-full pointer-events-none" />
 
             {/* Header row */}
             <div className="flex items-start justify-between gap-3 relative z-10">
               <div>
                 {/* Label */}
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">
+                <p className="text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wide">
                   {stat.title}
                 </p>
 
                 {/* Value */}
                 <div className="mt-2 flex items-end gap-1 leading-none">
-                  <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+                  <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                     {stat.value}
                   </h2>
                   {stat.suffix && (
-                    <span className="text-xl font-bold text-gray-400 mb-0.5">
+                    <span className="text-xl font-bold text-gray-400 dark:text-slate-500 mb-0.5">
                       {stat.suffix}
                     </span>
                   )}
                 </div>
               </div>
 
-              {/* Icon chip — navy bg with yellow icon, matches sidebar/logo style */}
+              {/* Icon chip — navy bg with yellow icon, matches sidebar/logo style (fixed brand color, not themed) */}
               <div className="
                 w-12 h-12 rounded-2xl flex items-center justify-center shrink-0
                 bg-[#0f172a]
@@ -113,7 +113,7 @@ export default function ProfileStats({
             {/* Completion progress bar — only shown for the completion stat */}
             {isCompletion && pct !== null && (
               <div className="mt-5 relative z-10">
-                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div
                     className={`h-1.5 rounded-full transition-all duration-700 ${
                       pct >= 80
