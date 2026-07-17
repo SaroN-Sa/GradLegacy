@@ -2,11 +2,11 @@
 
 import { Heart, Images, CalendarDays } from "lucide-react";
 
-export type ProfileTab = "wishes" | "gallery" | "timeline";
+export type GraduateTab = "wishes" | "gallery" | "timeline";
 
-interface ProfileTabsProps {
-  activeTab: ProfileTab;
-  onChange: (tab: ProfileTab) => void;
+interface GraduateTabsProps {
+  activeTab: GraduateTab;
+  onChange: (tab: GraduateTab) => void;
 
   wishCount?: number;
   galleryCount?: number;
@@ -19,14 +19,14 @@ const tabs = [
   { key: "timeline", label: "Timeline", icon: CalendarDays },
 ] as const;
 
-export default function ProfileTabs({
+export default function GraduateTabs({
   activeTab,
   onChange,
   wishCount = 0,
   galleryCount = 0,
   timelineCount = 0,
-}: ProfileTabsProps) {
-  const getCount = (tab: ProfileTab) => {
+}: GraduateTabsProps) {
+  const getCount = (tab: GraduateTab) => {
     switch (tab) {
       case "wishes":
         return wishCount;
@@ -59,16 +59,12 @@ export default function ProfileTabs({
           >
             <Icon size={15} className="shrink-0" />
 
-            <span className="hidden text-sm font-semibold sm:inline">
-              {tab.label}
-            </span>
+            <span className="hidden text-sm font-semibold sm:inline">{tab.label}</span>
 
             {count > 0 && (
               <span
                 className={`min-w-[1.25rem] rounded-full px-1.5 py-0.5 text-center text-[11px] font-semibold tabular-nums leading-none ${
-                  isActive
-                    ? "bg-[#FFD700]/15 text-[#FFD700]"
-                    : "bg-slate-800 text-slate-400"
+                  isActive ? "bg-[#FFD700]/15 text-[#FFD700]" : "bg-slate-800 text-slate-400"
                 }`}
               >
                 {count}
