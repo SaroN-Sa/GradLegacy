@@ -21,17 +21,16 @@ export default function GraduateFooter({
         {/* Logo */}
         <div className="flex flex-col items-center text-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#0f172a] to-[#1e3a5f] shadow-lg">
-            <GraduationCap size={30} className="text-yellow-400" />
+            <GraduationCap size={30} className="text-[#FFD700]" />
           </div>
 
           <h2 className="text-xl font-bold text-gray-900">
-            Grad<span className="text-yellow-500">Legacy</span>
+            Grad<span className="text-[#B8860B]">Legacy</span>
           </h2>
 
           <p className="mt-2 max-w-md text-sm leading-6 text-gray-500">
-            Celebrating graduates by preserving their achievements,
-            memories and milestones in one beautiful digital graduation
-            profile.
+            Celebrating graduates by preserving their achievements, memories and milestones in
+            one beautiful digital graduation profile.
           </p>
         </div>
 
@@ -83,7 +82,7 @@ export default function GraduateFooter({
           <p>© {currentYear} GradLegacy. All rights reserved.</p>
 
           <p className="flex items-center gap-1">
-            Made with
+            Made by Habtamu Samuel
             <Heart size={15} className="fill-red-500 text-red-500" />
             for graduates.
           </p>

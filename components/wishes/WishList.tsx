@@ -10,6 +10,7 @@ import { Wish } from "@/types/wish";
 
 import WishCard from "./WishCard";
 import WishFilters from "./WishFilters";
+import WishLightbox, { LightboxItem } from "./WishLightbox";
 
 interface WishListProps {
   userId: string;
@@ -31,21 +32,16 @@ function DeleteWishDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-        onClick={onCancel}
-      />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onCancel} />
 
-      <div className="relative w-full max-w-sm rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 p-6 shadow-2xl">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-900/20 text-red-400 mb-4">
+      <div className="relative w-full max-w-sm rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-2xl">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-900/20 text-red-400">
           <AlertTriangle size={22} />
         </div>
 
-        <h3 className="text-lg font-semibold text-white mb-1.5">
-          Delete this wish?
-        </h3>
+        <h3 className="mb-1.5 text-lg font-semibold text-white">Delete this wish?</h3>
 
-        <p className="text-sm text-slate-400 mb-6">
+        <p className="mb-6 text-sm text-slate-400">
           This action cannot be undone. The wish will be permanently removed.
         </p>
 
@@ -54,7 +50,7 @@ function DeleteWishDialog({
             type="button"
             onClick={onCancel}
             disabled={isDeleting}
-            className="flex-1 py-2.5 rounded-3xl border border-slate-700 text-slate-300 text-sm font-medium hover:border-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 rounded-3xl border border-slate-700 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Cancel
           </button>
@@ -62,7 +58,7 @@ function DeleteWishDialog({
             type="button"
             onClick={onConfirm}
             disabled={isDeleting}
-            className="flex-1 py-2.5 rounded-3xl bg-red-900/30 border border-red-500/40 text-red-300 text-sm font-medium hover:bg-red-900/50 hover:border-red-500/60 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 rounded-3xl border border-red-500/40 bg-red-900/30 py-2.5 text-sm font-medium text-red-300 transition-colors hover:border-red-500/60 hover:bg-red-900/50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isDeleting ? "Deleting..." : "Delete"}
           </button>
@@ -72,22 +68,21 @@ function DeleteWishDialog({
   );
 }
 
-export default function WishList({
-  userId,
-  dashboard = false,
-}: WishListProps) {
+export default function WishList({ userId, dashboard = false }: WishListProps) {
   const [loading, setLoading] = useState(true);
-
   const [wishes, setWishes] = useState<Wish[]>([]);
 
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState<"all" | "pending" | "published" | "hidden">("all");
 
-  const [status, setStatus] = useState<
-    "all" | "pending" | "published" | "hidden"
-  >("all");
+  // Which single wish is mid-update (publish/hide/feature) — drives WishCard's isProcessing prop
+  const [processingId, setProcessingId] = useState<string | null>(null);
 
   const [wishPendingDelete, setWishPendingDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Index into `mediaItems` for the lightbox, or null when closed
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const loadWishes = async () => {
     try {
@@ -108,34 +103,45 @@ export default function WishList({
 
   useEffect(() => {
     loadWishes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const filteredWishes = useMemo(() => {
     return wishes.filter((wish) => {
       const matchesSearch =
-        wish.visitorName
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        wish.message
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        wish.relationship
-          .toLowerCase()
-          .includes(search.toLowerCase());
+        wish.visitorName.toLowerCase().includes(search.toLowerCase()) ||
+        wish.message.toLowerCase().includes(search.toLowerCase()) ||
+        wish.relationship.toLowerCase().includes(search.toLowerCase());
 
-      const matchesStatus =
-        status === "all"
-          ? true
-          : wish.status === status;
+      const matchesStatus = status === "all" ? true : wish.status === status;
 
-      return (
-        matchesSearch &&
-        matchesStatus
-      );
+      return matchesSearch && matchesStatus;
     });
   }, [wishes, search, status]);
 
+  // Flattened list of every image/video across the currently visible wishes,
+  // in card order — this is what the lightbox scrolls/swipes through.
+  const mediaItems: LightboxItem[] = useMemo(() => {
+    const items: LightboxItem[] = [];
+    filteredWishes.forEach((wish) => {
+      if (wish.imageUrl) {
+        items.push({ type: "image", url: wish.imageUrl, name: wish.visitorName });
+      }
+      if (wish.videoUrl) {
+        items.push({ type: "video", url: wish.videoUrl, name: wish.visitorName });
+      }
+    });
+    return items;
+  }, [filteredWishes]);
+
+  const openMedia = (type: "image" | "video", url: string) => {
+    const idx = mediaItems.findIndex((item) => item.type === type && item.url === url);
+    if (idx !== -1) setLightboxIndex(idx);
+  };
+
   const publishWish = async (wishId: string) => {
+    if (processingId) return; // one in-flight action at a time
+    setProcessingId(wishId);
     try {
       await wishService.updateWish(wishId, { status: "published" });
       await loadWishes();
@@ -143,10 +149,14 @@ export default function WishList({
     } catch (error) {
       console.error(error);
       toast.error("Couldn't publish that wish.");
+    } finally {
+      setProcessingId(null);
     }
   };
 
   const hideWish = async (wishId: string) => {
+    if (processingId) return;
+    setProcessingId(wishId);
     try {
       await wishService.updateWish(wishId, { status: "hidden" });
       await loadWishes();
@@ -154,13 +164,17 @@ export default function WishList({
     } catch (error) {
       console.error(error);
       toast.error("Couldn't hide that wish.");
+    } finally {
+      setProcessingId(null);
     }
   };
 
   const featureWish = async (wishId: string) => {
+    if (processingId) return;
     const wish = wishes.find((item) => item.$id === wishId);
     if (!wish) return;
 
+    setProcessingId(wishId);
     try {
       await wishService.updateWish(wishId, { isFeatured: !wish.isFeatured });
       await loadWishes();
@@ -168,6 +182,8 @@ export default function WishList({
     } catch (error) {
       console.error(error);
       toast.error("Couldn't update that wish.");
+    } finally {
+      setProcessingId(null);
     }
   };
 
@@ -200,20 +216,70 @@ export default function WishList({
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <div className="w-8 h-8 border-2 border-[#FFD700] border-t-transparent rounded-full animate-spin" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#FFD700] border-t-transparent" />
       </div>
     );
   }
 
+  const deleteDialog = (
+    <DeleteWishDialog
+      open={wishPendingDelete !== null}
+      isDeleting={isDeleting}
+      onConfirm={confirmDelete}
+      onCancel={cancelDelete}
+    />
+  );
+
+  const lightbox = lightboxIndex !== null && (
+    <WishLightbox
+      items={mediaItems}
+      index={lightboxIndex}
+      onClose={() => setLightboxIndex(null)}
+      onIndexChange={setLightboxIndex}
+    />
+  );
+
+  // -------------------------------------------------------------------
+  // Public page: TikTok-style full-height vertical snap-scroll feed.
+  // Swipe / scroll up and down to move between wishes.
+  // -------------------------------------------------------------------
+  if (!dashboard) {
+    if (filteredWishes.length === 0) {
+      return (
+        <div className="flex h-[100dvh] items-center justify-center px-4">
+          <div className="rounded-3xl border border-dashed border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-10 text-center">
+            <MessageSquareHeart className="mx-auto mb-3 text-slate-600" size={28} />
+            <p className="text-sm text-slate-400">No wishes found.</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="h-[100dvh] w-full snap-y snap-mandatory overflow-y-scroll scroll-smooth">
+        {filteredWishes.map((wish) => (
+          <section
+            key={wish.$id}
+            className="flex h-[100dvh] w-full snap-start snap-always items-center justify-center px-0 py-0 sm:px-6 sm:py-6"
+          >
+            <div className="h-full w-full max-w-md sm:h-[92dvh]">
+              <WishCard wish={wish} variant="feed" onMediaClick={openMedia} />
+            </div>
+          </section>
+        ))}
+
+        {deleteDialog}
+        {lightbox}
+      </div>
+    );
+  }
+
+  // -------------------------------------------------------------------
+  // Dashboard: normal stacked list with filters and management actions.
+  // -------------------------------------------------------------------
   return (
     <div className="space-y-6">
-
-      <WishFilters
-        search={search}
-        status={status}
-        onSearchChange={setSearch}
-        onStatusChange={setStatus}
-      />
+      <WishFilters search={search} status={status} onSearchChange={setSearch} onStatusChange={setStatus} />
 
       {filteredWishes.length === 0 && (
         <div className="rounded-3xl border border-dashed border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-10 text-center">
@@ -223,28 +289,24 @@ export default function WishList({
       )}
 
       <div className="space-y-6">
-
         {filteredWishes.map((wish) => (
           <WishCard
             key={wish.$id}
             wish={wish}
+            variant="list"
             showActions={dashboard}
             onPublish={publishWish}
             onHide={hideWish}
             onDelete={deleteWish}
             onFeature={featureWish}
+            onMediaClick={openMedia}
+            isProcessing={processingId === wish.$id}
           />
         ))}
-
       </div>
 
-      <DeleteWishDialog
-        open={wishPendingDelete !== null}
-        isDeleting={isDeleting}
-        onConfirm={confirmDelete}
-        onCancel={cancelDelete}
-      />
-
+      {deleteDialog}
+      {lightbox}
     </div>
   );
 }

@@ -55,12 +55,47 @@ const initialFormData: CreateWishData = {
 };
 
 type MediaTab = "image" | "video";
+type LoadingStage = "idle" | "uploading" | "saving";
+
+/**
+ * Uploads a file to the app's /api/upload route (Cloudinary-backed)
+ * and returns the hosted URL to persist on the Wish document.
+ */
+async function uploadFile(file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch("/api/upload", {
+    method: "POST",
+    body: formData,
+  });
+
+  let data: any = null;
+  try {
+    data = await response.json();
+  } catch {
+    // response body wasn't JSON — fall through to status-based error below
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error || `Upload failed with status ${response.status}`
+    );
+  }
+
+  if (!data?.url) {
+    throw new Error("Upload response missing url");
+  }
+
+  return data.url as string;
+}
 
 export default function WishForm({
   userId,
   onSuccess,
 }: WishFormProps) {
-  const [loading, setLoading] = useState(false);
+  const [loadingStage, setLoadingStage] = useState<LoadingStage>("idle");
+  const loading = loadingStage !== "idle";
   const [formData, setFormData] = useState<CreateWishData>(initialFormData);
 
   const [mediaTab, setMediaTab] = useState<MediaTab>("image");
@@ -134,18 +169,21 @@ export default function WishForm({
     }
 
     try {
-      setLoading(true);
-
       let imageUrl = "";
       let videoUrl = "";
 
-      // Replace with your upload service
-      if (imageFile) {
-        // imageUrl = await uploadImage(imageFile);
+      if (imageFile || videoFile) {
+        setLoadingStage("uploading");
+
+        if (imageFile) {
+          imageUrl = await uploadFile(imageFile);
+        }
+        if (videoFile) {
+          videoUrl = await uploadFile(videoFile);
+        }
       }
-      if (videoFile) {
-        // videoUrl = await uploadVideo(videoFile);
-      }
+
+      setLoadingStage("saving");
 
       await wishService.createWish(userId, {
         ...formData,
@@ -162,14 +200,25 @@ export default function WishForm({
       onSuccess?.();
     } catch (err) {
       console.error(err);
-      setError("Unable to submit your wish. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to submit your wish. Please try again."
+      );
     } finally {
-      setLoading(false);
+      setLoadingStage("idle");
     }
   };
 
   const messageLength = formData.message.length;
   const isMessageNearLimit = messageLength > MESSAGE_MAX * 0.85;
+
+  const submitLabel =
+    loadingStage === "uploading"
+      ? "Uploading..."
+      : loadingStage === "saving"
+      ? "Saving..."
+      : "Submit Wish";
 
   return (
     <form
@@ -407,28 +456,32 @@ export default function WishForm({
 
       {/* Anonymous toggle */}
       <div className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/40 px-4 py-3">
-        <div>
-          <p className="text-sm font-medium text-white">Send Anonymously</p>
-          <p className="text-xs text-slate-500">Your name won't be shown publicly.</p>
-        </div>
-        <button
-          type="button"
-          role="switch"
-          aria-checked={formData.isAnonymous}
-          onClick={() =>
-            setFormData((prev) => ({ ...prev, isAnonymous: !prev.isAnonymous }))
-          }
-          className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 ${
-            formData.isAnonymous ? "bg-[#FFD700]" : "bg-slate-700"
-          }`}
-        >
-          <span
-            className={`absolute top-0.5 h-5 w-5 rounded-full bg-slate-950 transition-transform duration-200 ${
-              formData.isAnonymous ? "translate-x-5" : "translate-x-0.5"
-            }`}
-          />
-        </button>
-      </div>
+  <div>
+    <p className="text-sm font-medium text-white">Send Anonymously</p>
+    <p className="text-xs text-slate-500">Your name won't be shown publicly.</p>
+  </div>
+  <button
+    type="button"
+    role="switch"
+    aria-checked={formData.isAnonymous}
+    onClick={() =>
+      setFormData((prev) => ({ ...prev, isAnonymous: !prev.isAnonymous }))
+    }
+    className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full border transition-colors duration-300 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD700]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
+      formData.isAnonymous
+        ? "border-[#FFD700]/60 bg-[#FFD700]/20 shadow-[inset_0_0_8px_rgba(255,215,0,0.25)]"
+        : "border-slate-700 bg-slate-800"
+    }`}
+  >
+    <span
+      className={`inline-block h-5 w-5 transform rounded-full shadow-md ring-1 transition-all duration-300 ease-in-out ${
+        formData.isAnonymous
+          ? "translate-x-6 bg-[#FFD700] ring-[#FFD700]/40 shadow-[0_0_6px_rgba(255,215,0,0.6)]"
+          : "translate-x-1 bg-slate-400 ring-slate-500/40"
+      }`}
+    />
+  </button>
+</div>
 
       <button
         type="submit"
@@ -438,12 +491,12 @@ export default function WishForm({
         {loading ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            Submitting...
+            {submitLabel}
           </>
         ) : (
           <>
             <Send className="h-4 w-4" />
-            Submit Wish
+            {submitLabel}
           </>
         )}
       </button>
