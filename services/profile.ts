@@ -44,21 +44,13 @@ export const profileService = {
       data
     );
   },
-
-  async deleteProfile(documentId: string) {
-    return await databases.deleteDocument(
-      DATABASE_ID,
-      COLLECTION_ID,
-      documentId
-    );
-  },
-
   async getAllProfiles() {
-    const res = await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTION_ID
-    );
+  const res = await databases.listDocuments(
+    DATABASE_ID,
+    COLLECTION_ID
+  );
 
-    return res.documents;
-  },
+  return res.documents;
+}
+
 };
