@@ -1,50 +1,52 @@
-// types/timeline.ts
+// -------------------------
+// Relationship Type
+// -------------------------
+export type WishRelationship =
+  | "parent"
+  | "friend"
+  | "teacher"
+  | "colleague"
+  | "relative"
+  | "mentor";
 
 // -------------------------
-// Timeline Category
+// Wish Status
 // -------------------------
-export type TimelineCategory =
-  | "education"
-  | "internship"
-  | "achievement"
-  | "graduation"
-  | "other";
+export type WishStatus =
+  | "pending"
+  | "published"
+  | "hidden";
 
 // -------------------------
-// Timeline Status
+// Wish
 // -------------------------
-export type TimelineStatus =
-  | "draft"
-  | "published";
-
-// -------------------------
-// Timeline Event
-// -------------------------
-export interface TimelineEvent {
+export interface Wish {
   // Appwrite document ID
   $id: string;
 
-  // Owner of the event
+  // Graduate (Owner)
   userId: string;
 
-  // Event information
-  title: string;
-  description: string;
+  // Visitor Information
+  visitorName: string;
+  visitorEmail?: string;
 
-  // Event date
-  date: string;
+  // Visitor Relationship
+  relationship: WishRelationship;
 
-  // Event category
-  category: TimelineCategory;
+  // Wish Message
+  message: string;
 
-  // Optional cover image
-  image?: string;
+  // Anonymous Wish
+  isAnonymous: boolean;
 
-  // Optional location
-  location?: string;
+  // Optional Media
+  imageUrl?: string;
+  videoUrl?: string;
 
-  // Draft or Published
-  status: TimelineStatus;
+  // Dashboard Controls
+  status: WishStatus;
+  isFeatured: boolean;
 
   // Timestamps
   createdAt: string;
@@ -52,20 +54,22 @@ export interface TimelineEvent {
 }
 
 // -------------------------
-// Create Event
+// Create Wish
 // -------------------------
-export interface CreateTimelineEventData {
-  title: string;
-  description: string;
-  date: string;
-  category: TimelineCategory;
-  image?: string;
-  location?: string;
-  status: TimelineStatus;
+export interface CreateWishData {
+  visitorName: string;
+  visitorEmail?: string;
+  relationship: WishRelationship;
+  message: string;
+  isAnonymous: boolean;
+  imageUrl?: string;
+  videoUrl?: string;
+  status: WishStatus;
+  isFeatured?: boolean;
 }
 
 // -------------------------
-// Update Event
+// Update Wish
 // -------------------------
-export interface UpdateTimelineEventData
-  extends Partial<CreateTimelineEventData> {}
+export interface UpdateWishData
+  extends Partial<CreateWishData> {}

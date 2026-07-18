@@ -19,7 +19,7 @@ export function Navbar() {
           Log In
         </Link>
         <Link href="/egister" className="nav-signup">
-          Sign Up
+          Register
         </Link>
       </div>
     </nav>
