@@ -1,0 +1,19 @@
+import { useEffect, useRef, useState } from "react";
+
+export function useReveal(threshold = 0.2) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setVisible(true)),
+      { threshold }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [threshold]);
+
+  return { ref, visible };
+}
