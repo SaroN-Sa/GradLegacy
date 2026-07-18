@@ -18,7 +18,7 @@ export function Navbar() {
         <Link href="/login" className="nav-login">
           Log In
         </Link>
-        <Link href="/egister" className="nav-signup">
+        <Link href="/register" className="nav-signup">
           Register
         </Link>
       </div>
