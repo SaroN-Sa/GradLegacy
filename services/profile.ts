@@ -5,10 +5,11 @@ import {
   ID,
   Query,
 } from "@/lib/appwrite-db";
+import type { Profile } from "@/types/profile";
 
 export const profileService = {
-  async createProfile(data: any) {
-    return await databases.createDocument(
+  async createProfile(data: any): Promise<Profile> {
+    return await databases.createDocument<Profile>(
       DATABASE_ID,
       COLLECTION_ID,
       ID.unique(),
@@ -16,8 +17,8 @@ export const profileService = {
     );
   },
 
-  async getProfileByUserId(userId: string) {
-    const res = await databases.listDocuments(
+  async getProfileByUserId(userId: string): Promise<Profile | null> {
+    const res = await databases.listDocuments<Profile>(
       DATABASE_ID,
       COLLECTION_ID,
       [Query.equal("userId", userId)]
@@ -26,8 +27,8 @@ export const profileService = {
     return res.documents?.[0] || null;
   },
 
-  async getProfileByUsername(username: string) {
-    const res = await databases.listDocuments(
+  async getProfileByUsername(username: string): Promise<Profile | null> {
+    const res = await databases.listDocuments<Profile>(
       DATABASE_ID,
       COLLECTION_ID,
       [Query.equal("username", username)]
@@ -36,8 +37,8 @@ export const profileService = {
     return res.documents?.[0] || null;
   },
 
-  async updateProfile(documentId: string, data: any) {
-    return await databases.updateDocument(
+  async updateProfile(documentId: string, data: any): Promise<Profile> {
+    return await databases.updateDocument<Profile>(
       DATABASE_ID,
       COLLECTION_ID,
       documentId,
@@ -53,8 +54,8 @@ export const profileService = {
     );
   },
 
-  async getAllProfiles() {
-    const res = await databases.listDocuments(
+  async getAllProfiles(): Promise<Profile[]> {
+    const res = await databases.listDocuments<Profile>(
       DATABASE_ID,
       COLLECTION_ID
     );
