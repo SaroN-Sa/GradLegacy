@@ -67,7 +67,7 @@ export default function AdminPage() {
     }
   };
 
-  /*🔥 DELETE PROFILE
+  // 🔥 DELETE PROFILE
   const deleteProfile = async (id: string, fullName: string) => {
     const confirmed = window.confirm(
       `Delete ${fullName || "this profile"}? This cannot be undone.`
@@ -107,7 +107,7 @@ export default function AdminPage() {
         Loading users...
       </div>
     );
-  } */
+  }
 
   return (
     <div className="min-h-screen p-6 bg-gray-50 dark:bg-zinc-950">
