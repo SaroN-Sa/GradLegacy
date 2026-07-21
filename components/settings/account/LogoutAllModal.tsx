@@ -5,6 +5,7 @@ import { LogOut, X } from "lucide-react";
 interface LogoutAllModalProps {
   open: boolean;
   loading?: boolean;
+  error?: string | null;
   onClose: () => void;
   onConfirm: () => Promise<void>;
 }
@@ -12,6 +13,7 @@ interface LogoutAllModalProps {
 export default function LogoutAllModal({
   open,
   loading = false,
+  error = null,
   onClose,
   onConfirm,
 }: LogoutAllModalProps) {
@@ -35,11 +37,18 @@ export default function LogoutAllModal({
           device currently logged into your account.
         </p>
 
+        {error && (
+          <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-300">
+            {error}
+          </p>
+        )}
+
         <div className="mt-8 flex justify-end gap-3">
 
           <button
             onClick={onClose}
-            className="rounded-lg border px-4 py-2"
+            disabled={loading}
+            className="rounded-lg border px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
@@ -47,7 +56,7 @@ export default function LogoutAllModal({
           <button
             disabled={loading}
             onClick={onConfirm}
-            className="rounded-lg bg-orange-600 px-5 py-2 text-white"
+            className="rounded-lg bg-orange-600 px-5 py-2 text-white disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading
               ? "Logging out..."
