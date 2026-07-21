@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { X, Lock, Save } from "lucide-react";
 
-import { ChangePasswordData } from "@/app/types/account";
+import { ChangePasswordData } from "@/types/account";
 
 interface ChangePasswordModalProps {
   open: boolean;

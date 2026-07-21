@@ -7,7 +7,7 @@ import {
   Pencil,
 } from "lucide-react";
 
-import { AccountInfo } from "@/app/types/account";
+import { AccountInfo } from "@/types/account";
 
 interface EmailCardProps {
   account: AccountInfo | null;
