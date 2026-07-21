@@ -129,22 +129,25 @@ export default function TimelinePage() {
 
   async function handleCreate(
     data: CreateTimelineEventData
-  ) {
-    if (!userId) return;
+  ): Promise<TimelineEvent | null> {
+    if (!userId) return null;
 
     try {
       setSaving(true);
 
-      await timelineService.createEvent(userId, data);
+      const created = await timelineService.createEvent(userId, data);
 
       await refreshTimeline();
 
       setShowForm(false);
 
       toast.success("Timeline event added.");
+
+      return created;
     } catch (error) {
       console.error(error);
       toast.error("Couldn't add that event. Try again.");
+      return null;
     } finally {
       setSaving(false);
     }
@@ -153,11 +156,11 @@ export default function TimelinePage() {
   async function handleUpdate(
     eventId: string,
     data: UpdateTimelineEventData
-  ) {
+  ): Promise<TimelineEvent | null> {
     try {
       setSaving(true);
 
-      await timelineService.updateEvent(eventId, data);
+      const updated = await timelineService.updateEvent(eventId, data);
 
       await refreshTimeline();
 
@@ -166,9 +169,12 @@ export default function TimelinePage() {
       setEditingEvent(null);
 
       toast.success("Timeline event updated.");
+
+      return updated;
     } catch (error) {
       console.error(error);
       toast.error("Couldn't save your changes. Try again.");
+      return null;
     } finally {
       setSaving(false);
     }
