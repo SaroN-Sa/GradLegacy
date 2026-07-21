@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Mail, Save, X } from "lucide-react";
 
-import { ChangeEmailData } from "@/app/types/account";
+import { ChangeEmailData } from "@/types/account";
 
 interface ChangeEmailModalProps {
   open: boolean;
