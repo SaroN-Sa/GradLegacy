@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
 import {
   Sparkles,
   Clock,
   CheckCircle2,
   MessageSquareHeart,
   AlertCircle,
-  AlertTriangle,
 } from "lucide-react";
 
 import { account } from "@/lib/appwrite";
@@ -53,7 +51,6 @@ export default function DashboardWishPage() {
   const [loading, setLoading] = useState(true);
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [statsError, setStatsError] = useState(false);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -96,64 +93,6 @@ export default function DashboardWishPage() {
       featured: wishes.filter((w) => w.isFeatured).length,
     };
   }, [wishes]);
-
-  async function performDelete(wishId: string) {
-    try {
-      setDeletingId(wishId);
-      await wishService.deleteWish(wishId);
-      await loadStats();
-      toast.success("Wish deleted.");
-    } catch (error) {
-      console.error(error);
-      toast.error("Couldn't delete that wish. Try again.");
-    } finally {
-      setDeletingId(null);
-    }
-  }
-
-  function handleDeleteRequest(wishId: string) {
-    toast.custom(
-      (t) => (
-        <div className="w-full max-w-sm rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-4 shadow-xl shadow-black/30">
-          <div className="flex items-start gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-900/20 text-red-400">
-              <AlertTriangle size={16} />
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-white">
-                Delete this wish?
-              </p>
-              <p className="mt-0.5 text-xs text-slate-400">
-                This can't be undone. Reactions on it will be lost too.
-              </p>
-
-              <div className="mt-3 flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => toast.dismiss(t)}
-                  className="flex-1 rounded-xl border border-slate-700 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:border-slate-600"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    toast.dismiss(t);
-                    performDelete(wishId);
-                  }}
-                  className="flex-1 rounded-xl border border-red-500/40 bg-red-900/30 py-1.5 text-xs font-medium text-red-300 transition-colors hover:border-red-500/60 hover:bg-red-900/50"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      ),
-      { duration: 8000 }
-    );
-  }
 
   if (loading) {
     return (
@@ -211,14 +150,9 @@ export default function DashboardWishPage() {
           </div>
         )}
 
-        {/* Wishes */}
+        {/* Wishes — WishList handles its own delete confirmation internally */}
         <div className="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-lg shadow-black/20">
-          <WishList
-            userId={userId}
-            dashboard
-            onDelete={handleDeleteRequest}
-            deletingId={deletingId}
-          />
+          <WishList userId={userId} dashboard />
         </div>
       </div>
     </main>
