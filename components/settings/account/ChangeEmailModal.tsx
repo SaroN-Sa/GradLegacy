@@ -15,7 +15,7 @@ interface ChangeEmailModalProps {
 
 export default function ChangeEmailModal({
   open,
- loading = false,
+  loading = false,
   currentEmail,
   onClose,
   onSubmit,
@@ -42,13 +42,10 @@ export default function ChangeEmailModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="w-full max-w-md rounded-2xl bg-white shadow-xl dark:bg-gray-900">
-
         <div className="flex items-center justify-between border-b p-5">
           <div className="flex items-center gap-3">
             <Mail className="h-6 w-6 text-blue-600" />
-            <h2 className="text-lg font-semibold">
-              Change Email
-            </h2>
+            <h2 className="text-lg font-semibold">Change Email</h2>
           </div>
 
           <button onClick={onClose}>
@@ -56,10 +53,7 @@ export default function ChangeEmailModal({
           </button>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-5 p-6"
-        >
+        <form onSubmit={handleSubmit} className="space-y-5 p-6">
           <div>
             <label className="mb-2 block text-sm font-medium">
               New Email
@@ -69,9 +63,7 @@ export default function ChangeEmailModal({
               type="email"
               required
               value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg border px-4 py-2"
             />
           </div>
@@ -85,9 +77,7 @@ export default function ChangeEmailModal({
               type="password"
               required
               value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-lg border px-4 py-2"
             />
           </div>
@@ -107,7 +97,6 @@ export default function ChangeEmailModal({
               className="flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2 text-white"
             >
               <Save className="h-4 w-4" />
-
               {loading ? "Saving..." : "Save"}
             </button>
           </div>

@@ -1,3 +1,5 @@
+// types/account.ts
+
 export interface AccountInfo {
   $id: string;
   name: string;
@@ -7,11 +9,10 @@ export interface AccountInfo {
   registration: string;
 }
 
-export type ChangeEmailData = {
-  currentEmail: string;
-  newEmail: string;
+export interface ChangeEmailData {
+  email: string;
   password: string;
-};
+}
 
 export interface ChangePasswordData {
   currentPassword: string;
