@@ -7,10 +7,11 @@ export interface AccountInfo {
   registration: string;
 }
 
-export interface ChangeEmailData {
-  email: string;
+export type ChangeEmailData = {
+  currentEmail: string;
+  newEmail: string;
   password: string;
-}
+};
 
 export interface ChangePasswordData {
   currentPassword: string;
