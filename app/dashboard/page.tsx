@@ -18,20 +18,7 @@ import {
 
 import { authService } from "@/services/auth";
 import { profileService } from "@/services/profile";
-
-type ProfileStatus = "pending" | "approved" | "rejected" | undefined;
-
-interface Profile {
-  $id: string;
-  fullName: string;
-  username: string;
-  bio?: string;
-  university?: string;
-  department?: string;
-  profileImage?: string;
-  coverImage?: string;
-  status?: ProfileStatus;
-}
+import type { Profile } from "@/types/profile";
 
 const PROFILE_FIELDS = [
   "fullName",
