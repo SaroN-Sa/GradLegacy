@@ -147,7 +147,7 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
   const renderMedia = () => {
     if (media.type === "image") {
       return (
-        <Image src={media.url} alt={media.title} fill className="object-contain" sizes="100vw" priority />
+        <Image src={media.url} alt={media.title || "Untitled Media"} fill className="object-contain" sizes="100vw" priority />
       );
     }
     if (media.type === "video") {
