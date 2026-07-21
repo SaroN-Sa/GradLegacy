@@ -5,12 +5,14 @@ import { Camera, Loader2 } from "lucide-react";
 
 interface Props {
   onUpload: (url: string) => void;
+  label?: string;
   className?: string;
   iconSize?: number;
 }
 
 export default function ImageUpload({
   onUpload,
+  label,
   className = "",
   iconSize = 20,
 }: Props) {
@@ -47,7 +49,7 @@ export default function ImageUpload({
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center gap-2">
       <input
         ref={inputRef}
         type="file"
@@ -70,6 +72,10 @@ export default function ImageUpload({
           <Camera size={iconSize} />
         )}
       </button>
-    </>
+
+      {label && (
+        <span className="text-xs font-medium text-gray-500">{label}</span>
+      )}
+    </div>
   );
 }
