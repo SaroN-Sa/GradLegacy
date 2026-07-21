@@ -12,10 +12,9 @@ import QuickActions from "@/components/profile/QuickActions";
 import ProfileStats from "@/components/profile/ProfileStats";
 import QRCodeModal from "@/components/profile/QRCodeModal";
 import ProfilePreviewModal from "@/components/profile/ProfilePreviewModal";  // ← new
-import socialLinksCard from "@/components/profile/SocialLinksCard";
+import SocialLinksCard from "@/components/profile/SocialLinksCard";
 
 import type { GraduateProfile } from "@/types/profile";
-import SocialLinksCard from "@/components/profile/SocialLinksCard";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -107,7 +106,7 @@ export default function ProfilePage() {
   }
 
   async function handleProfileImageChange(url: string) {
-    if (!profile) return;
+    if (!profile?.$id) return;
     try {
       await profileService.updateProfile(profile.$id, { profileImage: url });
       setProfile({ ...profile, profileImage: url });
@@ -117,7 +116,7 @@ export default function ProfilePage() {
   }
 
   async function handleCoverImageChange(url: string) {
-    if (!profile) return;
+    if (!profile?.$id) return;
     try {
       await profileService.updateProfile(profile.$id, { coverImage: url });
       setProfile({ ...profile, coverImage: url });
@@ -198,7 +197,7 @@ export default function ProfilePage() {
         profile={profile}
       />
       <SocialLinksCard profile={profile} />
-      
+
     </>
   );
 }
