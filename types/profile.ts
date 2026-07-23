@@ -1,8 +1,13 @@
-export type ProfileStatus = "pending" | "approved" | "rejected" | "draft" | undefined;
+import { Models } from "appwrite";
 
-export interface GraduateProfile {
-  $id: string;
+export type ProfileStatus =
+  | "pending"
+  | "approved"
+  | "rejected"
+  | "draft"
+  | undefined;
 
+export interface GraduateProfile extends Models.Document {
   userId: string;
 
   fullName: string;
@@ -35,7 +40,4 @@ export interface GraduateProfile {
   status?: ProfileStatus;
 }
 
-// `Profile` is kept as an alias so every existing import across the app
-// (profileService, dashboard/page.tsx, AdminPage, etc.) resolves to the
-// exact same shape as GraduateProfile — no more mismatched types.
 export type Profile = GraduateProfile;
