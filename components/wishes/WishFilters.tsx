@@ -42,7 +42,7 @@ export default function WishFilters({
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search by visitor, relationship or message..."
-              className="w-full rounded-xl border border-slate-700 bg-slate-900 py-2.5 pl-10 pr-9 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[#FFD700]/60 focus:bg-slate-900 focus:ring-4 focus:ring-[#FFD700]/10"
+              className="w-full rounded-xl border border-slate-700 bg-slate-900 py-2.5 sm:py-2.5 pl-10 pr-9 text-base sm:text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[#FFD700]/60 focus:bg-slate-900 focus:ring-4 focus:ring-[#FFD700]/10"
             />
             {search && (
               <button
@@ -63,7 +63,7 @@ export default function WishFilters({
             <SlidersHorizontal className="h-3 w-3" />
             Status
           </label>
-          <div className="inline-flex flex-wrap gap-1 rounded-xl border border-slate-700 bg-slate-900 p-1">
+          <div className="flex flex-wrap gap-1 rounded-xl border border-slate-700 bg-slate-900 p-1 sm:inline-flex">
             {STATUS_OPTIONS.map((option) => {
               const isActive = status === option.value;
               return (
@@ -71,7 +71,7 @@ export default function WishFilters({
                   key={option.value}
                   type="button"
                   onClick={() => onStatusChange(option.value)}
-                  className={`rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all ${
+                  className={`flex-1 sm:flex-none rounded-lg px-3.5 py-2 sm:py-1.5 text-xs font-medium transition-all ${
                     isActive
                       ? "bg-[#FFD700]/10 text-[#FFD700] shadow-sm ring-1 ring-[#FFD700]/30"
                       : "text-slate-400 hover:text-slate-200"

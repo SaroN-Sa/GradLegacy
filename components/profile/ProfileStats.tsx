@@ -49,7 +49,7 @@ export default function ProfileStats({
   ];
 
   return (
-    <div className="grid gap-4 grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-3 grid-cols-2 sm:gap-4 lg:grid-cols-4">
       {stats.map((stat) => {
         const Icon = stat.icon;
         const isCompletion = stat.suffix === "%";
@@ -67,7 +67,7 @@ export default function ProfileStats({
             key={stat.title}
             className="
               group relative flex flex-col justify-between
-              bg-white dark:bg-slate-900 rounded-3xl p-6
+              bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6
               border border-gray-100 dark:border-slate-800
               shadow-lg shadow-black/5 dark:shadow-black/20
               transition-all duration-200
@@ -79,20 +79,20 @@ export default function ProfileStats({
             <div className="absolute -top-6 -left-6 w-24 h-24 bg-[#0f172a]/5 dark:bg-yellow-400/5 rounded-full pointer-events-none" />
 
             {/* Header row */}
-            <div className="flex items-start justify-between gap-3 relative z-10">
-              <div>
+            <div className="flex items-start justify-between gap-2 sm:gap-3 relative z-10">
+              <div className="min-w-0">
                 {/* Label */}
-                <p className="text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wide">
+                <p className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wide truncate">
                   {stat.title}
                 </p>
 
                 {/* Value */}
-                <div className="mt-2 flex items-end gap-1 leading-none">
-                  <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                <div className="mt-1.5 sm:mt-2 flex items-end gap-1 leading-none">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                     {stat.value}
                   </h2>
                   {stat.suffix && (
-                    <span className="text-xl font-bold text-gray-400 dark:text-slate-500 mb-0.5">
+                    <span className="text-base sm:text-lg lg:text-xl font-bold text-gray-400 dark:text-slate-500 mb-0.5">
                       {stat.suffix}
                     </span>
                   )}
@@ -101,18 +101,19 @@ export default function ProfileStats({
 
               {/* Icon chip — navy bg with yellow icon, matches sidebar/logo style (fixed brand color, not themed) */}
               <div className="
-                w-12 h-12 rounded-2xl flex items-center justify-center shrink-0
+                w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0
                 bg-[#0f172a]
                 shadow-md shadow-[#0f172a]/20
                 transition-transform duration-200 group-hover:scale-110
               ">
-                <Icon size={20} className="text-yellow-400" />
+                <Icon size={16} className="text-yellow-400 sm:hidden" />
+                <Icon size={20} className="hidden text-yellow-400 sm:block" />
               </div>
             </div>
 
             {/* Completion progress bar — only shown for the completion stat */}
             {isCompletion && pct !== null && (
-              <div className="mt-5 relative z-10">
+              <div className="mt-3.5 sm:mt-5 relative z-10">
                 <div className="w-full h-1.5 bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div
                     className={`h-1.5 rounded-full transition-all duration-700 ${
@@ -125,7 +126,7 @@ export default function ProfileStats({
                     style={{ width: `${pct}%` }}
                   />
                 </div>
-                <p className={`mt-1.5 text-[11px] font-semibold ${ringColor}`}>
+                <p className={`mt-1.5 text-[10px] sm:text-[11px] font-semibold ${ringColor}`}>
                   {pct >= 80
                     ? "Looking great!"
                     : pct >= 50

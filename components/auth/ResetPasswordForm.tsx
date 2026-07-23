@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Eye, EyeOff, GraduationCap, Sparkles, Shield, Cloud, Globe, KeyRound } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, GraduationCap, Sparkles, Shield, Cloud, Globe, KeyRound } from "lucide-react";
 import { authService } from "@/services/auth";
 
 export default function ResetPasswordPage() {
@@ -45,13 +45,14 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    /* Same root as RegisterForm — full viewport, no scroll, dark bg everywhere */
-    <div className="w-screen h-screen overflow-hidden flex bg-gradient-to-br from-[#0b1120] via-[#0f172a] to-[#162035]">
+    /* Same root as RegisterForm — fills viewport, scrolls on small screens where content is taller than the viewport */
+    <div className="w-full min-h-screen lg:h-screen lg:overflow-hidden flex flex-col lg:flex-row bg-gradient-to-br from-[#0b1120] via-[#0f172a] to-[#162035]">
 
       {/* ══════════════════════════════════════════
           LEFT PANEL — branding (identical to Register)
+          Hidden on mobile/tablet, shown from lg (desktop) up
       ══════════════════════════════════════════ */}
-      <div className="hidden lg:flex flex-col justify-between w-[56%] h-full px-14 py-12 text-white relative overflow-hidden flex-shrink-0">
+      <div className="hidden lg:flex flex-col justify-between w-full lg:w-[56%] xl:w-[58%] h-full px-8 xl:px-14 py-10 xl:py-12 text-white relative overflow-hidden flex-shrink-0">
 
         {/* Glow blobs */}
         <div className="absolute top-0 right-0 w-[26rem] h-[26rem] bg-blue-500/10 rounded-full blur-[110px] pointer-events-none" />
@@ -74,7 +75,7 @@ export default function ResetPasswordPage() {
             <Sparkles size={10} /> Account Recovery
           </div>
 
-          <h2 className="text-[2.8rem] font-extrabold leading-[1.08] tracking-tight">
+          <h2 className="text-[2.2rem] xl:text-[2.8rem] font-extrabold leading-[1.08] tracking-tight">
             Secure Your<br />
             Account<br />
             <span className="text-yellow-400">Again</span>
@@ -113,13 +114,24 @@ export default function ResetPasswordPage() {
       {/* ══════════════════════════════════════════
           RIGHT PANEL — same dark bg, white card inside
       ══════════════════════════════════════════ */}
-      <div className="flex-1 h-full flex items-center justify-center px-6 py-8 relative">
+      <div className="flex-1 w-full lg:h-full flex items-center justify-center px-4 sm:px-6 py-8 sm:py-10 lg:py-8 relative">
 
         <div className="absolute top-1/4 right-0 w-[20rem] h-[20rem] bg-blue-400/6 rounded-full blur-[90px] pointer-events-none" />
 
+        {/* Back button — always available, since the branding panel (and its own nav) is hidden below lg */}
+        <button
+          type="button"
+          onClick={() => router.back()}
+          aria-label="Go back"
+          className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20 flex items-center gap-1.5 text-white/60 hover:text-white text-xs sm:text-sm font-medium transition-colors"
+        >
+          <ArrowLeft size={16} />
+          <span className="hidden xs:inline">Back</span>
+        </button>
+
         {/* White card */}
-        <div className="relative z-10 w-full max-w-[420px] max-h-[calc(100vh-4rem)] bg-white rounded-3xl shadow-2xl shadow-black/40 overflow-y-auto">
-          <div className="px-8 py-8">
+        <div className="relative z-10 w-full max-w-[420px] sm:max-w-[440px] md:max-w-[460px] max-h-[calc(100vh-4rem)] bg-white rounded-2xl sm:rounded-3xl shadow-2xl shadow-black/40 overflow-y-auto">
+          <div className="px-5 py-6 sm:px-7 sm:py-7 md:px-8 md:py-8">
 
             {/* Mobile logo */}
             <div className="lg:hidden flex items-center justify-center gap-2 mb-6">
@@ -131,10 +143,10 @@ export default function ResetPasswordPage() {
 
             {/* Icon + Heading */}
             <div className="mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-[#0f172a]/8 flex items-center justify-center mb-4">
-                <KeyRound size={22} className="text-[#0f172a]" />
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#0f172a]/8 flex items-center justify-center mb-4">
+                <KeyRound size={20} className="text-[#0f172a] sm:w-[22px] sm:h-[22px]" />
               </div>
-              <h2 className="text-2xl font-extrabold text-[#0f172a] tracking-tight">Reset Password</h2>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-[#0f172a] tracking-tight">Reset Password</h2>
               <p className="mt-1 text-xs text-gray-400">Enter and confirm your new password below.</p>
             </div>
 

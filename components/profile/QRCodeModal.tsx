@@ -81,36 +81,38 @@ export default function QRCodeModal({ open, onClose, url }: Props) {
     <div
       ref={overlayRef}
       onClick={handleOverlayClick}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="qr-modal-title"
     >
-      {/* Card — consistent with dashboard design system */}
-      <div className="relative w-[340px] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl shadow-black/40 overflow-hidden">
+      {/* Card — consistent with dashboard design system.
+          w-full + max-w keeps it from overflowing very narrow phones (<340px),
+          while capping out at the original 340px on larger screens. */}
+      <div className="relative w-full max-w-[340px] bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl shadow-black/40 overflow-hidden">
 
         {/* Card top accent bar */}
         <div className="h-1.5 w-full bg-gradient-to-r from-[#0f172a] to-[#1e3a5f]" />
 
-        <div className="px-7 py-6">
+        <div className="px-5 py-5 sm:px-7 sm:py-6">
 
           {/* Close button */}
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700 hover:text-gray-800 dark:hover:text-white transition-colors"
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700 hover:text-gray-800 dark:hover:text-white transition-colors sm:top-5 sm:right-5"
           >
             <X size={16} />
           </button>
 
           {/* Heading */}
-          <div className="mb-5 pr-8">
+          <div className="mb-4 pr-8 sm:mb-5">
             <div className="inline-flex items-center gap-1.5 bg-[#0f172a] px-3 py-1 rounded-full text-[10px] font-bold text-yellow-400 mb-3 tracking-[0.15em] uppercase">
               QR Code
             </div>
             <h2
               id="qr-modal-title"
-              className="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight"
+              className="text-lg font-extrabold text-gray-900 dark:text-white tracking-tight sm:text-xl"
             >
               Scan to Visit
             </h2>
@@ -119,8 +121,11 @@ export default function QRCodeModal({ open, onClose, url }: Props) {
             </p>
           </div>
 
-          {/* QR canvas — centered in a padded navy container (fixed, not themed) */}
-          <div className="flex items-center justify-center rounded-2xl bg-[#0f172a] p-4 mb-4">
+          {/* QR canvas — centered in a padded navy container (fixed, not themed).
+              The canvas itself renders at a fixed 220px (set in QRCode.toCanvas)
+              for scan reliability; on very narrow screens it can scroll within
+              the card rather than overflow the viewport. */}
+          <div className="flex items-center justify-center overflow-x-auto rounded-2xl bg-[#0f172a] p-3 mb-4 sm:p-4">
             {qrError ? (
               <div className="w-[220px] h-[220px] flex items-center justify-center text-red-400 text-xs text-center px-4">
                 {qrError}
@@ -142,7 +147,7 @@ export default function QRCodeModal({ open, onClose, url }: Props) {
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:gap-3">
             <button
               onClick={handleCopy}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all border-2 ${

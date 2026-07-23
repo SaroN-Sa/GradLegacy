@@ -32,14 +32,18 @@ export default function PasswordRequirements({ password }: PasswordRequirementsP
   const strength = getStrengthInfo();
 
   return (
-    <div className="space-y-3 mt-2 p-3 bg-gray-50 rounded-xl border border-gray-100">
+    <div className="space-y-2 sm:space-y-3 mt-2 p-2.5 sm:p-3 md:p-4 bg-gray-50 rounded-xl border border-gray-100 w-full max-w-full">
       {/* Password strength meter */}
-      <div className="space-y-1.5">
-        <div className="flex justify-between items-center">
-          <span className="text-xs font-medium text-gray-600">Password Strength</span>
+      <div className="space-y-1 sm:space-y-1.5">
+        <div className="flex justify-between items-center flex-wrap gap-1">
+          <span className="text-xs sm:text-sm font-medium text-gray-600">
+            Password Strength
+          </span>
           {score > 0 && (
-            <span className={`text-xs font-semibold ${strength.textColor} flex items-center gap-1`}>
-              {score === 4 && <Shield size={12} />}
+            <span
+              className={`text-xs sm:text-sm font-semibold ${strength.textColor} flex items-center gap-1`}
+            >
+              {score === 4 && <Shield size={12} className="sm:w-3.5 sm:h-3.5" />}
               {strength.label}
             </span>
           )}
@@ -48,7 +52,7 @@ export default function PasswordRequirements({ password }: PasswordRequirementsP
           {[1, 2, 3, 4].map((item) => (
             <div
               key={item}
-              className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
+              className={`h-1.5 sm:h-2 flex-1 rounded-full transition-all duration-300 ${
                 score >= item ? strength.color : "bg-gray-200"
               }`}
             />
@@ -56,59 +60,75 @@ export default function PasswordRequirements({ password }: PasswordRequirementsP
         </div>
       </div>
 
-      {/* Requirements list - FIXED: Now properly visible */}
+      {/* Requirements list */}
       <div>
-        <p className="text-xs font-medium text-gray-600 mb-1.5">
+        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1 sm:mb-1.5 flex flex-wrap items-center gap-x-2">
           Requirements:
           {score === 4 && (
-            <span className="ml-2 text-green-600 font-semibold">✓ All met!</span>
+            <span className="text-green-600 font-semibold">✓ All met!</span>
           )}
         </p>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-x-2 sm:gap-x-3 gap-y-1 sm:gap-y-1.5">
           {/* 8+ Characters */}
-          <div className="flex items-center gap-1.5 text-xs">
+          <div className="flex items-center gap-1.5 text-xs sm:text-sm min-w-0">
             {checks.length ? (
-              <CheckCircle size={14} className="text-green-500 flex-shrink-0" />
+              <CheckCircle size={14} className="text-green-500 flex-shrink-0 sm:w-4 sm:h-4" />
             ) : (
-              <Circle size={14} className="text-gray-300 flex-shrink-0" />
+              <Circle size={14} className="text-gray-300 flex-shrink-0 sm:w-4 sm:h-4" />
             )}
-            <span className={checks.length ? "text-green-600 font-medium" : "text-gray-500"}>
+            <span
+              className={`truncate ${
+                checks.length ? "text-green-600 font-medium" : "text-gray-500"
+              }`}
+            >
               8+ Characters
             </span>
           </div>
 
           {/* Uppercase */}
-          <div className="flex items-center gap-1.5 text-xs">
+          <div className="flex items-center gap-1.5 text-xs sm:text-sm min-w-0">
             {checks.uppercase ? (
-              <CheckCircle size={14} className="text-green-500 flex-shrink-0" />
+              <CheckCircle size={14} className="text-green-500 flex-shrink-0 sm:w-4 sm:h-4" />
             ) : (
-              <Circle size={14} className="text-gray-300 flex-shrink-0" />
+              <Circle size={14} className="text-gray-300 flex-shrink-0 sm:w-4 sm:h-4" />
             )}
-            <span className={checks.uppercase ? "text-green-600 font-medium" : "text-gray-500"}>
+            <span
+              className={`truncate ${
+                checks.uppercase ? "text-green-600 font-medium" : "text-gray-500"
+              }`}
+            >
               Uppercase
             </span>
           </div>
 
           {/* Number */}
-          <div className="flex items-center gap-1.5 text-xs">
+          <div className="flex items-center gap-1.5 text-xs sm:text-sm min-w-0">
             {checks.number ? (
-              <CheckCircle size={14} className="text-green-500 flex-shrink-0" />
+              <CheckCircle size={14} className="text-green-500 flex-shrink-0 sm:w-4 sm:h-4" />
             ) : (
-              <Circle size={14} className="text-gray-300 flex-shrink-0" />
+              <Circle size={14} className="text-gray-300 flex-shrink-0 sm:w-4 sm:h-4" />
             )}
-            <span className={checks.number ? "text-green-600 font-medium" : "text-gray-500"}>
+            <span
+              className={`truncate ${
+                checks.number ? "text-green-600 font-medium" : "text-gray-500"
+              }`}
+            >
               Number
             </span>
           </div>
 
           {/* Special */}
-          <div className="flex items-center gap-1.5 text-xs">
+          <div className="flex items-center gap-1.5 text-xs sm:text-sm min-w-0">
             {checks.special ? (
-              <CheckCircle size={14} className="text-green-500 flex-shrink-0" />
+              <CheckCircle size={14} className="text-green-500 flex-shrink-0 sm:w-4 sm:h-4" />
             ) : (
-              <Circle size={14} className="text-gray-300 flex-shrink-0" />
+              <Circle size={14} className="text-gray-300 flex-shrink-0 sm:w-4 sm:h-4" />
             )}
-            <span className={checks.special ? "text-green-600 font-medium" : "text-gray-500"}>
+            <span
+              className={`truncate ${
+                checks.special ? "text-green-600 font-medium" : "text-gray-500"
+              }`}
+            >
               Special Character
             </span>
           </div>
@@ -117,9 +137,9 @@ export default function PasswordRequirements({ password }: PasswordRequirementsP
 
       {/* Success message */}
       {score === 4 && (
-        <div className="flex items-center gap-2 p-2 bg-green-50 rounded-lg border border-green-200">
-          <Check size={16} className="text-green-600" />
-          <p className="text-xs font-medium text-green-700">
+        <div className="flex items-center gap-2 p-2 sm:p-2.5 bg-green-50 rounded-lg border border-green-200">
+          <Check size={16} className="text-green-600 flex-shrink-0 sm:w-[18px] sm:h-[18px]" />
+          <p className="text-xs sm:text-sm font-medium text-green-700">
             🔒 Excellent password! Your account is well protected.
           </p>
         </div>
@@ -127,9 +147,12 @@ export default function PasswordRequirements({ password }: PasswordRequirementsP
 
       {/* Warning for weak password */}
       {score > 0 && score <= 2 && (
-        <div className="flex items-center gap-2 p-2 bg-orange-50 rounded-lg border border-orange-200">
-          <AlertTriangle size={16} className="text-orange-500" />
-          <p className="text-xs font-medium text-orange-700">
+        <div className="flex items-center gap-2 p-2 sm:p-2.5 bg-orange-50 rounded-lg border border-orange-200">
+          <AlertTriangle
+            size={16}
+            className="text-orange-500 flex-shrink-0 sm:w-[18px] sm:h-[18px]"
+          />
+          <p className="text-xs sm:text-sm font-medium text-orange-700">
             Consider adding more characters, numbers, and special characters.
           </p>
         </div>

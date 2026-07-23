@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
+  ArrowLeft,
   BadgeCheck,
   Calendar,
   GraduationCap,
@@ -17,6 +19,8 @@ interface ProfileHeaderProps {
 
   onEdit?: () => void;
 
+  onBack?: () => void;
+
   onProfileImageChange?: (
     url: string
   ) => Promise<void> | void;
@@ -29,19 +33,30 @@ interface ProfileHeaderProps {
 export default function ProfileHeader({
   profile,
   onEdit,
+  onBack,
   onProfileImageChange,
   onCoverImageChange,
 }: ProfileHeaderProps) {
 
+  const router = useRouter();
+
   if (!profile) return null;
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.back();
+    }
+  };
 
   return (
 
-    <div className="overflow-hidden rounded-3xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl dark:shadow-black/30">
+    <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl dark:shadow-black/30">
 
       {/* COVER */}
 
-      <div className="relative h-72 w-full">
+      <div className="relative h-44 w-full sm:h-56 lg:h-72">
 
         <Image
           src={
@@ -59,9 +74,23 @@ export default function ProfileHeader({
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
+        {/* back */}
+
+        <button
+          onClick={handleBack}
+          aria-label="Back"
+          className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-white/90 dark:bg-slate-900/90 py-2 pl-2.5 pr-3 text-sm font-medium text-gray-700 dark:text-slate-200 shadow-lg backdrop-blur transition hover:bg-white dark:hover:bg-slate-900 sm:left-5 sm:top-5"
+        >
+
+          <ArrowLeft size={16} />
+
+          <span className="hidden sm:inline">Back</span>
+
+        </button>
+
         {/* upload cover */}
 
-        <div className="absolute right-5 top-5">
+        <div className="absolute right-3 top-3 sm:right-5 sm:top-5">
 
           <ImageUpload
             onUpload={(url) =>
@@ -77,10 +106,11 @@ export default function ProfileHeader({
 
           <button
             onClick={onEdit}
-            className="absolute bottom-6 right-6 flex items-center gap-2 rounded-xl bg-white/90 dark:bg-slate-900/90 px-5 py-2 text-sm font-medium text-gray-700 dark:text-slate-200 shadow-lg backdrop-blur transition hover:bg-white dark:hover:bg-slate-900"
+            className="absolute bottom-4 right-3 flex items-center gap-1.5 rounded-xl bg-white/90 dark:bg-slate-900/90 px-3.5 py-2 text-xs font-medium text-gray-700 dark:text-slate-200 shadow-lg backdrop-blur transition hover:bg-white dark:hover:bg-slate-900 sm:bottom-6 sm:right-6 sm:gap-2 sm:px-5 sm:text-sm"
           >
 
-            <Pencil size={16} />
+            <Pencil size={15} className="sm:hidden" />
+            <Pencil size={16} className="hidden sm:block" />
 
             Edit Profile
 
@@ -92,15 +122,15 @@ export default function ProfileHeader({
 
       {/* CONTENT */}
 
-      <div className="relative px-6 pb-8 lg:px-10">
+      <div className="relative px-4 pb-6 sm:px-6 sm:pb-8 lg:px-10">
 
         {/* AVATAR */}
 
-        <div className="-mt-20 flex justify-center lg:justify-start">
+        <div className="-mt-14 flex justify-center sm:-mt-16 lg:-mt-20 lg:justify-start">
 
           <div className="relative">
 
-            <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white dark:border-slate-900 bg-white dark:bg-slate-800 shadow-2xl">
+            <div className="relative h-28 w-28 overflow-hidden rounded-full border-4 border-white dark:border-slate-900 bg-white dark:bg-slate-800 shadow-2xl sm:h-32 sm:w-32 lg:h-40 lg:w-40">
 
               <Image
                 src={
@@ -109,7 +139,7 @@ export default function ProfileHeader({
                 }
                 alt={profile.fullName}
                 fill
-                sizes="160px"
+                sizes="(max-width:640px) 112px, (max-width:1024px) 128px, 160px"
                 className="object-cover"
               />
 
@@ -133,32 +163,32 @@ export default function ProfileHeader({
 
         {/* HEADER */}
 
-        <div className="mt-6 flex flex-col items-center gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mt-5 flex flex-col items-center gap-4 sm:mt-6 lg:flex-row lg:items-end lg:justify-between">
 
           <div className="text-center lg:text-left">
 
             <div className="flex items-center justify-center gap-2 lg:justify-start">
 
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl lg:text-3xl">
 
                 {profile.fullName}
 
               </h1>
 
               <BadgeCheck
-                size={22}
-                className="text-green-600 dark:text-green-400"
+                size={20}
+                className="shrink-0 text-green-600 dark:text-green-400 sm:h-[22px] sm:w-[22px]"
               />
 
             </div>
 
-            <p className="mt-1 text-gray-500 dark:text-slate-400">
+            <p className="mt-1 text-sm text-gray-500 dark:text-slate-400 sm:text-base">
 
               @{profile.username}
 
             </p>
 
-            <span className="mt-4 inline-flex rounded-full bg-blue-100 dark:bg-blue-500/10 px-4 py-1 text-sm font-medium text-blue-700 dark:text-blue-300">
+            <span className="mt-3 inline-flex rounded-full bg-blue-100 dark:bg-blue-500/10 px-4 py-1 text-sm font-medium text-blue-700 dark:text-blue-300 sm:mt-4">
 
               🎓 Graduate
 
@@ -170,7 +200,7 @@ export default function ProfileHeader({
 
         {/* EDUCATION */}
 
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:mt-10 sm:gap-5 md:grid-cols-3">
 
           <InfoCard
             icon={
@@ -215,15 +245,15 @@ export default function ProfileHeader({
 
         {/* ABOUT */}
 
-        <div className="mt-10 rounded-3xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/60 p-6">
+        <div className="mt-8 rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/60 p-4 sm:mt-10 sm:rounded-3xl sm:p-6">
 
-          <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+          <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-xl">
 
             About Me
 
           </h2>
 
-          <p className="leading-8 text-gray-600 dark:text-slate-300 italic">
+          <p className="leading-7 text-gray-600 dark:text-slate-300 italic sm:leading-8">
 
             {profile.bio ||
 
@@ -255,9 +285,9 @@ function InfoCard({
 
   return (
 
-    <div className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/60 p-5 transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-black/30">
+    <div className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/60 p-4 transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-black/30 sm:p-5">
 
-      <div className="mb-3 flex items-center gap-3">
+      <div className="mb-2.5 flex items-center gap-3 sm:mb-3">
 
         {icon}
 

@@ -17,6 +17,11 @@ import { CategorySlug } from "@/lib/media/categories";
  * backgrounds. Assumes Tailwind's class-based dark mode (a `dark` class
  * on <html> or a parent element) — adjust if your project uses a
  * different toggle strategy (e.g. a data attribute).
+ *
+ * Fixed h-9 w-14 size is intentional — this is an icon-scale decorative
+ * mark (like a badge or favicon), not layout content, so it stays the
+ * same physical size across breakpoints rather than scaling with the
+ * viewport.
  */
 export default function CategoryMotif({
   slug,

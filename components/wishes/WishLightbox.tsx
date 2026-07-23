@@ -143,14 +143,14 @@ export default function WishLightbox({
         type="button"
         onClick={handleClose}
         aria-label="Close preview"
-        className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 text-slate-300 transition-colors hover:border-[#FFD700]/50 hover:text-[#FFD700]"
+        className="absolute right-3 top-3 sm:right-4 sm:top-4 z-10 flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 text-slate-300 transition-colors hover:border-[#FFD700]/50 hover:text-[#FFD700]"
       >
         <X size={18} />
       </button>
 
       {/* Counter */}
       {total > 1 && (
-        <div className="absolute left-1/2 top-4 z-10 -translate-x-1/2 rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1 text-xs font-medium text-slate-300">
+        <div className="absolute left-1/2 top-3 sm:top-4 z-10 -translate-x-1/2 rounded-full border border-slate-700 bg-slate-900/80 px-2.5 sm:px-3 py-1 text-xs font-medium text-slate-300">
           {index + 1} / {total}
         </div>
       )}
@@ -164,7 +164,7 @@ export default function WishLightbox({
             goPrev();
           }}
           aria-label="Previous"
-          className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 text-slate-300 transition-colors hover:border-[#FFD700]/50 hover:text-[#FFD700] sm:left-6"
+          className="absolute left-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 text-slate-300 transition-colors hover:border-[#FFD700]/50 hover:text-[#FFD700] sm:left-6 sm:h-11 sm:w-11"
         >
           <ChevronLeft size={20} />
         </button>
@@ -179,7 +179,7 @@ export default function WishLightbox({
             goNext();
           }}
           aria-label="Next"
-          className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 text-slate-300 transition-colors hover:border-[#FFD700]/50 hover:text-[#FFD700] sm:right-6"
+          className="absolute right-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 text-slate-300 transition-colors hover:border-[#FFD700]/50 hover:text-[#FFD700] sm:right-6 sm:h-11 sm:w-11"
         >
           <ChevronRight size={20} />
         </button>

@@ -13,20 +13,20 @@ interface Props {
 }
 
 const INPUT_CLASS =
-  "w-full rounded-xl border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 py-3 pl-10 pr-4 text-sm text-gray-900 dark:text-white outline-none transition placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-blue-600 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950";
+  "w-full rounded-xl border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 py-2.5 sm:py-3 pl-10 pr-4 text-sm text-gray-900 dark:text-white outline-none transition placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-blue-600 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950";
 
 export default function PersonalInfoSection({
   form,
   onChange,
 }: Props) {
   return (
-    <div className="rounded-2xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm dark:shadow-black/20">
+    <div className="rounded-2xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm dark:shadow-black/20 sm:p-6">
 
       {/* Header */}
 
-      <div className="mb-6">
+      <div className="mb-5 sm:mb-6">
 
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">
           Personal Information
         </h2>
 
@@ -36,7 +36,7 @@ export default function PersonalInfoSection({
 
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-4 sm:space-y-5">
 
         {/* Full Name */}
 
@@ -108,7 +108,7 @@ export default function PersonalInfoSection({
             value={form.bio}
             onChange={onChange}
             placeholder="Write something about yourself..."
-            className="w-full rounded-xl border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 p-4 text-sm text-gray-900 dark:text-white outline-none transition resize-none placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-blue-600 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950"
+            className="w-full rounded-xl border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 p-3.5 sm:p-4 text-sm text-gray-900 dark:text-white outline-none transition resize-none placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-blue-600 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950"
           />
 
         </div>

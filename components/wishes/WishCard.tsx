@@ -83,9 +83,9 @@ function formatDate(dateString: string) {
 
 /** Bigger, bolder type for short wishes; scales down as the message grows. */
 function getFeedTextSizeClass(messageLength: number) {
-  if (messageLength < 80) return "text-2xl sm:text-3xl";
-  if (messageLength < 200) return "text-xl sm:text-2xl";
-  return "text-base sm:text-lg";
+  if (messageLength < 80) return "text-xl sm:text-2xl md:text-3xl";
+  if (messageLength < 200) return "text-lg sm:text-xl md:text-2xl";
+  return "text-sm sm:text-base md:text-lg";
 }
 
 export default function WishCard({
@@ -149,12 +149,14 @@ export default function WishCard({
 
   const header = (
     <div className="flex items-start justify-between gap-3">
-      <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-slate-800 text-sm font-semibold text-slate-300">
+      <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+        <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-full bg-slate-800 text-xs sm:text-sm font-semibold text-slate-300">
           {getInitials(displayName)}
         </div>
-        <div>
-          <h3 className="text-base font-semibold text-white">{displayName}</h3>
+        <div className="min-w-0">
+          <h3 className="truncate text-sm sm:text-base font-semibold text-white">
+            {displayName}
+          </h3>
           <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs capitalize text-slate-400">
             <span className="flex items-center gap-1">
               <RelationshipIcon size={12} />
@@ -166,7 +168,7 @@ export default function WishCard({
         </div>
       </div>
 
-      <div className="flex flex-col items-end gap-1.5">
+      <div className="flex shrink-0 flex-col items-end gap-1.5">
         {!hasMedia && wish.isFeatured && (
           <span className="flex items-center gap-1 rounded-full bg-[#FFD700]/10 px-2.5 py-1 text-[11px] font-semibold text-[#FFD700]">
             <Sparkles size={12} />
@@ -199,7 +201,7 @@ export default function WishCard({
     <div
       ref={mediaWrapperRef}
       className={`relative overflow-hidden bg-slate-900 ${
-        isFeed ? "min-h-0 flex-1 rounded-2xl" : "h-64 w-full rounded-none"
+        isFeed ? "min-h-0 flex-1 rounded-2xl" : "h-48 sm:h-64 w-full rounded-none"
       }`}
     >
       {wish.imageUrl && (
@@ -300,7 +302,7 @@ export default function WishCard({
         <button
           onClick={() => onPublish?.(wish.$id)}
           disabled={isProcessing}
-          className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <CheckCircle2 size={14} />
           Publish
@@ -312,7 +314,7 @@ export default function WishCard({
           <button
             onClick={() => onHide?.(wish.$id)}
             disabled={isProcessing}
-            className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-white transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <EyeOff size={14} />
             Hide
@@ -321,7 +323,7 @@ export default function WishCard({
           <button
             onClick={() => onFeature?.(wish.$id)}
             disabled={isProcessing}
-            className={`flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+            className={`flex items-center gap-1.5 rounded-lg px-3.5 py-2.5 sm:py-2 text-xs font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
               wish.isFeatured
                 ? "bg-slate-800 text-slate-300 hover:bg-slate-700"
                 : "bg-[#FFD700] text-slate-900 hover:bg-[#FFD700]/90"
@@ -336,7 +338,7 @@ export default function WishCard({
       <button
         onClick={() => onDelete?.(wish.$id)}
         disabled={isProcessing}
-        className="ml-auto flex items-center gap-1.5 rounded-2xl border border-slate-700 px-3.5 py-2 text-xs font-medium text-slate-300 transition-colors hover:border-red-500/50 hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-50"
+        className="ml-auto flex items-center gap-1.5 rounded-2xl border border-slate-700 px-3.5 py-2.5 sm:py-2 text-xs font-medium text-slate-300 transition-colors hover:border-red-500/50 hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isProcessing ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
         Delete
@@ -352,14 +354,14 @@ export default function WishCard({
             isProcessing ? "opacity-60" : "opacity-100"
           }`}
         >
-          <div className="space-y-3 px-5 pt-5">
+          <div className="space-y-3 px-4 sm:px-5 pt-4 sm:pt-5">
             {header}
             {message}
           </div>
 
-          <div className="flex min-h-0 flex-1 flex-col px-5 py-3">{media}</div>
+          <div className="flex min-h-0 flex-1 flex-col px-4 sm:px-5 py-3">{media}</div>
 
-          <div className="px-5 pb-5">{reactions}</div>
+          <div className="px-4 sm:px-5 pb-4 sm:pb-5">{reactions}</div>
         </div>
       );
     }
@@ -380,13 +382,13 @@ export default function WishCard({
           isProcessing ? "opacity-60" : "opacity-100"
         }`}
       >
-        <div className="px-5 pt-5">{header}</div>
+        <div className="px-4 sm:px-5 pt-4 sm:pt-5">{header}</div>
 
-        <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden px-8 py-6 text-center">
+        <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden px-5 sm:px-8 py-5 sm:py-6 text-center">
           <div className="pointer-events-none absolute -top-10 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-[#FFD700]/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-16 right-0 h-48 w-48 rounded-full bg-[#FFD700]/5 blur-3xl" />
 
-          <Quote size={28} className="mb-4 text-[#FFD700]/40" />
+          <Quote size={24} className="mb-3 sm:mb-4 text-[#FFD700]/40 sm:size-7" />
 
           <p
             className={`max-h-full overflow-y-auto whitespace-pre-line font-medium leading-relaxed text-slate-100 ${feedTextSizeClass}`}
@@ -394,17 +396,17 @@ export default function WishCard({
             {wish.message}
           </p>
 
-          <Quote size={28} className="mt-4 rotate-180 text-[#FFD700]/40" />
+          <Quote size={24} className="mt-3 sm:mt-4 rotate-180 text-[#FFD700]/40 sm:size-7" />
 
           {wish.isFeatured && (
-            <span className="absolute right-4 top-4 flex items-center gap-1 rounded-full bg-[#FFD700]/10 px-2.5 py-1 text-[11px] font-semibold text-[#FFD700]">
+            <span className="absolute right-3 sm:right-4 top-3 sm:top-4 flex items-center gap-1 rounded-full bg-[#FFD700]/10 px-2.5 py-1 text-[11px] font-semibold text-[#FFD700]">
               <Sparkles size={12} />
               Featured
             </span>
           )}
         </div>
 
-        <div className="flex justify-center px-5 pb-6">{reactions}</div>
+        <div className="flex justify-center px-4 sm:px-5 pb-5 sm:pb-6">{reactions}</div>
       </div>
     );
   }
@@ -415,14 +417,14 @@ export default function WishCard({
         isProcessing ? "opacity-60" : "opacity-100"
       }`}
     >
-      <div className="space-y-4 p-6">
+      <div className="space-y-3 sm:space-y-4 p-4 sm:p-6">
         {header}
         {message}
       </div>
 
       {media}
 
-      <div className="space-y-4 p-6 pt-4">
+      <div className="space-y-3 sm:space-y-4 p-4 sm:p-6 pt-3 sm:pt-4">
         {reactions}
         {actions}
       </div>

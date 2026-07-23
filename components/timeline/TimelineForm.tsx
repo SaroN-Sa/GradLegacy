@@ -33,6 +33,11 @@ const CATEGORY_OPTIONS: { value: TimelineCategory; label: string }[] = [
   { value: "other", label: "📌 Other" },
 ];
 
+// text-base on mobile / text-sm from sm: up — keeps focused inputs at 16px+
+// so iOS Safari doesn't auto-zoom the page when a field is tapped.
+const INPUT_CLASS =
+  "w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-base sm:text-sm focus:outline-none focus:border-[#FFD700]/60";
+
 export default function TimelineForm({
   event,
   onClose,
@@ -106,20 +111,21 @@ export default function TimelineForm({
         onSubmit={handleSubmit}
         className="relative w-full max-w-md h-full bg-gradient-to-b from-slate-900 to-slate-950 border-l border-slate-800 overflow-y-auto animate-slide-in flex flex-col"
       >
-        <div className="sticky top-0 flex items-center justify-between px-6 py-5 bg-slate-950/80 backdrop-blur-sm border-b border-slate-800 z-10">
-          <h3 className="text-lg font-semibold text-white">
+        <div className="sticky top-0 flex items-center justify-between px-5 sm:px-6 py-4 sm:py-5 bg-slate-950/80 backdrop-blur-sm border-b border-slate-800 z-10">
+          <h3 className="text-base sm:text-lg font-semibold text-white">
             {isEditing ? "Edit Event" : "Add Timeline Event"}
           </h3>
           <button
             type="button"
             onClick={onClose}
             className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            aria-label="Close"
           >
             <X size={18} />
           </button>
         </div>
 
-        <div className="px-6 py-6 space-y-5 flex-1">
+        <div className="px-5 sm:px-6 py-5 sm:py-6 space-y-4 sm:space-y-5 flex-1">
           {/* Title */}
           <div>
             <label className="block text-sm text-slate-300 mb-1.5">
@@ -130,7 +136,7 @@ export default function TimelineForm({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter event title"
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60"
+              className={INPUT_CLASS}
             />
             {errors.title && (
               <p className="text-xs text-red-400 mt-1">{errors.title}</p>
@@ -147,7 +153,7 @@ export default function TimelineForm({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe this milestone..."
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60 resize-none"
+              className={`${INPUT_CLASS} resize-none`}
             />
             {errors.description && (
               <p className="text-xs text-red-400 mt-1">
@@ -165,7 +171,7 @@ export default function TimelineForm({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60"
+              className={INPUT_CLASS}
             />
             {errors.date && (
               <p className="text-xs text-red-400 mt-1">{errors.date}</p>
@@ -182,7 +188,7 @@ export default function TimelineForm({
               onChange={(e) =>
                 setCategory(e.target.value as TimelineCategory)
               }
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60"
+              className={INPUT_CLASS}
             >
               {CATEGORY_OPTIONS.map((item) => (
                 <option key={item.value} value={item.value}>
@@ -205,7 +211,7 @@ export default function TimelineForm({
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="e.g. Addis Ababa, Ethiopia"
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60"
+              className={INPUT_CLASS}
             />
             {errors.location && (
               <p className="text-xs text-red-400 mt-1">{errors.location}</p>
@@ -218,7 +224,7 @@ export default function TimelineForm({
               Cover Image (optional)
             </label>
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-slate-900 border border-slate-700 flex items-center justify-center shrink-0">
                 {image ? (
                   <img
@@ -263,7 +269,7 @@ export default function TimelineForm({
                   key={s}
                   type="button"
                   onClick={() => setStatus(s)}
-                  className={`flex-1 py-2 rounded-2xl text-sm font-medium border transition-colors ${
+                  className={`flex-1 py-2.5 sm:py-2 rounded-2xl text-sm font-medium border transition-colors ${
                     status === s
                       ? "bg-gradient-to-r from-slate-800 to-slate-900 border-[#FFD700] text-[#FFD700]"
                       : "border-slate-700 text-slate-400 hover:border-slate-600"
@@ -277,7 +283,10 @@ export default function TimelineForm({
         </div>
 
         {/* Buttons */}
-        <div className="sticky bottom-0 flex gap-3 px-6 py-5 bg-slate-950/80 backdrop-blur-sm border-t border-slate-800">
+        <div
+          className="sticky bottom-0 flex gap-3 px-5 sm:px-6 pt-4 sm:pt-5 bg-slate-950/80 backdrop-blur-sm border-t border-slate-800"
+          style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))" }}
+        >
           <button
             type="button"
             onClick={onClose}
