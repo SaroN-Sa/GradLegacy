@@ -52,17 +52,20 @@ export const authService = {
     );
   },
 
-  async resetPassword(
-    userId: string,
-    secret: string,
-    password: string,
-    confirmPassword: string
-  ) {
-    return await account.updateRecovery(
-      userId,
-      secret,
-      password,
-      confirmPassword
-    );
-  },
+ async resetPassword(
+  userId: string,
+  secret: string,
+  password: string,
+  confirmPassword: string
+) {
+  if (password !== confirmPassword) {
+    throw new Error("Passwords do not match");
+  }
+
+  return await account.updateRecovery(
+    userId,
+    secret,
+    password
+  );
+}
 };
