@@ -40,7 +40,7 @@ export default function GraduateTabs({
   };
 
   return (
-    <div className="mt-5 flex gap-1 rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-1.5 shadow-lg shadow-black/20">
+    <div className="mt-4 sm:mt-5 flex gap-1 rounded-xl sm:rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-1 sm:p-1.5 shadow-lg shadow-black/20 w-full max-w-full">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.key;
@@ -51,19 +51,19 @@ export default function GraduateTabs({
             key={tab.key}
             onClick={() => onChange(tab.key)}
             aria-current={isActive ? "true" : undefined}
-            className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl px-2 py-3 transition-all duration-200 sm:gap-2 ${
+            className={`flex flex-1 items-center justify-center gap-1 sm:gap-1.5 md:gap-2 rounded-lg sm:rounded-xl px-1.5 py-2.5 sm:px-2 sm:py-3 transition-all duration-200 min-w-0 ${
               isActive
                 ? "bg-[#FFD700]/10 text-[#FFD700] shadow-sm ring-1 ring-[#FFD700]/30"
                 : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"
             }`}
           >
-            <Icon size={15} className="shrink-0" />
+            <Icon size={14} className="shrink-0 sm:w-[15px] sm:h-[15px]" />
 
-            <span className="hidden text-sm font-semibold sm:inline">{tab.label}</span>
+            <span className="hidden text-xs sm:text-sm font-semibold sm:inline truncate">{tab.label}</span>
 
             {count > 0 && (
               <span
-                className={`min-w-[1.25rem] rounded-full px-1.5 py-0.5 text-center text-[11px] font-semibold tabular-nums leading-none ${
+                className={`min-w-[1.1rem] sm:min-w-[1.25rem] rounded-full px-1 sm:px-1.5 py-0.5 text-center text-[10px] sm:text-[11px] font-semibold tabular-nums leading-none shrink-0 ${
                   isActive ? "bg-[#FFD700]/15 text-[#FFD700]" : "bg-slate-800 text-slate-400"
                 }`}
               >

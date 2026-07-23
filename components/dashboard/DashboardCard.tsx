@@ -29,29 +29,29 @@ export default function DashboardCard({
 
   return (
     <div
-      className={`rounded-3xl border border-gray-100 bg-white p-6 shadow-xl shadow-black/5 transition-shadow hover:shadow-2xl hover:shadow-black/10 ${className}`}
+      className={`rounded-2xl sm:rounded-3xl border border-gray-100 bg-white p-4 sm:p-5 md:p-6 shadow-xl shadow-black/5 transition-shadow hover:shadow-2xl hover:shadow-black/10 w-full ${className}`}
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide truncate">
           {title}
         </h3>
 
         {icon && (
-          <div className="w-9 h-9 rounded-xl bg-[#0f172a]/8 flex items-center justify-center text-[#0f172a] shrink-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#0f172a]/8 flex items-center justify-center text-[#0f172a] shrink-0">
             {icon}
           </div>
         )}
       </div>
 
       {value !== undefined && (
-        <p className="mt-2 text-3xl font-extrabold text-[#0f172a] tracking-tight">
+        <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-[#0f172a] tracking-tight truncate">
           {value}
         </p>
       )}
 
       <div className="mt-1.5 flex items-center gap-2 flex-wrap">
         {subtitle && (
-          <p className="text-sm text-gray-400">{subtitle}</p>
+          <p className="text-xs sm:text-sm text-gray-400">{subtitle}</p>
         )}
 
         {trend && (
@@ -61,7 +61,7 @@ export default function DashboardCard({
         )}
       </div>
 
-      {children && <div className="mt-4">{children}</div>}
+      {children && <div className="mt-3 sm:mt-4">{children}</div>}
     </div>
   );
 }

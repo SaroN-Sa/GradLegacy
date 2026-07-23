@@ -36,10 +36,10 @@ export default function PasswordStrength({
   const strength = getStrength();
 
   return (
-    <div className="space-y-2">
-      <div className="h-2 rounded bg-gray-200 overflow-hidden">
+    <div className="space-y-1.5 sm:space-y-2 w-full max-w-full">
+      <div className="h-1.5 sm:h-2 md:h-2.5 rounded bg-gray-200 overflow-hidden">
         <div
-          className={`h-full ${strength.color}`}
+          className={`h-full ${strength.color} transition-all duration-300`}
           style={{
             width: `${
               strength.label === "Weak"
@@ -52,7 +52,7 @@ export default function PasswordStrength({
         />
       </div>
 
-      <p className="text-sm text-gray-500">
+      <p className="text-xs sm:text-sm text-gray-500">
         Password Strength: {strength.label}
       </p>
     </div>

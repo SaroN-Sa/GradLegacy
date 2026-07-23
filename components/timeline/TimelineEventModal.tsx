@@ -26,6 +26,11 @@ const CATEGORY_OPTIONS: TimelineCategory[] = [
   "other",
 ];
 
+// Shared input classes. text-base on mobile / text-sm from sm: up —
+// keeping focused inputs at 16px+ avoids iOS Safari's auto-zoom-on-focus.
+const INPUT_CLASS =
+  "w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-base sm:text-sm focus:outline-none focus:border-[#FFD700]/60";
+
 export default function TimelineEventModal({
   event,
   onClose,
@@ -88,25 +93,26 @@ export default function TimelineEventModal({
       />
 
       <div className="relative w-full max-w-md h-full bg-gradient-to-b from-slate-900 to-slate-950 border-l border-slate-800 overflow-y-auto animate-in slide-in-from-right duration-300">
-        <div className="sticky top-0 flex items-center justify-between px-6 py-5 bg-slate-950/80 backdrop-blur-sm border-b border-slate-800">
-          <h3 className="text-lg font-semibold text-white">
+        <div className="sticky top-0 flex items-center justify-between px-5 sm:px-6 py-4 sm:py-5 bg-slate-950/80 backdrop-blur-sm border-b border-slate-800">
+          <h3 className="text-base sm:text-lg font-semibold text-white">
             {isEditing ? "Edit Event" : "Add Timeline Event"}
           </h3>
           <button
             onClick={onClose}
             className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            aria-label="Close"
           >
             <X size={18} />
           </button>
         </div>
 
-        <div className="px-6 py-6 space-y-5">
+        <div className="px-5 sm:px-6 py-5 sm:py-6 space-y-4 sm:space-y-5">
           <div>
             <label className="block text-sm text-slate-300 mb-1.5">Title</label>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60"
+              className={INPUT_CLASS}
               placeholder="e.g. Started internship at..."
             />
             {errors.title && <p className="text-xs text-red-400 mt-1">{errors.title}</p>}
@@ -118,7 +124,7 @@ export default function TimelineEventModal({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60 resize-none"
+              className={`${INPUT_CLASS} resize-none`}
               placeholder="Tell the story behind this moment..."
             />
             {errors.description && (
@@ -132,7 +138,7 @@ export default function TimelineEventModal({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60"
+              className={INPUT_CLASS}
             />
             {errors.date && <p className="text-xs text-red-400 mt-1">{errors.date}</p>}
           </div>
@@ -142,7 +148,7 @@ export default function TimelineEventModal({
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as TimelineCategory)}
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60"
+              className={INPUT_CLASS}
             >
               {CATEGORY_OPTIONS.map((cat) => (
                 <option key={cat} value={cat}>
@@ -157,7 +163,7 @@ export default function TimelineEventModal({
             <input
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60"
+              className={INPUT_CLASS}
               placeholder="e.g. Addis Ababa, Ethiopia"
             />
             {errors.location && <p className="text-xs text-red-400 mt-1">{errors.location}</p>}
@@ -168,7 +174,7 @@ export default function TimelineEventModal({
             <input
               value={image}
               onChange={(e) => setImage(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#FFD700]/60"
+              className={INPUT_CLASS}
               placeholder="https://..."
             />
             {errors.image && <p className="text-xs text-red-400 mt-1">{errors.image}</p>}
@@ -182,7 +188,7 @@ export default function TimelineEventModal({
                   key={s}
                   type="button"
                   onClick={() => setStatus(s)}
-                  className={`flex-1 py-2 rounded-2xl text-sm font-medium border transition-colors ${
+                  className={`flex-1 py-2.5 sm:py-2 rounded-2xl text-sm font-medium border transition-colors ${
                     status === s
                       ? "bg-gradient-to-r from-slate-800 to-slate-900 border-[#FFD700] text-[#FFD700]"
                       : "border-slate-700 text-slate-400 hover:border-slate-600"
@@ -195,7 +201,10 @@ export default function TimelineEventModal({
           </div>
         </div>
 
-        <div className="sticky bottom-0 flex gap-3 px-6 py-5 bg-slate-950/80 backdrop-blur-sm border-t border-slate-800">
+        <div
+          className="sticky bottom-0 flex gap-3 px-5 sm:px-6 pt-4 sm:pt-5 bg-slate-950/80 backdrop-blur-sm border-t border-slate-800"
+          style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))" }}
+        >
           <button
             onClick={onClose}
             className="flex-1 py-2.5 rounded-3xl border border-slate-700 text-slate-300 text-sm font-medium hover:border-slate-600 transition-colors"

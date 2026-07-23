@@ -155,7 +155,7 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
     <div
       ref={overlayRef}
       onClick={handleOverlayClick}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 sm:p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-3 sm:p-6"
       role="dialog"
       aria-modal="true"
       aria-label={`Preview of ${profile.fullName}'s graduation page`}
@@ -164,15 +164,16 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
         ── Modal shell ──
         Tall card, scrollable internally, never overflows viewport.
         Max width 420px mirrors a phone viewport so the graduate sees
-        exactly what visitors on mobile will see.
+        exactly what visitors on mobile will see — this stays phone-width
+        even on tablet/desktop by design; only the backdrop grows.
 
         NOTE: this outer shell (navy + gold) is fixed brand chrome —
         matches Sidebar.tsx — and does not follow the site theme toggle.
       */}
       <div className="
-        relative w-full max-w-[420px] max-h-[90vh]
+        relative w-full max-w-[420px] max-h-[92vh] sm:max-h-[90vh]
         bg-gradient-to-br from-[#0b1120] via-[#0f172a] to-[#162035]
-        rounded-3xl shadow-2xl shadow-black/60
+        rounded-2xl sm:rounded-3xl shadow-2xl shadow-black/60
         overflow-hidden flex flex-col
       ">
 
@@ -184,7 +185,7 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
         <div className="h-1 w-full bg-gradient-to-r from-[#0f172a] via-yellow-400 to-[#0f172a] shrink-0" />
 
         {/* ── Sticky header ── */}
-        <div className="relative z-10 flex items-center justify-between px-5 py-4 shrink-0 border-b border-white/10">
+        <div className="relative z-10 flex items-center justify-between px-4 py-3.5 shrink-0 border-b border-white/10 sm:px-5 sm:py-4">
           <div className="flex items-center gap-2">
             <div className="bg-white/10 p-1.5 rounded-xl border border-white/10">
               <GraduationCap size={16} className="text-yellow-400" />
@@ -200,11 +201,11 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
               👁 Preview
             </span>
 
-            {/* Close button */}
+            {/* Close button — sized for a comfortable tap target on mobile */}
             <button
               onClick={onClose}
               aria-label="Close preview"
-              className="w-8 h-8 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-colors"
+              className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-colors sm:w-8 sm:h-8"
             >
               <X size={16} />
             </button>
@@ -215,7 +216,7 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
         <div className="flex-1 overflow-y-auto">
 
           {/* Cover image */}
-          <div className="relative w-full h-32 shrink-0">
+          <div className="relative w-full h-28 shrink-0 sm:h-32">
             {profile.coverImage ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -239,11 +240,11 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
           </div>
 
           {/* ── Profile card (mirrors public profile page — theme-aware) ── */}
-          <div className="relative z-10 mx-4 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl shadow-black/40 -mt-8 p-5">
+          <div className="relative z-10 mx-3.5 sm:mx-4 bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl shadow-black/40 -mt-8 p-4 sm:p-5">
 
             {/* Avatar + name */}
-            <div className="flex items-end gap-4">
-              <div className="w-20 h-20 rounded-2xl border-4 border-white dark:border-slate-900 shadow-lg overflow-hidden bg-[#0f172a] flex items-center justify-center shrink-0 -mt-12">
+            <div className="flex items-end gap-3.5 sm:gap-4">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-4 border-white dark:border-slate-900 shadow-lg overflow-hidden bg-[#0f172a] flex items-center justify-center shrink-0 -mt-10 sm:-mt-12">
                 {profile.profileImage ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -252,7 +253,10 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <GraduationCap size={30} className="text-yellow-400" />
+                  <>
+                    <GraduationCap size={26} className="text-yellow-400 sm:hidden" />
+                    <GraduationCap size={30} className="hidden text-yellow-400 sm:block" />
+                  </>
                 )}
               </div>
 
@@ -261,7 +265,7 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
                   <Sparkles size={8} />
                   {profile.graduationYear ? `Class of ${profile.graduationYear}` : "Graduate"}
                 </div>
-                <h1 className="text-lg font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight truncate">
+                <h1 className="text-base sm:text-lg font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight truncate">
                   {profile.fullName}
                 </h1>
                 <p className="text-xs text-gray-400 dark:text-slate-500 font-medium">@{profile.username}</p>
@@ -299,7 +303,7 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
           </div>
 
           {/* ── Tab bar (part of fixed brand chrome, unthemed) ── */}
-          <div className="mx-4 mt-4 bg-white/10 backdrop-blur-sm rounded-2xl p-1 flex gap-1 border border-white/10">
+          <div className="mx-3.5 sm:mx-4 mt-4 bg-white/10 backdrop-blur-sm rounded-2xl p-1 flex gap-1 border border-white/10">
             {TABS.map(({ key, label, icon: Icon }) => (
               <button
                 key={key}
@@ -317,11 +321,11 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
           </div>
 
           {/* ── Tab content (theme-aware, mirrors public page cards) ── */}
-          <div className="mx-4 mt-3 mb-6">
+          <div className="mx-3.5 sm:mx-4 mt-3 mb-6">
 
             {activeTab === "wishes" && (
-              <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-black/20 overflow-hidden">
-                <div className="px-5 pt-5 pb-4 border-b border-gray-100 dark:border-slate-800">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-xl shadow-black/20 overflow-hidden">
+                <div className="px-4 sm:px-5 pt-5 pb-4 border-b border-gray-100 dark:border-slate-800">
                   <div className="flex items-center gap-2 mb-0.5">
                     <Heart size={14} className="text-[#0f172a] dark:text-yellow-400" />
                     <h2 className="text-sm font-extrabold text-gray-900 dark:text-white">Send a Wish</h2>
@@ -330,14 +334,14 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
                     Celebrate {firstName}'s graduation with a message.
                   </p>
                 </div>
-                <div className="px-5 py-5">
+                <div className="px-4 sm:px-5 py-5">
                   <WishFormPreview name={firstName} />
                 </div>
               </div>
             )}
 
             {activeTab === "gallery" && (
-              <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-black/20 px-5 py-10 text-center">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-xl shadow-black/20 px-5 py-10 text-center">
                 <div className="w-11 h-11 rounded-2xl bg-[#0f172a]/8 dark:bg-yellow-400/10 flex items-center justify-center mx-auto mb-3">
                   <Globe size={20} className="text-[#0f172a] dark:text-yellow-400" />
                 </div>
@@ -349,7 +353,7 @@ export default function ProfilePreviewModal({ open, onClose, profile }: Props) {
             )}
 
             {activeTab === "timeline" && (
-              <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-black/20 px-5 py-10 text-center">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-xl shadow-black/20 px-5 py-10 text-center">
                 <div className="w-11 h-11 rounded-2xl bg-[#0f172a]/8 dark:bg-yellow-400/10 flex items-center justify-center mx-auto mb-3">
                   <CalendarDays size={20} className="text-[#0f172a] dark:text-yellow-400" />
                 </div>

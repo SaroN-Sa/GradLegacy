@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
-import { X, Download, Share2, Pencil, Trash2, Star, Calendar, Music, AlertTriangle } from "lucide-react";
+import { ArrowLeft, X, Download, Share2, Pencil, Trash2, Star, Calendar, Music, AlertTriangle } from "lucide-react";
 
 import { Media } from "@/types/media";
 import { TYPE_ACCENT, VISIBILITY_ACCENT } from "@/lib/media/media-accent";
@@ -36,12 +36,13 @@ function DeleteMediaDialog({
         onClick={onCancel}
       />
 
-      <div className="relative w-full max-w-sm rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 border border-slate-200 dark:border-slate-800 p-6 shadow-2xl">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 mb-4">
-          <AlertTriangle size={22} />
+      <div className="relative w-full max-w-sm rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-2xl">
+        <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 mb-4">
+          <AlertTriangle size={20} className="sm:hidden" />
+          <AlertTriangle size={22} className="hidden sm:block" />
         </div>
 
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-1.5">
+        <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white mb-1.5">
           Delete this media?
         </h3>
 
@@ -89,6 +90,16 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
   }, [onClose, showDeleteConfirm]);
+
+  // Lock body scroll while the viewer is open (mobile-friendly)
+  useEffect(() => {
+    if (!open) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [open]);
 
   if (!open || !media) return null;
 
@@ -154,8 +165,8 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
       return <video src={media.url} controls autoPlay className="h-full w-full" />;
     }
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-8">
-        <Music className="h-24 w-24 text-emerald-400" />
+      <div className="flex h-full flex-col items-center justify-center gap-6 sm:gap-8 px-4">
+        <Music className="h-16 w-16 sm:h-24 sm:w-24 text-emerald-400" />
         <audio controls className="w-full max-w-lg">
           <source src={media.url} />
         </audio>
@@ -164,32 +175,44 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-0 sm:p-4" onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex h-[88vh] w-full max-w-6xl overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 shadow-2xl"
+        className="flex h-[100dvh] w-full max-w-6xl flex-col overflow-hidden rounded-none bg-gradient-to-br from-slate-900 to-slate-950 border-0 sm:h-[88vh] sm:flex-row sm:rounded-3xl sm:border sm:border-slate-800 shadow-2xl"
       >
         {/* Media section — intentionally stays dark in both themes (lightbox convention) */}
-        <div className="relative flex-1 bg-black">
+        <div className="relative min-h-0 flex-1 bg-black sm:flex-1">
           {renderMedia()}
+
+          {/* Back button — primary nav affordance on mobile */}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Back"
+            className="absolute left-3 top-3 sm:left-4 sm:top-4 flex items-center gap-1.5 rounded-full bg-slate-950/90 border border-slate-700 py-2 pl-2.5 pr-3 transition hover:border-slate-600 sm:hidden"
+          >
+            <ArrowLeft className="h-4 w-4 text-slate-200" />
+            <span className="text-sm font-semibold text-slate-200">Back</span>
+          </button>
 
           <button
             type="button"
             onClick={onClose}
-            className="absolute right-4 top-4 rounded-full bg-slate-950/90 border border-slate-700 p-2.5 transition hover:border-slate-600"
+            aria-label="Close"
+            className="absolute right-3 top-3 sm:right-4 sm:top-4 rounded-full bg-slate-950/90 border border-slate-700 p-2.5 transition hover:border-slate-600"
           >
             <X className="h-4 w-4 text-slate-200" />
           </button>
 
           {media.featured && (
-            <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-[#FFD700] px-3 py-1.5 text-xs font-bold text-slate-950 shadow">
+            <div className="absolute left-3 top-14 sm:left-4 sm:top-4 flex items-center gap-1.5 rounded-full bg-[#FFD700] px-2.5 py-1.5 sm:px-3 text-xs font-bold text-slate-950 shadow">
               <Star className="h-3.5 w-3.5 fill-current" />
               Featured
             </div>
           )}
 
           {typeAccent && (
-            <div className={`absolute bottom-4 left-4 flex items-center gap-1.5 rounded-full ${typeAccent.chip} px-3 py-1.5 text-xs font-bold text-white capitalize shadow`}>
+            <div className={`absolute bottom-3 left-3 sm:bottom-4 sm:left-4 flex items-center gap-1.5 rounded-full ${typeAccent.chip} px-2.5 py-1.5 sm:px-3 text-xs font-bold text-white capitalize shadow`}>
               <typeAccent.icon className="h-3.5 w-3.5" />
               {media.type}
             </div>
@@ -197,9 +220,9 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
         </div>
 
         {/* Information panel — theme-aware */}
-        <div className="flex w-[360px] flex-col border-l border-slate-200 dark:border-slate-800 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
-          <div className="border-b border-slate-200 dark:border-slate-800 p-5">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-snug">
+        <div className="flex max-h-[45vh] w-full flex-col border-t border-slate-200 dark:border-slate-800 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 sm:max-h-none sm:w-[360px] sm:border-l sm:border-t-0">
+          <div className="border-b border-slate-200 dark:border-slate-800 p-4 sm:p-5">
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug">
               {media.title || "Untitled Media"}
             </h2>
             {media.description && (
@@ -207,7 +230,7 @@ export default function MediaViewer({ open, media, onClose, onEdit, onDelete }: 
             )}
           </div>
 
-          <div className="flex-1 space-y-5 overflow-y-auto p-5">
+          <div className="flex-1 space-y-4 sm:space-y-5 overflow-y-auto p-4 sm:p-5">
             <div className="flex flex-wrap items-center gap-2">
               {visibility && (
                 <span className={`inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800/60 px-2.5 py-1 text-xs font-semibold ${visibility.text}`}>

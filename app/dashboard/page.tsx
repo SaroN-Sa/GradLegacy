@@ -150,7 +150,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-[#0b1120] via-[#0f172a] to-[#162035] px-4 py-10 sm:px-6">
+    <div className="min-h-screen w-full bg-gradient-to-br from-[#0b1120] via-[#0f172a] to-[#162035] px-4 py-6 sm:px-6 sm:py-10">
 
       {/* Ambient glow — consistent with auth pages */}
       <div className="fixed top-0 right-0 w-[26rem] h-[26rem] bg-blue-500/10 rounded-full blur-[110px] pointer-events-none" />
@@ -159,12 +159,12 @@ export default function DashboardPage() {
       <div className="relative z-10 max-w-4xl mx-auto">
 
         {/* ── Top bar — logo + status pill ── */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="bg-white/10 p-2.5 rounded-2xl backdrop-blur-sm border border-white/10">
-              <GraduationCap size={22} className="text-[#FFD700]" />
+        <div className="flex items-center justify-between mb-6 sm:mb-8">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="bg-white/10 p-2 sm:p-2.5 rounded-2xl backdrop-blur-sm border border-white/10">
+              <GraduationCap size={20} className="text-[#FFD700] sm:size-[22px]" />
             </div>
-            <span className="text-lg font-bold tracking-tight text-white">
+            <span className="text-base sm:text-lg font-bold tracking-tight text-white">
               Grad<span className="text-[#FFD700]">Legacy</span>
             </span>
           </div>
@@ -176,17 +176,17 @@ export default function DashboardPage() {
         </div>
 
         {/* ── Header card ── */}
-        <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl shadow-2xl shadow-black/40 p-7 mb-5 flex items-center gap-5">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFD700]/10 flex items-center justify-center shrink-0 overflow-hidden">
+        <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl shadow-2xl shadow-black/40 p-5 sm:p-7 mb-5 flex items-center gap-4 sm:gap-5">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#FFD700]/10 flex items-center justify-center shrink-0 overflow-hidden">
             {profile?.profileImage ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={profile.profileImage} alt={profile.fullName} className="w-full h-full object-cover" />
             ) : (
-              <UserRound size={26} className="text-[#FFD700]" />
+              <UserRound size={24} className="text-[#FFD700] sm:size-[26px]" />
             )}
           </div>
-          <div>
-            <h1 className="text-xl font-extrabold text-white tracking-tight">
+          <div className="min-w-0">
+            <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight truncate">
               {profile ? `Welcome back, ${profile.fullName.split(" ")[0]}` : "Welcome to GradLegacy"}
             </h1>
             <p className="mt-0.5 text-sm text-slate-400">
@@ -197,23 +197,23 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
 
           {/* ── Status card ── */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl shadow-xl shadow-black/20 p-6">
+          <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl shadow-xl shadow-black/20 p-5 sm:p-6">
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
               Application Status
             </p>
             <div className="flex items-center gap-2.5">
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center border ${statusInfo.badgeClass}`}>
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center border shrink-0 ${statusInfo.badgeClass}`}>
                 <StatusIcon size={17} />
               </div>
-              <p className="text-lg font-bold text-white">{statusInfo.label}</p>
+              <p className="text-base sm:text-lg font-bold text-white">{statusInfo.label}</p>
             </div>
           </div>
 
           {/* ── Progress card ── */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl shadow-xl shadow-black/20 p-6">
+          <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl shadow-xl shadow-black/20 p-5 sm:p-6">
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
               Profile Completion
             </p>
@@ -224,20 +224,20 @@ export default function DashboardPage() {
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <span className="text-sm font-bold text-white w-10 text-right">{progress}%</span>
+              <span className="text-sm font-bold text-white w-10 text-right shrink-0">{progress}%</span>
             </div>
           </div>
         </div>
 
         {/* ── Main action card ── */}
-        <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl shadow-2xl shadow-black/40 p-7 mt-5">
+        <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl shadow-2xl shadow-black/40 p-5 sm:p-7 mt-5">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
               <div className="inline-flex items-center gap-2 bg-[#FFD700]/10 px-3 py-1 rounded-full text-[10px] font-bold text-[#FFD700] mb-3 tracking-[0.15em] uppercase">
                 <Sparkles size={10} className="text-[#FFD700]" />
                 Graduation Page
               </div>
-              <h2 className="text-lg font-bold text-white">Graduation Page Application</h2>
+              <h2 className="text-base sm:text-lg font-bold text-white">Graduation Page Application</h2>
               <p className="mt-1 text-sm text-slate-400 max-w-md">
                 Manage your public graduation page application — fill it out, track its review, and share it once approved.
               </p>
@@ -247,7 +247,7 @@ export default function DashboardPage() {
           <button
             onClick={handleAction}
             disabled={status === "pending"}
-            className={`mt-5 inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold transition-all active:scale-[0.99] disabled:cursor-not-allowed ${
+            className={`mt-5 flex w-full sm:inline-flex sm:w-auto items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold transition-all active:scale-[0.99] disabled:cursor-not-allowed ${
               status === "pending"
                 ? "bg-amber-900/30 border border-amber-500/40 text-amber-300 disabled:opacity-80"
                 : status === "approved"
@@ -264,7 +264,7 @@ export default function DashboardPage() {
 
         {/* ── Rejected info ── */}
         {status === "rejected" && (
-          <div className="mt-5 rounded-2xl border border-red-500/30 bg-red-900/20 px-6 py-4 flex items-start gap-3">
+          <div className="mt-5 rounded-2xl border border-red-500/30 bg-red-900/20 px-5 sm:px-6 py-4 flex items-start gap-3">
             <XCircle size={18} className="text-red-400 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-semibold text-red-300">Application was rejected</p>
@@ -275,7 +275,7 @@ export default function DashboardPage() {
 
         {/* ── Approved info ── */}
         {status === "approved" && (
-          <div className="mt-5 rounded-2xl border border-emerald-500/30 bg-emerald-900/20 px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
+          <div className="mt-5 rounded-2xl border border-emerald-500/30 bg-emerald-900/20 px-5 sm:px-6 py-4 flex items-start sm:items-center justify-between gap-3 flex-wrap">
             <div className="flex items-start gap-3">
               <CheckCircle2 size={18} className="text-emerald-400 shrink-0 mt-0.5" />
               <div>

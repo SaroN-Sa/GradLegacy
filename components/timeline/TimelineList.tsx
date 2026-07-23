@@ -60,12 +60,12 @@ export default function TimelineList({
 
   if (events.length === 0) {
     return (
-      <div className="rounded-3xl border border-dashed border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-12 text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#FFD700]/10 text-3xl">
+      <div className="rounded-2xl sm:rounded-3xl border border-dashed border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-6 sm:p-12 text-center">
+        <div className="mx-auto mb-4 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#FFD700]/10 text-2xl sm:text-3xl">
           📅
         </div>
 
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-lg sm:text-xl font-semibold text-white">
           No Timeline Events
         </h2>
 
@@ -80,8 +80,8 @@ export default function TimelineList({
   return (
     <div>
       {/* Filter & sort bar */}
-      <div className="mb-6 space-y-3">
-        <div className="flex flex-wrap gap-2">
+      <div className="mb-5 sm:mb-6 space-y-3">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
           {CATEGORY_FILTERS.map((filter) => {
             const isActive = categoryFilter === filter.value;
             const count =
@@ -95,7 +95,7 @@ export default function TimelineList({
               <button
                 key={filter.value}
                 onClick={() => setCategoryFilter(filter.value)}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 ${
                   isActive
                     ? "bg-gradient-to-r from-slate-800 to-slate-900 border-[#FFD700] text-[#FFD700] scale-105"
                     : "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
@@ -116,7 +116,7 @@ export default function TimelineList({
           })}
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex gap-1.5">
             {STATUS_FILTERS.map((filter) => (
               <button
@@ -137,7 +137,7 @@ export default function TimelineList({
             onClick={() =>
               setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"))
             }
-            className="flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-[#FFD700] transition-colors"
+            className="flex items-center gap-1.5 self-start sm:self-auto text-xs font-medium text-slate-400 hover:text-[#FFD700] transition-colors"
           >
             {sortOrder === "newest" ? (
               <ArrowDownAZ size={14} />
@@ -151,7 +151,7 @@ export default function TimelineList({
 
       {/* Results */}
       {filteredEvents.length === 0 ? (
-        <div className="rounded-3xl border border-slate-800 bg-slate-900/40 p-10 text-center">
+        <div className="rounded-2xl sm:rounded-3xl border border-slate-800 bg-slate-900/40 p-6 sm:p-10 text-center">
           <Sparkles className="mx-auto mb-3 text-slate-600" size={24} />
           <p className="text-sm text-slate-400">
             No events match these filters.
@@ -167,7 +167,7 @@ export default function TimelineList({
           </button>
         </div>
       ) : (
-        <div className="relative ml-3 space-y-6 border-l-2 border-slate-800 pl-8">
+        <div className="relative ml-2 sm:ml-3 space-y-5 sm:space-y-6 border-l-2 border-slate-800 pl-6 sm:pl-8">
           {filteredEvents.map((event, index) => (
             <div
               key={event.$id}

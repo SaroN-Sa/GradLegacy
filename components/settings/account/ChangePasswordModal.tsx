@@ -62,20 +62,24 @@ export default function ChangePasswordModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-2xl bg-white shadow-xl dark:bg-gray-900">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4">
+      <div className="flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-white shadow-xl dark:bg-gray-900">
 
         {/* Header */}
-        <div className="flex items-center justify-between border-b p-5">
-          <div className="flex items-center gap-3">
-            <Lock className="h-6 w-6 text-blue-600" />
+        <div className="flex shrink-0 items-center justify-between border-b border-gray-200 p-4 sm:p-5 dark:border-gray-800">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
 
-            <h2 className="text-lg font-semibold">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
               Change Password
             </h2>
           </div>
 
-          <button onClick={onClose}>
+          <button
+            onClick={onClose}
+            className="rounded-full p-1 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+            aria-label="Close"
+          >
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -83,10 +87,10 @@ export default function ChangePasswordModal({
         {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="space-y-5 p-6"
+          className="space-y-4 sm:space-y-5 overflow-y-auto p-5 sm:p-6"
         >
           <div>
-            <label className="mb-2 block text-sm font-medium">
+            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Current Password
             </label>
 
@@ -100,12 +104,12 @@ export default function ChangePasswordModal({
                   currentPassword: e.target.value,
                 })
               }
-              className="w-full rounded-lg border px-4 py-2 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 sm:py-2 text-sm text-gray-900 outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium">
+            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
               New Password
             </label>
 
@@ -119,12 +123,12 @@ export default function ChangePasswordModal({
                   newPassword: e.target.value,
                 })
               }
-              className="w-full rounded-lg border px-4 py-2 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 sm:py-2 text-sm text-gray-900 outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium">
+            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Confirm Password
             </label>
 
@@ -138,21 +142,21 @@ export default function ChangePasswordModal({
                   confirmPassword: e.target.value,
                 })
               }
-              className="w-full rounded-lg border px-4 py-2 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 sm:py-2 text-sm text-gray-900 outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
           </div>
 
           {error && (
-            <div className="rounded-lg bg-red-100 p-3 text-sm text-red-600">
+            <div className="rounded-lg bg-red-100 p-3 text-sm text-red-600 dark:bg-red-500/10 dark:text-red-400">
               {error}
             </div>
           )}
 
-          <div className="flex justify-end gap-3">
+          <div className="flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end sm:gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border px-4 py-2 hover:bg-gray-100"
+              className="rounded-lg border border-gray-300 px-4 py-2.5 sm:py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
             >
               Cancel
             </button>
@@ -160,7 +164,7 @@ export default function ChangePasswordModal({
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
+              className="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 sm:py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
             >
               <Save className="h-4 w-4" />
 

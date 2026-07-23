@@ -12,6 +12,9 @@ export function Hero() {
     const r = e.currentTarget.getBoundingClientRect();
     setTilt({ x: (e.clientX - r.left) / r.width - 0.5, y: (e.clientY - r.top) / r.height - 0.5 });
   }, []);
+  // Tilt only responds to onMouseMove, so on touch devices it never fires
+  // and the diploma card simply renders flat — correct mobile behavior,
+  // no extra handling needed.
   const handleTiltLeave = useCallback(() => setTilt({ x: 0, y: 0 }), []);
 
   return (

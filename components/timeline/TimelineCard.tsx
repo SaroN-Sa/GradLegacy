@@ -32,14 +32,16 @@ export default function TimelineCard({
   onDelete,
 }: TimelineCardProps) {
   return (
-    <div className="relative rounded-3xl border border-gray-200 dark:border-slate-800 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 transition-all duration-200 hover:border-gray-300 dark:hover:border-slate-700 hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20">
-      {/* Timeline Dot */}
-      <span className="absolute -left-[41px] top-8 h-4 w-4 rounded-full bg-[#FFD700] ring-4 ring-white dark:ring-slate-950" />
+    <div className="relative rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-slate-800 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 transition-all duration-200 hover:border-gray-300 dark:hover:border-slate-700 hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20">
+      {/* Timeline Dot — assumes a left rail from the parent list; hidden on
+          mobile where that rail is typically collapsed. Adjust/remove the
+          sm: prefix if your mobile layout keeps the rail. */}
+      <span className="hidden sm:block absolute -left-[41px] top-8 h-4 w-4 rounded-full bg-[#FFD700] ring-4 ring-white dark:ring-slate-950" />
 
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3">
-          <div>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
             <span
               className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full border mb-2 ${CATEGORY_COLORS[event.category]}`}
             >
@@ -47,7 +49,7 @@ export default function TimelineCard({
               {event.category.charAt(0).toUpperCase() + event.category.slice(1)}
             </span>
 
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white break-words">
               {event.title}
             </h3>
 
@@ -61,7 +63,7 @@ export default function TimelineCard({
           </div>
 
           <span
-            className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${
+            className={`self-start shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${
               event.status === "published"
                 ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300"
                 : "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
@@ -73,7 +75,7 @@ export default function TimelineCard({
 
         {/* Image */}
         {event.image && (
-          <div className="relative mt-5 h-56 w-full overflow-hidden rounded-2xl border border-gray-200 dark:border-slate-800">
+          <div className="relative mt-4 sm:mt-5 h-44 sm:h-56 w-full overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200 dark:border-slate-800">
             <Image
               src={event.image}
               alt={event.title}
@@ -85,16 +87,16 @@ export default function TimelineCard({
         )}
 
         {/* Description */}
-        <p className="mt-5 text-sm leading-relaxed text-gray-600 dark:text-slate-300 whitespace-pre-line">
+        <p className="mt-4 sm:mt-5 text-sm leading-relaxed text-gray-600 dark:text-slate-300 whitespace-pre-line">
           {event.description}
         </p>
 
         {/* Footer */}
-        <div className="mt-6 flex items-center justify-between">
+        <div className="mt-5 sm:mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             {event.location && (
               <span className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-slate-500">
-                <MapPin size={13} />
+                <MapPin size={13} className="shrink-0" />
                 {event.location}
               </span>
             )}
@@ -103,7 +105,7 @@ export default function TimelineCard({
           <div className="flex gap-2">
             <button
               onClick={() => onEdit(event)}
-              className="flex items-center gap-1.5 rounded-2xl border border-gray-300 dark:border-slate-700 px-3.5 py-2 text-xs font-medium text-gray-600 dark:text-slate-300 transition-colors hover:border-[#FFD700]/50 hover:text-[#B8860B] dark:hover:text-[#FFD700]"
+              className="flex flex-1 sm:flex-none items-center justify-center gap-1.5 rounded-xl sm:rounded-2xl border border-gray-300 dark:border-slate-700 px-3.5 py-2 text-xs font-medium text-gray-600 dark:text-slate-300 transition-colors hover:border-[#FFD700]/50 hover:text-[#B8860B] dark:hover:text-[#FFD700]"
             >
               <Pencil size={13} />
               Edit
@@ -111,7 +113,7 @@ export default function TimelineCard({
 
             <button
               onClick={() => onDelete(event.$id)}
-              className="flex items-center gap-1.5 rounded-2xl border border-gray-300 dark:border-slate-700 px-3.5 py-2 text-xs font-medium text-gray-600 dark:text-slate-300 transition-colors hover:border-red-400 dark:hover:border-red-500/50 hover:text-red-600 dark:hover:text-red-400"
+              className="flex flex-1 sm:flex-none items-center justify-center gap-1.5 rounded-xl sm:rounded-2xl border border-gray-300 dark:border-slate-700 px-3.5 py-2 text-xs font-medium text-gray-600 dark:text-slate-300 transition-colors hover:border-red-400 dark:hover:border-red-500/50 hover:text-red-600 dark:hover:text-red-400"
             >
               <Trash2 size={13} />
               Delete

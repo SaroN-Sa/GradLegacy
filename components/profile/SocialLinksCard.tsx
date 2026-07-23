@@ -99,15 +99,15 @@ export default function SocialLinksCard({
   };
 
   return (
-    <div className="rounded-3xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-lg dark:shadow-black/20">
+    <div className="rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 sm:p-5 md:p-6 shadow-lg dark:shadow-black/20">
 
       {/* Header */}
 
-      <div className="mb-6 flex items-center justify-between gap-3">
+      <div className="mb-5 sm:mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
         <div>
 
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
             Social Links
           </h2>
 
@@ -117,9 +117,9 @@ export default function SocialLinksCard({
 
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap sm:shrink-0">
           {!editing && (
-            <span className="rounded-full bg-blue-100 dark:bg-blue-500/10 px-4 py-2 text-sm font-medium text-blue-700 dark:text-blue-300">
+            <span className="rounded-full bg-blue-100 dark:bg-blue-500/10 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-medium text-blue-700 dark:text-blue-300 whitespace-nowrap">
               {availableLinks.length} Connected
             </span>
           )}
@@ -128,17 +128,17 @@ export default function SocialLinksCard({
             <button
               type="button"
               onClick={startEditing}
-              className="flex items-center gap-1.5 rounded-full border border-gray-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 transition hover:border-gray-400 dark:hover:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-800"
+              className="flex items-center gap-1.5 rounded-full border border-gray-300 dark:border-slate-700 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 dark:text-slate-300 transition hover:border-gray-400 dark:hover:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-800 whitespace-nowrap"
             >
               <Pencil size={14} />
               Edit
             </button>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={cancelEditing}
-                className="flex items-center gap-1.5 rounded-full border border-gray-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 transition hover:border-gray-400 dark:hover:border-slate-600"
+                className="flex flex-1 sm:flex-none items-center justify-center gap-1.5 rounded-full border border-gray-300 dark:border-slate-700 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 dark:text-slate-300 transition hover:border-gray-400 dark:hover:border-slate-600 whitespace-nowrap"
               >
                 <X size={14} />
                 Cancel
@@ -146,7 +146,7 @@ export default function SocialLinksCard({
               <button
                 type="button"
                 onClick={handleSave}
-                className="flex items-center gap-1.5 rounded-full bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 dark:hover:bg-blue-600"
+                className="flex flex-1 sm:flex-none items-center justify-center gap-1.5 rounded-full bg-blue-600 dark:bg-blue-500 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-white transition hover:bg-blue-700 dark:hover:bg-blue-600 whitespace-nowrap"
               >
                 <Check size={14} />
                 Save
@@ -159,7 +159,7 @@ export default function SocialLinksCard({
 
       {editing ? (
         /* ── Edit form (frontend-only — updates local state on Save) ── */
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           {PLATFORM_META.map((meta) => {
             const Icon = meta.icon;
             return (
@@ -181,25 +181,29 @@ export default function SocialLinksCard({
         </div>
       ) : availableLinks.length === 0 ? (
         /* ── Empty State ── */
-        <div className="rounded-2xl border border-dashed border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/60 px-6 py-12 text-center">
+        <div className="rounded-2xl border border-dashed border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/60 px-4 sm:px-6 py-10 sm:py-12 text-center">
 
           <Globe
+            size={40}
+            className="mx-auto mb-4 text-gray-400 dark:text-slate-500 sm:hidden"
+          />
+          <Globe
             size={48}
-            className="mx-auto mb-4 text-gray-400 dark:text-slate-500"
+            className="mx-auto mb-4 text-gray-400 dark:text-slate-500 hidden sm:block"
           />
 
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-200">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-700 dark:text-slate-200">
             No Social Links Yet
           </h3>
 
-          <p className="mt-2 text-gray-500 dark:text-slate-400">
+          <p className="mt-2 text-sm sm:text-base text-gray-500 dark:text-slate-400">
             Click Edit above to add your social accounts.
           </p>
 
         </div>
       ) : (
         /* ── Link cards (read view) ── */
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
 
           {availableLinks.map((item) => {
             const Icon = item.icon;
@@ -210,26 +214,30 @@ export default function SocialLinksCard({
                 href={item.value!}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-between rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/60 p-5 transition-all hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-500 hover:bg-white dark:hover:bg-slate-800 hover:shadow-lg"
+                className="group flex items-center justify-between gap-3 rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/60 p-4 sm:p-5 transition-all hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-500 hover:bg-white dark:hover:bg-slate-800 hover:shadow-lg"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex min-w-0 items-center gap-3 sm:gap-4">
 
-                  <div className="rounded-xl bg-white dark:bg-slate-900 p-3 shadow-sm">
+                  <div className="shrink-0 rounded-xl bg-white dark:bg-slate-900 p-2.5 sm:p-3 shadow-sm">
 
                     <Icon
+                      size={22}
+                      className={`sm:hidden ${item.color}`}
+                    />
+                    <Icon
                       size={24}
-                      className={item.color}
+                      className={`hidden sm:block ${item.color}`}
                     />
 
                   </div>
 
-                  <div>
+                  <div className="min-w-0">
 
                     <h3 className="font-semibold text-gray-900 dark:text-white">
                       {item.name}
                     </h3>
 
-                    <p className="max-w-[180px] truncate text-sm text-gray-500 dark:text-slate-400">
+                    <p className="truncate text-sm text-gray-500 dark:text-slate-400">
                       {item.value}
                     </p>
 
@@ -239,7 +247,7 @@ export default function SocialLinksCard({
 
                 <ExternalLink
                   size={18}
-                  className="text-gray-400 dark:text-slate-500 transition group-hover:text-blue-600 dark:group-hover:text-blue-400"
+                  className="shrink-0 text-gray-400 dark:text-slate-500 transition group-hover:text-blue-600 dark:group-hover:text-blue-400"
                 />
 
               </Link>

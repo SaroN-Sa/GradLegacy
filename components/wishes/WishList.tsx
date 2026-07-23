@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { MessageSquareHeart, AlertTriangle } from "lucide-react";
+import { MessageSquareHeart, AlertTriangle, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 import { wishService } from "@/services/wish";
@@ -15,6 +15,7 @@ import WishLightbox, { LightboxItem } from "./WishLightbox";
 interface WishListProps {
   userId: string;
   dashboard?: boolean;
+  onBack?: () => void; // optional — only shown in the dashboard variant, if provided
 }
 
 function DeleteWishDialog({
@@ -34,18 +35,18 @@ function DeleteWishDialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onCancel} />
 
-      <div className="relative w-full max-w-sm rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-2xl">
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-900/20 text-red-400">
-          <AlertTriangle size={22} />
+      <div className="relative w-full max-w-sm rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-5 sm:p-6 shadow-2xl">
+        <div className="mb-4 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-red-900/20 text-red-400">
+          <AlertTriangle size={20} />
         </div>
 
-        <h3 className="mb-1.5 text-lg font-semibold text-white">Delete this wish?</h3>
+        <h3 className="mb-1.5 text-base sm:text-lg font-semibold text-white">Delete this wish?</h3>
 
         <p className="mb-6 text-sm text-slate-400">
           This action cannot be undone. The wish will be permanently removed.
         </p>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col-reverse gap-2.5 sm:flex-row sm:gap-3">
           <button
             type="button"
             onClick={onCancel}
@@ -68,7 +69,7 @@ function DeleteWishDialog({
   );
 }
 
-export default function WishList({ userId, dashboard = false }: WishListProps) {
+export default function WishList({ userId, dashboard = false, onBack }: WishListProps) {
   const [loading, setLoading] = useState(true);
   const [wishes, setWishes] = useState<Wish[]>([]);
 
@@ -247,7 +248,7 @@ export default function WishList({ userId, dashboard = false }: WishListProps) {
     if (filteredWishes.length === 0) {
       return (
         <div className="flex h-[100dvh] items-center justify-center px-4">
-          <div className="rounded-3xl border border-dashed border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-10 text-center">
+          <div className="rounded-3xl border border-dashed border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-6 sm:p-10 text-center">
             <MessageSquareHeart className="mx-auto mb-3 text-slate-600" size={28} />
             <p className="text-sm text-slate-400">No wishes found.</p>
           </div>
@@ -278,17 +279,28 @@ export default function WishList({ userId, dashboard = false }: WishListProps) {
   // Dashboard: normal stacked list with filters and management actions.
   // -------------------------------------------------------------------
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
+      {onBack && (
+        <button
+          type="button"
+          onClick={onBack}
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+        >
+          <ArrowLeft size={16} />
+          Back
+        </button>
+      )}
+
       <WishFilters search={search} status={status} onSearchChange={setSearch} onStatusChange={setStatus} />
 
       {filteredWishes.length === 0 && (
-        <div className="rounded-3xl border border-dashed border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-10 text-center">
+        <div className="rounded-3xl border border-dashed border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-6 sm:p-10 text-center">
           <MessageSquareHeart className="mx-auto mb-3 text-slate-600" size={28} />
           <p className="text-sm text-slate-400">No wishes found.</p>
         </div>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-5 sm:space-y-6">
         {filteredWishes.map((wish) => (
           <WishCard
             key={wish.$id}

@@ -10,26 +10,26 @@ export default function DeleteAccountCard({
   onDeleteAccount,
 }: DeleteAccountCardProps) {
   return (
-    <div className="rounded-2xl border border-red-300 bg-red-50 p-6 shadow-sm dark:border-red-800 dark:bg-red-950">
+    <div className="rounded-2xl border border-red-300 bg-red-50 p-4 sm:p-6 shadow-sm dark:border-red-800 dark:bg-red-950">
       {/* Header */}
-      <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900">
-          <AlertTriangle className="h-5 w-5 text-red-600" />
+      <div className="mb-5 sm:mb-6 flex items-start sm:items-center gap-3">
+        <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900">
+          <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-red-600" />
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-red-700 dark:text-red-400">
+          <h2 className="text-base sm:text-lg font-semibold text-red-700 dark:text-red-400">
             Danger Zone
           </h2>
 
-          <p className="text-sm text-red-600 dark:text-red-300">
+          <p className="text-xs sm:text-sm text-red-600 dark:text-red-300">
             These actions are permanent and cannot be undone.
           </p>
         </div>
       </div>
 
       {/* Warning */}
-      <div className="rounded-xl border border-red-200 bg-white p-4 dark:border-red-800 dark:bg-red-900">
+      <div className="rounded-xl border border-red-200 bg-white p-3.5 sm:p-4 dark:border-red-800 dark:bg-red-900">
         <h3 className="font-semibold text-gray-900 dark:text-white">
           Delete Account
         </h3>
@@ -39,7 +39,7 @@ export default function DeleteAccountCard({
           GradLegacy data, including:
         </p>
 
-        <ul className="mt-4 list-disc space-y-2 pl-6 text-sm text-gray-700 dark:text-gray-300">
+        <ul className="mt-4 list-disc space-y-2 pl-5 sm:pl-6 text-sm text-gray-700 dark:text-gray-300">
           <li>Your profile</li>
           <li>Your timeline</li>
           <li>Your gallery</li>
@@ -52,7 +52,7 @@ export default function DeleteAccountCard({
         <div className="mt-6">
           <button
             onClick={onDeleteAccount}
-            className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 text-white transition hover:bg-red-700"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 text-white transition hover:bg-red-700"
           >
             <Trash2 className="h-4 w-4" />
 

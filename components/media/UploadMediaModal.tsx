@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import {
+  ArrowLeft,
   X,
   Loader2,
   ChevronDown,
@@ -51,6 +52,16 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
     }
   }, [open]);
 
+  // Lock body scroll while the modal is open (mobile-friendly)
+  useEffect(() => {
+    if (!open) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [open]);
+
   if (!open) return null;
 
   const handleUploadComplete = (media: Media[]) => {
@@ -89,28 +100,40 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-      <div className="relative flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-0 backdrop-blur-sm sm:p-4">
+      <div className="relative flex h-[100dvh] w-full max-w-lg flex-col overflow-hidden rounded-none bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 border-0 shadow-2xl sm:h-auto sm:max-h-[85vh] sm:rounded-3xl sm:border sm:border-slate-200 sm:dark:border-slate-800">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFD700]/10 text-[#B8860B] dark:text-[#FFD700]">
-              <ImageIcon size={17} />
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-4 py-3.5 sm:px-6 sm:py-4">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            {/* Back button — primary nav affordance on mobile */}
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={saving}
+              aria-label="Back"
+              className="-ml-1.5 rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white sm:hidden"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFD700]/10 text-[#B8860B] dark:text-[#FFD700] sm:h-9 sm:w-9">
+              <ImageIcon size={16} className="sm:hidden" />
+              <ImageIcon size={17} className="hidden sm:block" />
             </div>
-            <h2 className="text-base font-semibold text-slate-900 dark:text-white">Upload Media</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-white sm:text-base">Upload Media</h2>
           </div>
           <button
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="rounded-full p-1.5 text-slate-400 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white disabled:opacity-50"
+            aria-label="Close"
+            className="hidden rounded-full p-1.5 text-slate-400 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white disabled:opacity-50 sm:block"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+        <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4 sm:space-y-5 sm:px-6 sm:py-5">
           <MediaUploader userId={userId} multiple onUploadComplete={handleUploadComplete} onError={setError} />
 
           {uploadedMedia.length > 0 && (
@@ -161,7 +184,7 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
                   <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
                     <Eye size={12} />
@@ -224,12 +247,12 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-2 border-t border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/60 px-6 py-4">
+        <div className="flex items-center justify-end gap-2 border-t border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/60 px-4 py-3.5 sm:px-6 sm:py-4">
           <button
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="rounded-2xl border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 transition hover:border-slate-400 dark:hover:border-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex-1 rounded-2xl border border-slate-300 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 transition hover:border-slate-400 dark:hover:border-slate-600 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:py-2"
           >
             Cancel
           </button>
@@ -238,7 +261,7 @@ export default function UploadMediaModal({ open, userId, onClose, onUploaded }: 
             type="button"
             onClick={handleSave}
             disabled={saving || uploadedMedia.length === 0}
-            className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border border-[#FFD700]/50 px-4 py-2 text-sm font-semibold text-[#B8860B] dark:text-[#FFD700] transition hover:border-[#FFD700] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border border-[#FFD700]/50 px-4 py-2.5 text-sm font-semibold text-[#B8860B] dark:text-[#FFD700] transition hover:border-[#FFD700] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:py-2"
           >
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
             {saving ? "Saving…" : "Save Media"}
